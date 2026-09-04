@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GORO - Currículo e Questionário Digital</title>
+    <style>
+        /* Estilos Gerais Otimizados para Celular */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #F7FAFC;
+            color: #2D3748;
+            margin: 0;
+            padding: 12px;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #FFFFFF;
+            padding: 20px 15px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+        h1 {
+            font-size: 22px;
+            color: #1A365D;
+            text-align: center;
+            margin-top: 0;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+        .subtitle {
+            text-align: center;
+            font-size: 13px;
+            color: #718096;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #E2E8F0;
+            padding-bottom: 15px;
+        }
+        
+        /* Seções do Formulário */
+        .section-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #2B6CB0;
+            background-color: #EBF8FF;
+            padding: 10px;
+            border-left: 5px solid #2B6CB0;
+            border-radius: 4px;
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+        
+        /* Grupo de Campos */
+        .form-group {
+            margin-bottom: 18px;
+        }
+        label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #2D3748;
+        }
+        label span {
+            font-size: 12px;
+            color: #718096;
+            font-weight: normal;
+        }
+        
+        /* Inputs de Texto/Número */
+        input[type="text"], input[type="number"], input[type="date"], textarea, select {
+            width: 100%;
+            padding: 12px;
+            font-size: 15px;
+            border: 1px solid #CBD5E0;
+            border-radius: 8px;
+            box-sizing: border-box;
+            background-color: #FFF;
+            transition: border-color 0.2s;
+        }
+        input[type="text"]:focus, input[type="number"]:focus, textarea:focus, select:focus {
+            border-color: #3182CE;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.15);
+        }
+        
+        /* Grid para inputs pequenos (Ex: Altura, Peso) */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        
+        /* Opções de Seleção (Radio e Checkbox) Mobile-Friendly */
+        .options-vertical {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .option-card {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            border: 1px solid #E2E8F0;
+            border-radius: 8px;
+            cursor: pointer;
+            background-color: #F8FAFC;
+        }
+        .option-card input {
+            margin-right: 12px;
+            width: 18px;
+            height: 18px;
+        }
+        
+        /* Tabela de Idiomas Otimizada */
+        .lang-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 8px;
+        }
+        .lang-table th, .lang-table td {
+            border: 1px solid #E2E8F0;
+            padding: 8px;
+            font-size: 13px;
+            text-align: center;
+        }
+        .lang-table th {
+            background-color: #F7FAFC;
+        }
+
+        /* Termos e Condições */
+        .terms-box {
+            background-color: #FFFAF0;
+            border: 1px solid #FEEBC8;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            color: #744210;
+            margin-top: 20px;
+        }
+        .terms-box ul {
+            margin: 5px 0 0 0;
+            padding-left: 20px;
+        }
+
+        /* Botão Final */
+        .btn-container {
+            text-align: center;
+            margin-top: 30px;
+            margin-bottom: 20px;
+        }
+        .btn-submit {
+            background-color: #1A365D;
+            color: white;
+            font-size: 17px;
+            font-weight: bold;
+            padding: 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .status-msg {
+            color: #4A5568;
+            font-size: 13px;
+            margin-top: 8px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <form id="goroForm" onsubmit="enviarFormulario(event)">
+        
+        <h1>Currículo e Questionário</h1>
+        <div class="subtitle">GORO DIGITAL RECRUITMENT</div>
+
+        <!-- SEÇÃO 1 -->
+        <!-- SEÇÃO 1 ATUALIZADA (COM NASCIMENTO E PROFISSÃO) -->
+        <div class="section-title">1. Dados Pessoais e Endereço</div>
+        
+        <div class="form-group">
+            <label for="nome">Sobrenome / Nome</label>
+            <input type="text" id="nome" name="Sobrenome / Nome" required placeholder="Digite seu nome completo">
+        </div>
+
+        <div class="form-group">
+            <label for="data_nasc">Data de Nascimento (生年月日)</label>
+            <input type="date" id="data_nasc" name="Data_Nascimento" required>
+        </div>
+
+        <div class="form-group">
+            <label>Sexo</label>
+            <div class="options-vertical">
+                <label class="option-card"><input type="radio" name="Sexo" value="Masculino" required> Masculino</label>
+                <label class="option-card"><input type="radio" name="Sexo" value="Feminino"> Feminino</label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Estado Civil</label>
+            <div class="options-vertical">
+                <label class="option-card"><input type="radio" name="Estado Civil" value="Solteiro" required> Solteiro</label>
+                <label class="option-card"><input type="radio" name="Estado Civil" value="Casado"> Casado</label>
+                <label class="option-card"><input type="radio" name="Estado Civil" value="Divórcio"> Divórcio</label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Geração (Nikkeis 日系)</label>
+            <div class="options-vertical">
+                <label class="option-card"><input type="radio" name="Geração (Nikkeis 日系)" value="2sei (Nissei)" required> Nissei (2sei)</label>
+                <label class="option-card"><input type="radio" name="Geração (Nikkeis 日系)" value="3sei (Sansei)"> Sansei (3sei)</label>
+                <label class="option-card"><input type="radio" name="Geração (Nikkeis 日系)" value="4sei (Yonsei)"> Yonsei (4sei)</label>
+                <label class="option-card"><input type="radio" name="Geração (Nikkeis 日系)" value="Não é japonês"> Não é japonês</label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Educação Final</label>
+            <div class="options-vertical">
+                <label class="option-card"><input type="radio" name="Educação Final" value="Primário" required> Primário</label>
+                <label class="option-card"><input type="radio" name="Educação Final" value="Ginásio"> Ginásio</label>
+                <label class="option-card"><input type="radio" name="Educação Final" value="Colegial"> Colegial</label>
+                <label class="option-card"><input type="radio" name="Educação Final" value="Universidade"> Universidade</label>
+                <label class="option-card"><input type="radio" name="Educação Final" value="Profissionalizante"> Profissionalizante</label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Status da Educação</label>
+            <div class="options-vertical">
+                <label class="option-card"><input type="radio" name="Status da Educação" value="Completo" required> Completo</label>
+                <label class="option-card"><input type="radio" name="Status da Educação" value="Incompleto"> Incompleto</label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Endereço Atual</label>
+            <div class="options-vertical">
+                <label class="option-card"><input type="radio" name="Endereço Atual" value="O mesmo do ZAIRYU-CARD" required> O mesmo do ZAIRYU-CARD / Registro Residencial (Juminhyo)</label>
+                <label class="option-card"><input type="radio" name="Endereço Atual" value="Diferente do ZAIRYU-CARD"> Diferente do ZAIRYU-CARD / Registro Residencial</label>
+                <label class="option-card"><input type="radio" name="Endereço Atual" value="Possuo Nacionalidade Japonesa (Não tenho Zairyu Card)"> Possuo Nacionalidade Japonesa (Não tenho Zairyu Card)</label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="tipo_endereco">Se mudou de endereço recente, descreva o Tipo / Detalhes</label>
+            <input type="text" id="tipo_endereco" name="Tipo_Endereco" placeholder="Ex: Mudou de província recente">
+        </div>
+
+        <div class="form-group">
+            <label for="contatos">Contatos <span>(Telefone / E-mail / Redes Sociais)</span></label>
+            <textarea id="contatos" name="Contatos (Telefone / E-mail / Redes Sociais)" rows="2" required placeholder="Ex: (11) 99999-9999 / email@email.com"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label>Moradia após contratação</label>
+            <div class="options-vertical">
+                <label class="option-card"><input type="radio" name="Moradia após contratação" value="Pendulares do endereço atual ou própria casa etc." required> Pendulares do endereço atual ou própria casa etc.</label>
+                <label class="option-card"><input type="radio" name="Moradia após contratação" value="Precisa Alojamento da empresa"> Precisa Alojamento da empresa</label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="profissao_patria">Qual era sua profissão no país de origem? (Profissao_Patria)</label>
+            <input type="text" id="profissao_patria" name="Profissao_Patria" placeholder="Ex: Mecânico, Administrador, Vendedor">
+        </div>
+
+
+        <!-- SEÇÃO 2 EXPANDIDA (AS 3 ÚLTIMAS EXPERIÊNCIAS NO JAPÃO) -->
+        <div class="section-title">2. Histórico Profissional no Japão (Três Últimas Empresas)</div>
+        
+        <div style="background-color: #F8FAFC; padding: 12px; border-radius: 8px; margin-bottom: 15px; border: 1px dashed #CBD5E0;">
+            <strong style="color: #2B6CB0; font-size: 14px;">🏢 1ª Empresa (Mais Recente / Atual)</strong>
+            <div class="grid-2" style="margin-top: 8px;">
+                <div class="form-group"><label>Entrar 入社</label><input type="text" name="Experiencia_1_Entrada" placeholder="ano/mês"></div>
+                <div class="form-group"><label>Sair 退社</label><input type="text" name="Experiencia_1_Saida" placeholder="ano/mês ou Atual"></div>
+            </div>
+            <div class="form-group"><label>Nome da Empresa / Empreiteira / Fábrica</label><input type="text" name="Experiencia_1_Empresa" placeholder="Nome da empresa e local"></div>
+            <div class="form-group"><label>Trabalho / Função / Motivo da Saída</label><input type="text" name="Experiencia_1_Detalhes" placeholder="O que fazia e por que saiu"></div>
+        </div>
+
+        <div style="background-color: #F8FAFC; padding: 12px; border-radius: 8px; margin-bottom: 15px; border: 1px dashed #CBD5E0;">
+            <strong style="color: #2B6CB0; font-size: 14px;">🏢 2ª Empresa (Anterior)</strong>
+            <div class="grid-2" style="margin-top: 8px;">
+                <div class="form-group"><label>Entrar 入社</label><input type="text" name="Experiencia_2_Entrada" placeholder="ano/mês"></div>
+                <div class="form-group"><label>Sair 退社</label><input type="text" name="Experiencia_2_Saida" placeholder="ano/mês"></div>
+            </div>
+            <div class="form-group"><label>Nome da Empresa / Empreiteira / Fábrica</label><input type="text" name="Experiencia_2_Empresa" placeholder="Nome da empresa e local"></div>
+            <div class="form-group"><label>Trabalho / Função / Motivo da Saída</label><input type="text" name="Experiencia_2_Detalhes" placeholder="O que fazia e por que saiu"></div>
+        </div>
+
+        <div style="background-color: #F8FAFC; padding: 12px; border-radius: 8px; margin-bottom: 15px; border: 1px dashed #CBD5E0;">
+            <strong style="color: #2B6CB0; font-size: 14px;">🏢 3ª Empresa (Mais Antiga)</strong>
+            <div class="grid-2" style="margin-top: 8px;">
+                <div class="form-group"><label>Entrar 入社</label><input type="text" name="Experiencia_3_Entrada" placeholder="ano/mês"></div>
+                <div class="form-group"><label>Sair 退社</label><input type="text" name="Experiencia_3_Saida" placeholder="ano/mês"></div>
+            </div>
+            <div class="form-group"><label>Nome da Empresa / Empreiteira / Fábrica</label><input type="text" name="Experiencia_3_Empresa" placeholder="Nome da empresa e local"></div>
+            <div class="form-group"><label>Trabalho / Função / Motivo da Saída</label><input type="text" name="Experiencia_3_Detalhes" placeholder="O que fazia e por que saiu"></div>
+        </div>
+
+        <!-- SEÇÃO 3 -->
+        <div class="section-title">3. Familiares e Idioma (日本語スキル)</div>
+        <div class="form-group">
+            <label>Parentes que moram no Japão 在日親族 <span>(Nome, idade, relação, residência)</span></label>
+            <textarea name="Parentes que moram no Japão 在日親族" rows="3" placeholder="Se moram junto ou separado e em qual local"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label>Se mora com seu filho 子供と同居の場合 ➔</label>
+            <div class="options-vertical">
+                <label class="option-card"><input type="radio" name="Se mora com seu filho" value="Não esta 居ない"> Não está / Ninguém além de mim 居ない</label>
+                <label class="option-card"><input type="radio" name="Se mora com seu filho" value="Estou 居る"> Estou / Existe alguém 居る</label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Nível de Japonês Falado e Compreensão</label>
+            <select name="Conhecimento do japonês 日本語スキル">
+                <option value="D (0%)">D) Nada ・・・・・ 0%</option>
+                <option value="C (±20%)">C) Um pouco ・・・ ±20%</option>
+                <option value="B (±50%)">B) Geralmente ・・ ±50%</option>
+                <option value="A (±80%)">A) Quase completo ・ ±80%</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Leitura e Escrita (読み・書き)</label>
+            <table class="lang-table">
+                <tr>
+                    <th>Alfabeto</th>
+                    <th>Leitura (読み)</th>
+                    <th>Escrita (書き)</th>
+                </tr>
+                <tr>
+                    <td>Hiragana</td>
+                    <td>
+                        <select name="Leitura Hiragana"><option value="Todo">Todo</option><option value="Pouco">Pouco</option><option value="Nada" selected>Nada</option></select>
+                    </td>
+                    <td>
+                        <select name="Escrita Hiragana"><option value="Todo">Todo</option><option value="Pouco">Pouco</option><option value="Nada" selected>Nada</option></select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Katakana</td>
+                    <td>
+                        <select name="Leitura Katakana"><option value="Todo">Todo</option><option value="Pouco">Pouco</option><option value="Nada" selected>Nada</option></select>
+                    </td>
+                    <td>
+                        <select name="Escrita Katakana"><option value="Todo">Todo</option><option value="Pouco">Pouco</option><option value="Nada" selected>Nada</option></select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Kanji</td>
+                    <td>
+                        <select name="Leitura Kanji"><option value="Todo">Todo</option><option value="Pouco">Pouco</option><option value="Nada" selected>Nada</option></select>
+                    </td>
+                    <td>
+                        <select name="Escrita Kanji"><option value="Todo">Todo</option><option value="Pouco">Pouco</option><option value="Nada" selected>Nada</option></select>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- SEÇÃO 4 -->
+        <div class="section-title">4. Qualificações, Habilitação e Veículo</div>
+        <div class="form-group">
+            <label>Qualificação Profissional</label>
+            <div class="options-vertical">
+                <label class="option-card"><input type="checkbox" name="Qualificação" value="Não tem"> Não tem</label>
+                <label class="option-card"><input type="checkbox" name="Qualificação" value="Empilhadeira"> Empilhadeira</label>
+                <label class="option-card"><input type="checkbox" name="Qualificação" value="Solda"> Solda</label>
+                <label class="option-card"><input type="checkbox" name="Qualificação" value="Guindaste"> Guindaste</label>
+                <label class="option-card"><input type="checkbox" name="Qualificação" value="Prensa"> Prensa</label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Habilitação</label>
+            <div class="options-vertical">
+                <label class="option-card"><input type="checkbox" name="Habilitação" value="Não tem"> Não tem</label>
+                <label class="option-card"><input type="checkbox" name="Habilitação" value="Carro"> Carro</label>
+                <label class="option-card"><input type="checkbox" name="Habilitação" value="Carro (acima de 4ton)"> Carro (acima de 4ton)</label>
+                <label class="option-card"><input type="checkbox" name="Habilitação" value="Moto (50cc)"> Moto (50cc)</label>
+                <label class="option-card"><input type="checkbox" name="Habilitação" value="Moto (Acima 50cc)"> Moto (Acima 50cc)</label>
+            </div>
+        </div>
+<div class="form-group">
+            <label>Propriedade de Automóveis</label>
+            <div class="options-vertical">
+                <label class="option-card"><input type="checkbox" name="Propriedade de Automóveis" value="Não tem"> Não tem</label>
+                <label class="option-card"><input type="checkbox" name="Propriedade de Automóveis" value="Carro"> Carro</label>
+                <label class="option-card"><input type="checkbox" name="Propriedade de Automóveis" value="Equipamento Inverno"> Equipamento Inverno</label>
+                <label class="option-card"><input type="checkbox" name="Propriedade de Automóveis" value="Moto (50cc)"> Moto (50cc)</label>
+                <label class="option-card"><input type="checkbox" name="Propriedade de Automóveis" value="Moto (Acima 50cc)"> Moto (Acima 50cc)</label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Método de comutação (Transporte)</label>
+            <div class="options-vertical">
+                <label class="option-card"><input type="checkbox" name="Método de comutação" value="Souguei / Irapé"> Souguei / Irapé</label>
+                <label class="option-card"><input type="checkbox" name="Método de comutação" value="Carro"> Carro</label>
+                <label class="option-card"><input type="checkbox" name="Método de comutação" value="Moto (50cc ou acima)"> Moto (50cc ou acima)</label>
+                <label class="option-card"><input type="checkbox" name="Método de comutação" value="Bicicleta"> Bicicleta</label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Documentos do Veículo para Uso</label>
+            <div class="options-vertical">
+                <label class="option-card"><input type="checkbox" name="Documentos do Veículo" value="Inspeção de veículos (Shaken)"> Inspeção de veículos</label>
+                <label class="option-card"><input type="checkbox" name="Documentos do Veículo" value="Seguro Responsabilidade Obligatorio"> Seguro Responsabilidade</label>
+                <label class="option-card"><input type="checkbox" name="Documentos do Veículo" value="Seguro voluntário (Ninihoken)"> Seguro voluntário</label>
+            </div>
+        </div>
+
+        <!-- SEÇÃO 5 -->
+        <div class="section-title">5. Estado de Saúde e Dados Físicos</div>
+        
+        <div class="form-group">
+            <label>Estado da saúde</label>
+            <div class="options-vertical">
+                <label class="option-card"><input type="radio" name="Estado da saúde" value="Sem problemas" required> Sem problemas</label>
+                <label class="option-card"><input type="radio" name="Estado da saúde" value="Tenho lesão ou doença"> Tenho lesão ou doença</label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Status médico</label>
+            <div class="options-vertical">
+                <label class="option-card"><input type="radio" name="Status de Saúde" value="Sob tratamento"> Sob tratamento</label>
+                <label class="option-card"><input type="radio" name="Status de Saúde" value="Não precisa tratamento"> Não precisa tratamento</label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Hospitalizado</label>
+            <div class="options-vertical">
+                <label class="option-card"><input type="radio" name="Hospitalizado" value="Nunca foi hospitalizado"> Nunca foi hospitalizado</label>
+                <label class="option-card"><input type="radio" name="Hospitalizado" value="Tem histórico"> Tem histórico de hospitalização</label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Doença crônica / Sintomas</label>
+            <div class="options-vertical">
+                <label class="option-card"><input type="checkbox" name="Sintomas" value="Não tem"> Não tem</label>
+                <label class="option-card"><input type="checkbox" name="Sintomas" value="Dor Lombar"> Dor Lombar</label>
+                <label class="option-card"><input type="checkbox" name="Sintomas" value="Hipertensão"> Hipertensão</label>
+                <label class="option-card"><input type="checkbox" name="Sintomas" value="Alergia (Solvente / Óleo)"> Alergia (Solvente / Óleo)</label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Lateralidade / Tipo Sanguíneo</label>
+            <div class="options-vertical" style="margin-bottom: 10px;">
+                <label class="option-card"><input type="radio" name="Lateralidade" value="Destro"> Destro</label>
+                <label class="option-card"><input type="radio" name="Lateralidade" value="Canhoto"> Canhoto</label>
+            </div>
+            <select name="Tipo Sanguíneo">
+                <option value="A">Tipo Sanguíneo: A</option>
+                <option value="B">Tipo Sanguíneo: B</option>
+                <option value="AB">Tipo Sanguíneo: AB</option>
+                <option value="O">Tipo Sanguíneo: O</option>
+            </select>
+        </div>
+
+        <div class="grid-2">
+            <div class="form-group">
+                <label>Altura (cm)</label>
+                <input type="number" name="Altura (cm)" placeholder="Ex: 175">
+            </div>
+            <div class="form-group">
+                <label>Peso (kg)</label>
+                <input type="number" name="Peso (kg)" placeholder="Ex: 70">
+            </div>
+        </div>
+
+        <div class="grid-2">
+            <div class="form-group">
+                <label>Camisa</label>
+                <input type="text" name="Camisa" placeholder="Ex: M / L">
+            </div>
+            <div class="form-group">
+                <label>Calça</label>
+                <input type="text" name="Calça" placeholder="Ex: 42 / 32">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Sapato (cm)</label>
+            <input type="text" name="Sapato (cm)" placeholder="Ex: 27.5">
+        </div>
+
+        <div class="form-group">
+            <label>Visão</label>
+            <div class="options-vertical" style="margin-bottom: 10px;">
+                <label class="option-card"><input type="radio" name="Visão" value="Olho nu"> Olho nu</label>
+                <label class="option-card"><input type="radio" name="Visão" value="Uso óculos"> Uso óculos</label>
+                <label class="option-card"><input type="radio" name="Visão" value="Uso lentes"> Uso lentes</label>
+            </div>
+            <input type="text" name="Valor de inspeção da visão" placeholder="Grau ou Valor de inspeção (se aplicável)">
+        </div>
+
+        <div class="form-group">
+            <label>Tabagismo</label>
+            <div class="options-vertical">
+                <label class="option-card"><input type="radio" name="Tabagismo" value="Não Fumar"> Não Fumar</label>
+                <label class="option-card"><input type="radio" name="Tabagismo" value="Fumar"> Fumar (Informe quantidade/dia no campo abaixo)</label>
+            </div>
+            <input type="text" name="Quantidade Cigarros/dia" placeholder="Quantidade por dia (se fuma)">
+        </div>
+
+        <div class="form-group">
+            <label>Bebendo álcool</label>
+            <div class="options-vertical">
+                <label class="option-card"><input type="radio" name="Bebendo álcool" value="Não Beba"> Não Beba</label>
+                <label class="option-card"><input type="radio" name="Bebendo álcool" value="Bebo"> Bebo (Informe quantidade ml/dia no campo abaixo)</label>
+            </div>
+            <input type="text" name="Quantidade Álcool ml/dia" placeholder="Quantidade em ml por dia (se bebe)">
+        </div>
+
+        <div class="form-group">
+            <label>Trabalho impossível</label>
+            <div class="options-vertical">
+                <label class="option-card"><input type="radio" name="Trabalho impossível" value="Não tem" checked> Não tem</label>
+                <label class="option-card"><input type="radio" name="Trabalho impossível" value="Tem"> Tem (Descreva qual trabalho não pode fazer abaixo)</label>
+            </div>
+            <input type="text" name="Descrição Trabalho impossível" placeholder="Especifique as restrições de trabalho se houver">
+        </div>
+
+       <!-- SEÇÃO 6 TOTALMENTE CORRIGIDA E REVISADA -->
+        <div class="section-title">6. Disponibilidade e Histórico de Seguros</div>
+        
+        <div class="form-group">
+            <label>Quando participar (Início)</label>
+            <div class="options-vertical">
+                <label class="option-card"><input type="radio" name="Quando participar" value="Início imediato"> Início imediato</label>
+                <label class="option-card"><input type="radio" name="Quando participar" value="Precisa tempo"> Precisa tempo (Informe os dias no campo abaixo)</label>
+            </div>
+            <input type="text" name="Dias necessários para início" placeholder="Quantidade de dias necessários">
+        </div>
+
+        <div class="form-group">
+            <label>Hora extra</label>
+            <div class="options-vertical">
+                <label class="option-card"><input type="radio" name="Hora extra" value="Possível"> Possível (Informe o limite de H/dia abaixo)</label>
+                <label class="option-card"><input type="radio" name="Hora extra" value="Impossível"> Impossível</label>
+            </div>
+            <input type="text" name="Limite Hora Extra H/dia" placeholder="Ex: Até 2 horas/dia">
+        </div>
+
+        <div class="form-group">
+            <label>Trabalho férias / Turno</label>
+            <div class="options-vertical">
+                <label class="option-card"><input type="checkbox" name="Disponibilidade Turnos" value="Trabalho férias (Possível)"> Trabalho férias (Possível)</label>
+                <label class="option-card"><input type="checkbox" name="Disponibilidade Turnos" value="Apenas noturno / Turno alternado"> Apenas noturno / Turno alternado</label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Conta de correios (Yucho)</label>
+            <div class="options-vertical">
+                <label class="option-card"><input type="radio" name="Conta de correios" value="Nunca abri"> Nunca abri</label>
+                <label class="option-card"><input type="radio" name="Conta de correios" value="Abri (Tem cartão / Caderneta)"> Abri (Tem cartão / Caderneta)</label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Seguro desemprego</label>
+            <div class="options-vertical">
+                <label class="option-card"><input type="radio" name="Seguro desemprego" value="Nunca juntei"> Nunca juntei</label>
+                <label class="option-card"><input type="radio" name="Seguro desemprego" value="Foi juntei (Certificado: Tem/Não tem)"> Já contribuí (Possui certificado? Sim/Não)</label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Seguro de saúde</label>
+            <div class="options-vertical">
+                <label class="option-card"><input type="radio" name="Seguro de saúde" value="Nunca juntei"> Nunca juntei</label>
+                <label class="option-card"><input type="radio" name="Seguro de saúde" value="Foi juntei social (Shakai Hoken)"> Já contribuí Seguro Social (Shakai Hoken)</label>
+                <label class="option-card"><input type="radio" name="Seguro de saúde" value="Foi juntei Seguro nacional (Kokumin Hoken)"> Já contribuí Seguro Nacional (Kokumin Hoken)</label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Pensão (NENKIN)</label>
+            <div class="options-vertical">
+                <label class="option-card"><input type="radio" name="Pensão (NENKIN)" value="Nunca juntei"> Nunca juntei</label>
+                <label class="option-card"><input type="radio" name="Pensão (NENKIN)" value="Foi juntei (Caderno: Tem/Não tem)"> Já contribuí (Possui caderneta? Sim/Não)</label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Como conheceu a GORO?</label>
+            <div class="options-vertical">
+                <label class="option-card"><input type="radio" name="Como conheceu a GORO?" value="Internet (Face Book / Empregos)"> Internet (Facebook / Empregos)</label>
+                <label class="option-card"><input type="radio" name="Como conheceu a GORO?" value="Jornal etc. (Empregos Outros)"> Jornal etc. (Outras Mídias de Empregos)</label>
+                <label class="option-card"><input type="radio" name="Como conheceu a GORO?" value="Amigo / Indicação"> Amigo / Indicação (Especifique o nome abaixo)</label>
+            </div>
+            <input type="text" name="Nome do Amigo / Indicação" placeholder="Nome do amigo que indicou (se aplicável)">
+        </div>
+
+        <div class="section-title">Apenas se solicitar serviço de mudança</div>
+        <div class="form-group">
+            <label>Bagagem para mudança</label>
+            <div class="options-vertical">
+                <label class="option-card"><input type="checkbox" name="Bagagem" value="Geladeira"> Geladeira (Informe altura em cm no campo abaixo)</label>
+                <label class="option-card"><input type="checkbox" name="Bagagem" value="Máquina de lavar (Grande)"> Máquina de lavar (Grande)</label>
+                <label class="option-card"><input type="checkbox" name="Bagagem" value="Fogão a gás (LP / City)"> Fogão a gás (LP / City)</label>
+                <label class="option-card"><input type="checkbox" name="Bagagem" value="Cama (Sozinha / Casal)"> Cama (Solteiro / Casal)</label>
+                <label class="option-card"><input type="checkbox" name="Bagagem" value="Sofá (Para 2p / Para 3p)"> Sofá (Para 2 ou 3 pessoas)</label>
+                <label class="option-card"><input type="checkbox" name="Bagagem" value="Mesa (Grande / Pequeno)"> Mesa (Grande / Pequena)</label>
+                <label class="option-card"><input type="checkbox" name="Bagagem" value="Cadeira"> Cadeira</label>
+                <label class="option-card"><input type="checkbox" name="Bagagem" value="Guarda-louça (Grande / Pequeno)"> Guarda-louça (Grande / Pequeno)</label>
+                <label class="option-card"><input type="checkbox" name="Bagagem" value="Caixa etc."> Caixas / Outros</label>
+            </div>
+            <input type="text" name="Especificações de Bagagem adicionais" placeholder="Ex: Altura da geladeira, quantidade de caixas, etc.">
+        </div>
+
+        <!-- TERMOS E OBSERVAÇÕES -->
+        <div class="terms-box">
+            <strong>Observações importantes e Termos:</strong>
+            <ul>
+                <li>Se houver falsidade no conteúdo preenchido, há possibilidade de cancelamento do emprego.</li>
+                <li>Se você se deslocar de carro, precisará apresentar a licença de condução e os seguros ativos.</li>
+                <li>Se solicitar à empresa o serviço de mudança, será aplicada uma taxa corporativa correspondente.</li>
+                <li>As configurações de salário final diferem dependendo se o seguro social está inscrito ou não.</li>
+            </ul>
+            <label class="option-card" style="margin-top: 15px; background-color: #FFFFFF;">
+                <input type="checkbox" name="Eu entendo o acima e concordo." value="Sim" required>
+                <strong>Eu entendo o acima e concordo.</strong>
+            </label>
+        </div>
+
+        <!-- BOTÃO FINAL ÚNICO -->
+        <div class="btn-container">
+            <button type="submit" id="btn-submit" class="btn-submit">
+                🚀 Enviar e Salvar Currículo em PDF
+            </button>
+            <div id="status-msg" class="status-msg">Enviando dados para o servidor GORO, por favor aguarde...</div>
+        </div>
+
+    </form>
+</div>
+
+<script>
+function enviarFormulario(event) {
+    event.preventDefault(); // Impede a página de recarregar
+    
+    const botao = document.getElementById('btn-submit');
+    const status = document.getElementById('status-msg');
+    
+    botao.disabled = true;
+    botao.style.backgroundColor = "#718096";
+    status.style.display = "block";
+
+    const formElement = document.getElementById('goroForm');
+    const formData = new FormData(formElement);
+    
+    // Converte os dados em chaves e valores organizados para a Planilha
+    const dadosFormulario = {};
+    formData.forEach((value, key) => {
+        if(dadosFormulario[key]) {
+            dadosFormulario[key] = dadosFormulario[key] + ", " + value; // Junta os checkboxes selecionados
+        } else {
+            dadosFormulario[key] = value;
+        }
+    });
+
+    // ⚠️ ATENÇÃO: COLOQUE AQUI O SEU LINK ATUALIZADO DO APPS SCRIPT (Web App)
+    // Cole o link que termina com "/exec" gerado após salvar o código da planilha
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyZHHVpViR0sjH6qlnepRhGcvX0EHemVD_QgbztbvEryebHLQM1Q9HrrEC6RVwWDud5/exec";
+
+    // Envio direto em formato texto para evitar travas do navegador no celular
+    fetch(WEB_APP_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(dadosFormulario)
+    })
+    .then(() => {
+        alert("Sucesso! Os dados do currículo foram enviados e registrados na planilha da GORO.");
+        formElement.reset(); // Limpa a ficha para o próximo candidato
+    })
+    .catch(error => {
+        console.error("Erro na gravação:", error);
+        alert("Ocorreu um erro técnico ao registrar o currículo. Verifique sua conexão.");
+    })
+    .finally(() => {
+        botao.disabled = false;
+        botao.style.backgroundColor = "#1A365D";
+        status.style.display = "none";
+    });
+}</script>
+
+</body>
+</html>
