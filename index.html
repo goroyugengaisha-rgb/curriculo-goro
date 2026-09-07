@@ -794,16 +794,55 @@
 
 <script>
     function enviarFormulario(event) {
-        // Impede que a página recarregue e apague os dados digitados
-        event.preventDefault();
+        event.preventDefault(); // Impede o recarregamento automático da página
         
-        // Exibe a mensagem de sucesso na tela sem sumir com o texto dos inputs
         const statusMsg = document.getElementById('statusMessage');
-        statusMsg.style.display = 'block';
+        const btnSubmit = document.querySelector('.btn-submit');
         
-        alert('Formulário enviado com sucesso! Você pode revisar os seus dados na tela ou clicar em "Apagar Tudo" para recomeçar.');
+        statusMsg.style.display = 'block';
+        statusMsg.innerText = 'Enviando dados para o servidor GORO, por favor aguarde...';
+        btnSubmit.disabled = true; // Evita cliques duplos que geram linhas repetidas
+        
+        const form = document.getElementById('goroForm');
+        const formData = new FormData(form);
+        
+        // Junta múltiplas seleções de checkboxes (como qualificações e doenças) separando por vírgula
+        const dataParsed = {};
+        for (const [key, value] of formData.entries()) {
+            if (dataParsed[key]) {
+                dataParsed[key] = dataParsed[key] + ", " + value;
+            } else {
+                dataParsed[key] = value;
+            }
+        }
+        
+        // Transforma os dados em formato aceito pelo Google Apps Script
+        const urlParams = new URLSearchParams(dataParsed);
+        
+        // Link de integração Web App oficial criado por você
+        const urlWebhook = "https://script.google.com/macros/s/AKfycbzApfxWE-jf-gvt6iSxRqBCT9f8lqZJFpuarYsXd4f9qGwuoeVC3fWFZTTXoIt4_Yv-/exec";
+        
+        fetch(urlWebhook, {
+            method: 'POST',
+            mode: 'no-cors', // Permite o envio entre domínios diferentes sem travar no navegador
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: urlParams.toString()
+        })
+        .then(() => {
+            statusMsg.style.innerText = '✓ Dados enviados com sucesso! Suas informações foram mantidas na tela para sua conferência.';
+            statusMsg.style.color = '#2F855A';
+            alert('✓ Currículo gravado com sucesso na planilha da GORO! Os seus dados foram mantidos na tela para conferência.');
+            btnSubmit.disabled = false;
+        })
+        .catch(error => {
+            console.error('Erro:', error);
+            statusMsg.innerText = 'Erro ao enviar dados. Tente novamente.';
+            statusMsg.style.color = '#C53030';
+            btnSubmit.disabled = false;
+        });
     }
 </script>
-
 </body>
 </html>
