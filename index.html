@@ -815,16 +815,28 @@
         const form = document.getElementById('goroForm');
         const formData = new FormData(form);
         
-        // Junta múltiplas seleções de checkboxes (como qualificações e doenças) separando por vírgula
-        const dataParsed = {};
+        // CORREÇÃO: Inicializa os campos críticos vazios para que o navegador nunca os omita
+        const dataParsed = {
+            "Qualificacao": "",
+            "Qualificacao_Outras": "",
+            "Habilitacao": "",
+            "Habilitacao_Tipo": ""
+        };
+        
+        // Mapeia todas as entradas reais do formulário
         for (const [key, value] of formData.entries()) {
-            if (dataParsed[key]) {
-                dataParsed[key] = dataParsed[key] + ", " + value;
+            if (dataParsed[key] !== undefined) {
+                // Se a chave já existe e não está vazia (caso de múltiplos checkboxes selecionados)
+                if (dataParsed[key] !== "") {
+                    dataParsed[key] = dataParsed[key] + ", " + value;
+                } else {
+                    dataParsed[key] = value;
+                }
             } else {
                 dataParsed[key] = value;
             }
         }
-        
+
         // Transforma os dados em formato aceito pelo Google Apps Script
         const urlParams = new URLSearchParams(dataParsed);
         
