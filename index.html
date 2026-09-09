@@ -496,53 +496,58 @@
             </table>
         </div>
  <!-- SEÇÃO 4: Qualificações, Habilitação e Veículo -->
-        <div class="section-title">4. Qualificações, Habilitação e Veículo (資格・免許・車両)</div>
-        
-       
+<div class="section-title">4. Qualificações, Habilitação e Veículo (資格・免許・車両)</div>
 
-        <div class="form-group">
-            <label>Qualificação Profissional <span>📋 業務資格</span></label>
-            <div class="options-vertical">
-                <label class="option-card"><input type="checkbox" name="Qualificação" value="Empilhadeira"> Empilhadeira (フォークリフト)</label>
-                <label class="option-card"><input type="checkbox" name="Qualificação" value="Solda"> Solda (溶接)</label>
-                <label class="option-card"><input type="checkbox" name="Qualificação" value="Guindaste"> Guindaste (クレーン)</label>
-                <label class="option-card"><input type="checkbox" name="Qualificação" value="Prensa"> Prensa (プレス)</label>
-            </div>
-            <!-- Campo Outras com caixa de texto livre -->
-                       <!-- Campo Outras com caixa de texto livre -->
-            <div style="margin-top: 8px;">
-                <label style="font-size: 13px; font-weight: normal; margin-bottom: 4px;">Outras qualificações <span>その他の資格</span></label>
-                <input type="text" name="Qualificação_Outras" placeholder="Descreva outras qualificações que possui / その他の資格を記載してください">
-            </div>
+<div class="form-group">
+    <label>Qualificação Profissional <span>📋 業務資格</span></label>
+    <div class="options-vertical">
+        <label class="option-card"><input type="checkbox" name="Qualificacao" value="Empilhadeira"> Empilhadeira (フォークリフト)</label>
+        <label class="option-card"><input type="checkbox" name="Qualificacao" value="Solda"> Solda (溶接)</label>
+        <label class="option-card"><input type="checkbox" name="Qualificacao" value="Guindaste"> Guindaste (クレーン)</label>
+        <label class="option-card"><input type="checkbox" name="Qualificacao" value="Prensa"> Prensa (プレス)</label>
+    </div>
+    <!-- Campo Outras com caixa de texto livre -->
+    <div style="margin-top: 8px;">
+        <label style="font-size: 13px; font-weight: normal; margin-bottom: 4px;">Outras qualificações <span>その他の資格</span></label>
+        <input type="text" name="Qualificacao_Outras" placeholder="Descreva outras qualificações que possui / その他の資格を記載してください">
+    </div>
+</div>
+
+<div class="form-group">
+    <label>Possui Habilitação? <span>🪪 運転免許の有無</span></label>
+    <div class="options-vertical">
+        <label class="option-card"><input type="radio" name="Habilitacao" value="Sim"> Sim (あり)</label>
+        <label class="option-card"><input type="radio" name="Habilitacao" value="Não"> Não (なし)</label>
+    </div>
+</div>
+
+<div class="form-group">
+    <label for="Habilitacao_Tipo">Categoria da CNH <span>運転免許種類</span></label>
+    <select id="Habilitacao_Tipo" name="Habilitacao_Tipo" class="form-control" style="width: 100%; padding: 8px; border: 1px solid #D1D5DB; border-radius: 4px; font-size: 14px; background-color: #FFFFFF;">
+        <option value="">Selecione... / 未選択</option>
+        <option value="Carro (普通自動車)">Carro / 普通自動車</option>
+        <option value="Moto (二輪車)">Moto / 二輪車</option>
+        <option value="Caminhão Chuugata (中型)">Caminhão Chuugata / 中型トラック</option>
+        <option value="Caminhão Ogata (大型)">Caminhão Ogata / 大型トラック</option>
+    </select>
+</div>
+
+<div class="form-group">
+    <label>Propriedade de Automóveis <span>🚗 車の保有</span></label>
+    <div class="options-vertical">
+        <!-- Opção Principal: Carro -->
+        <label class="option-card"><input type="checkbox" name="Propriedade_Veiculo" value="Carro"> Carro (自動車保有)</label>
+
+        <!-- Subopção de Carro -->
+        <div style="margin-left: 25px; margin-top: -4px; margin-bottom: 4px;">
+            <label class="option-card" style="background-color: #FFF; border-style: dashed;"><input type="checkbox" name="Propriedade_Veiculo_Inverno" value="Equipamento Inverno"> Possui Equipamento de Inverno? (冬用装備 / スタッドレスタイヤを保有しているか？)</label>
         </div>
 
-        <div class="form-group">
-            <label for="Habilitação_Tipo">Categoria da CNH <span>運転免許種類</span></label>
-            <select id="Habilitação_Tipo" name="Habilitação_Tipo" class="form-control" style="width: 100%; padding: 8px; border: 1px solid #D1D5DB; border-radius: 4px; font-size: 14px; background-color: #FFFFFF;">
-                <option value="">Selecione... / 未選択</option>
-                <option value="Carro (普通自動車)">Carro / 普通自動車</option>
-                <option value="Moto (二輪車)">Moto / 二輪車</option>
-                <option value="Caminhão Chuugata (中型)">Caminhão Chuugata / 中型トラック</option>
-                <option value="Caminhão Ogata (大型)">Caminhão Ogata / 大型トラック</option>
-            </select>
-        </div>
+        <!-- Opção Principal: Moto -->
+        <label class="option-card"><input type="checkbox" name="Propriedade_Veiculo" value="Moto"> Moto (バイク保有)</label>
+    </div>
+</div>
 
-        <div class="form-group">
-            <label>Propriedade de Automóveis <span>🚗 車の保有</span></label>
-            <div class="options-vertical">
-                <!-- Opção Principal: Carro -->
-                <label class="option-card"><input type="checkbox" name="Propriedade_Veiculo" value="Carro"> Carro (自動車保有)</label>
-
-                
-                <!-- Subopção de Carro (Identada e com margem recuada) -->
-                <div style="margin-left: 25px; margin-top: -4px; margin-bottom: 4px;">
-                    <label class="option-card" style="background-color: #FFF; border-style: dashed;"><input type="checkbox" name="Propriedade_Veiculo_Inverno" value="Equipamento Inverno"> Possui Equipamento de Inverno? (冬用装備 / スタッドレスタイヤを保有しているか？)</label>
-                </div>
-                
-                <!-- Opção Principal: Moto -->
-                <label class="option-card"><input type="checkbox" name="Propriedade_Veiculo" value="Moto"> Moto (バイク保有)</label>
-            </div>
-        </div>
 
         <div class="form-group">
             <label>Método de comutação / Transporte <span>🚲 通勤方法</span></label>
