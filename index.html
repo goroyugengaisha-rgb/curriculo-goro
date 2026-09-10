@@ -801,6 +801,21 @@
         const statusMsg = document.getElementById('statusMessage');
         const btnSubmit = document.querySelector('.btn-submit');
         
+        // --- VALIDAÇÃO EXCLUSIVA PARA CELULAR E PC ---
+        const nome = document.getElementById('nome').value.trim();
+        const dataNasc = document.getElementById('data_nasc').value;
+        const generoM = document.getElementById('genero_m').checked;
+        const generoF = document.getElementById('genero_f').checked;
+        const contatos = document.getElementById('contatos').value.trim();
+        const termos = document.querySelector('input[name="Termos_Aceite"]').checked;
+        
+        if (!nome) { alert('Por favor, preencha o Nome.\n氏名を入力してください。'); document.getElementById('nome').focus(); return; }
+        if (!dataNasc) { alert('Por favor, preencha a Data de Nascimento.\n生年月日を入力してください。'); document.getElementById('data_nasc').focus(); return; }
+        if (!generoM && !generoF) { alert('Por favor, selecione o Gênero.\n性別を選択してください。'); document.getElementById('genero_container').scrollIntoView({behavior: 'smooth'}); return; }
+        if (!contatos) { alert('Por favor, preencha o campo de Contatos.\n連絡先を入力してください。'); document.getElementById('contatos').focus(); return; }
+        if (!termos) { alert('Por favor, aceite os termos para enviar.\n規約に同意してください。'); document.querySelector('input[name="Termos_Aceite"]').focus(); return; }
+        // ----------------------------------------------
+
         statusMsg.style.display = 'block';
         statusMsg.innerText = 'Enviando dados para o servidor GORO, por favor aguarde...';
         statusMsg.style.color = '#2B6CB0';
@@ -809,7 +824,6 @@
         const form = document.getElementById('goroForm');
         const formData = new FormData(form);
         
-        // Agrupa múltiplos checkboxes selecionados por vírgula
         const dataParsed = {};
         for (const [key, value] of formData.entries()) {
             if (dataParsed[key]) {
@@ -822,17 +836,13 @@
         const urlParams = new URLSearchParams(dataParsed);
         const urlWebhook = "https://google.com";
         
-        // No mobile, text/plain com URLSearchParams funciona melhor com o redirecionamento do Google Apps Script
         fetch(urlWebhook, {
             method: 'POST',
             mode: 'no-cors',
-            headers: {
-                'Content-Type': 'text/plain;charset=utf-8'
-            },
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
             body: urlParams.toString()
         })
         .then(() => {
-            // Em modo no-cors, o fetch sempre cai no .then() mesmo sem ler a resposta do Google
             statusMsg.innerText = '✓ Dados enviados com sucesso! Suas informações foram mantidas na tela para sua conferência.';
             statusMsg.style.color = '#2F855A';
             alert('✓ Currículo gravado com sucesso na planilha da GORO! Os seus dados foram mantidos na tela para conferência.');
