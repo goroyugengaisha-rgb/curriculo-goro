@@ -690,7 +690,7 @@
 
         <!-- SEÇÃO 6: Disponibilidade e Histórico de Seguros -->
         <div class="section-title">6. Disponibilidade e Histórico de Seguros (就労可否・保険加入歴)</div>
-
+        
         <div class="form-group">
             <label>Quando participar / Início <span>📅 稼働開始希望日</span></label>
             <select name="Inicio_Disponibilidade">
@@ -699,7 +699,7 @@
             </select>
         </div>
 
-          <div class="form-group">
+        <div class="form-group">
             <label>Hora extra <span>⏰ 残業対応</span></label>
             <select name="Hora_Extra">
                 <option value="0 - Não posso fazer horas extras">0 - Não posso fazer horas extras (残業対応不可)</option>
@@ -718,7 +718,7 @@
             </div>
         </div>
 
-         <div class="form-group">
+        <div class="form-group">
             <label>Conta no Banco do Correio <span>🏦 ゆうちょ銀行口座</span></label>
             <select name="Conta_Yucho">
                 <option value="Abri (Tem cartão / Caderneta)">Abri / Possuo conta e cartão (口座あり・通帳/カード保持)</option>
@@ -743,7 +743,7 @@
             </select>
         </div>
 
-  <div class="form-group">
+        <div class="form-group">
             <label>Pensão <span>年金 (厚生年金・国民年金歴)</span></label>
             <select name="Contribuição_Nenkin">
                 <option value="Já contribuí">Já contribuí / Possuo caderneta (加入歴あり・年金手帳保持)</option>
@@ -770,11 +770,11 @@
                 <li style="color: #9B2C2C; font-weight: bold;">No caso de mudança, consulte os termos de taxa de mudança com a empreiteira. (引越しをする場合、引越し費用や条件については派遣会社に確認してください。)</li>
             </ul>
             <label class="option-card" style="margin-top: 12px; background-color: #FFF;">
-                <input type="checkbox" name="Termos_Aceite" value="Sim" required> Eu entendo o acima e concordo. (上記内容を理解し、同意します。) *
+                <input type="checkbox" name="Termos_Aceite" value="Sim"> Eu entendo o acima e concordo. (上記内容を理解し、同意します。) *
             </label>
         </div>
 
-        <!-- Botões Finais do Formulário (Envio e Limpeza) -->
+        <!-- Botões Finais do Formulário -->
         <div class="btn-container" style="display: flex; gap: 12px; margin-top: 30px; margin-bottom: 20px;">
             <button type="reset" class="btn-clear" style="background-color: #E2E8F0; color: #4A5568; font-size: 16px; font-weight: bold; padding: 16px; border: none; border-radius: 8px; cursor: pointer; flex: 1;">
                 🗑️ Apagar Tudo
@@ -787,18 +787,18 @@
         <div id="statusMessage" class="status-msg" style="text-align: center; color: #2B6CB0; font-weight: bold; margin-top: 8px; display: none;">
             ✓ Dados enviados com sucesso! Suas informações foram mantidas na tela para sua conferência.
         </div>
-        
+
     </form>
 </div>
 
 <script>
     function enviarFormulario(event) {
-        event.preventDefault(); // Impede o recarregamento da página
+        event.preventDefault();
         
         const statusMsg = document.getElementById('statusMessage');
         const btnSubmit = document.querySelector('.btn-submit');
         
-        // --- VALIDAÇÃO EXCLUSIVA PARA CELULAR E PC ---
+        // Validação Manual dos 5 itens obrigatórios
         const nome = document.getElementById('nome').value.trim();
         const dataNasc = document.getElementById('data_nasc').value;
         const generoM = document.getElementById('genero_m').checked;
@@ -811,12 +811,11 @@
         if (!generoM && !generoF) { alert('Por favor, selecione o Gênero.\n性別を選択してください。'); document.getElementById('genero_container').scrollIntoView({behavior: 'smooth'}); return; }
         if (!contatos) { alert('Por favor, preencha o campo de Contatos.\n連絡先を入力してください。'); document.getElementById('contatos').focus(); return; }
         if (!termos) { alert('Por favor, aceite os termos para enviar.\n規約に同意してください。'); document.querySelector('input[name="Termos_Aceite"]').focus(); return; }
-        // ----------------------------------------------
 
         statusMsg.style.display = 'block';
         statusMsg.innerText = 'Enviando dados para o servidor GORO, por favor aguarde...';
         statusMsg.style.color = '#2B6CB0';
-        btnSubmit.disabled = true; // Evita cliques duplos no celular
+        btnSubmit.disabled = true;
         
         const form = document.getElementById('goroForm');
         const formData = new FormData(form);
