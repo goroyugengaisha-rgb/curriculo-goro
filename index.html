@@ -174,27 +174,28 @@
 <body>
 
 <div class="container">
-     <form id="goroForm" onsubmit="enviarFormulario(event)">
-        
+    <form id="goroForm" onsubmit="enviarFormulario(event)">
+
         <h1>Currículo e Questionário</h1>
         <div class="subtitle">GORO DIGITAL RECRUITMENT</div>
 
-        <!-- SEÇÃO 1: Dados Pessoais e Endereço / 個人情報と住所 -->
-        <div class="section-title">1. Dados Pessoais e Endereço (個人情報 e 住所)</div>
-        
-        <div class="form-group">
-            <label for="nome">Sobrenome / Nome <span>氏名</span></label>
-            <input type="text" id="nome" name="Sobrenome_Nome" required placeholder="Digite seu nome completo / 氏名を入力してください">
-        </div>
+               <!-- SEÇÃO 1: Dados Pessoais e Endereço / 個人情報と住所 -->
+        <div class="section-title">1. Dados Pessoais e Endereço (個人情報と住所)</div>
 
         <div class="form-group">
-            <label for="data_nasc">Data de Nascimento <span>生年月日</span></label>
-            <input type="date" id="data_nasc" name="Data_Nascimento">
-        </div>
-              <div class="form-group">
+    <label for="nome">Sobrenome / Nome <span>氏名</span></label>
+    <!-- LINHA ALTERADA ABAIXO (Adicionado o value) -->
+    <input type="text" id="nome" name="Sobrenome_Nome" value="<?= d.Sobrenome_Nome || '' ?>" required placeholder="Digite seu nome completo / 氏名を入力してください">
+</div>
+       <div class="form-group">
+    <label for="data_nasc">Data de Nascimento <span>生年月日</span></label>
+    <!-- LINHA ALTERADA ABAIXO (Adicionado o value) -->
+    <input type="date" id="data_nasc" name="Data_Nascimento" value="<?= d.Data_Nascimento || '' ?>" required>
+</div>
+        <div class="form-group">
             <label>Gênero <span>性別</span></label>
             <div class="options-vertical">
-                <label class="option-card"><input type="radio" name="Genero" value="Masculino"> Masculino (男性)</label>
+                <label class="option-card"><input type="radio" name="Genero" value="Masculino" required> Masculino (男性)</label>
                 <label class="option-card"><input type="radio" name="Genero" value="Feminino"> Feminino (女性)</label>
             </div>
         </div>
@@ -202,7 +203,7 @@
         <div class="form-group">
             <label>Estado Civil <span>婚姻状況</span></label>
             <div class="options-vertical">
-                <label class="option-card"><input type="radio" name="Estado_Civil" value="Solteiro"> Solteiro (独身)</label>
+                <label class="option-card"><input type="radio" name="Estado_Civil" value="Solteiro" required> Solteiro (独身)</label>
                 <label class="option-card"><input type="radio" name="Estado_Civil" value="Casado"> Casado (既婚)</label>
                 <label class="option-card"><input type="radio" name="Estado_Civil" value="Divórcio"> Divórcio (離婚)</label>
             </div>
@@ -211,7 +212,7 @@
         <div class="form-group">
             <label>Geração (Nikkeis) <span>日系世代</span></label>
             <div class="options-vertical">
-                <label class="option-card"><input type="radio" name="Geracao_Nikkei" value="2sei (Nissei)"> Nissei / 2sei (日系二世)</label>
+                <label class="option-card"><input type="radio" name="Geracao_Nikkei" value="2sei (Nissei)" required> Nissei / 2sei (日系二世)</label>
                 <label class="option-card"><input type="radio" name="Geracao_Nikkei" value="3sei (Sansei)"> Sansei / 3sei (日系三世)</label>
                 <label class="option-card"><input type="radio" name="Geracao_Nikkei" value="4sei (Yonsei)"> Yonsei / 4sei (日系四世)</label>
                 <label class="option-card"><input type="radio" name="Geracao_Nikkei" value="Não é japonês"> Não é descendente de japonês (日系人ではない)</label>
@@ -219,9 +220,9 @@
         </div>
 
         <div class="form-group">
-            <label>Educação Final <span>学歴</span></label>
+            <label>Educação Final <span>最終学歴</span></label>
             <div class="options-vertical">
-                <label class="option-card"><input type="radio" name="Educacao_Final" value="Primário"> Primário (小学校)</label>
+                <label class="option-card"><input type="radio" name="Educacao_Final" value="Primário" required> Primário (小学校)</label>
                 <label class="option-card"><input type="radio" name="Educacao_Final" value="Ginásio"> Ginásio (中学校)</label>
                 <label class="option-card"><input type="radio" name="Educacao_Final" value="Colegial"> Colegial (高等学校)</label>
                 <label class="option-card"><input type="radio" name="Educacao_Final" value="Universidade"> Universidade (大学)</label>
@@ -232,7 +233,7 @@
         <div class="form-group">
             <label>Status da Educação <span>学歴状況</span></label>
             <div class="options-vertical">
-                <label class="option-card"><input type="radio" name="Status_Educacao" value="Completo"> Completo (卒業)</label>
+                <label class="option-card"><input type="radio" name="Status_Educacao" value="Completo" required> Completo (卒業)</label>
                 <label class="option-card"><input type="radio" name="Status_Educacao" value="Incompleto"> Incompleto (中退)</label>
             </div>
         </div>
@@ -240,7 +241,7 @@
         <div class="form-group">
             <label>Endereço Atual <span>現住所</span></label>
             <div class="options-vertical">
-                <label class="option-card"><input type="radio" name="Endereco_Atual" value="O mesmo do ZAIRYU-CARD"> O mesmo do ZAIRYU-CARD / Registro Residencial (在留カード・住民票と同じ)</label>
+                <label class="option-card"><input type="radio" name="Endereco_Atual" value="O mesmo do ZAIRYU-CARD" required> O mesmo do ZAIRYU-CARD / Registro Residencial (在留カード・住民票と同じ)</label>
                 <label class="option-card"><input type="radio" name="Endereco_Atual" value="Diferente do ZAIRYU-CARD"> Diferente do ZAIRYU-CARD / Registro Residencial (在留カード・住民票と異なる)</label>
                 <label class="option-card"><input type="radio" name="Endereco_Atual" value="Possuo Nacionalidade Japonesa"> Possuo Nacionalidade Japonesa / Não tenho Zairyu Card (日本国籍所有・在留カードなし)</label>
             </div>
@@ -251,10 +252,9 @@
             <input type="text" name="Mudanca_Endereco_Detalhes" placeholder="Tipo / Detalhes / 理由や詳細を入力してください">
         </div>
 
-
         <div class="form-group">
-            <label for="contatos">Contatos (Telefone / E-mail / Redes Sociais) <span>連絡先 (電話番号、メール、SNS)</span></label>
-            <input type="text" id="contatos" name="Contatos" required placeholder="Telefone ou link do perfil / 連絡先を入力してください">
+            <label>Contatos (Telefone / E-mail / Redes Sociais) <span>連絡先 (電話番号、メール、SNS)</span></label>
+            <input type="text" name="Contatos" placeholder="Telefone ou link do perfil / 連絡先を入力してください">
         </div>
 
         <div class="form-group">
@@ -551,7 +551,7 @@
         <div class="form-group">
             <label>Método de comutação / Transporte <span>🚲 通勤方法</span></label>
             <div class="options-vertical">
-                <label class="option-card"><input type="radio" name="Transporte" value="Souguei / Irapé"> Souguei / A pé (送迎・徒歩)</label>
+                <label class="option-card"><input type="radio" name="Transporte" value="Souguei / Irapé" required> Souguei / A pé (送迎・徒歩)</label>
                 <label class="option-card"><input type="radio" name="Transporte" value="Carro"> Carro (自家用車)</label>
                 <label class="option-card"><input type="radio" name="Transporte" value="Moto"> Moto 50cc ou acima (バイク 50cc以上)</label>
                 <label class="option-card"><input type="radio" name="Transporte" value="Bicicleta"> Bicicleta (自転車)</label>
@@ -569,7 +569,7 @@
 
         <!-- SEÇÃO 5: Estado de Saúde e Dados Físicos -->
         <div class="section-title">5. Estado de Saúde e Dados Físicos (健康状態・身体データ)</div>
-        
+
         <div class="grid-2">
             <div class="form-group">
                 <label>Estado da saúde <span>健康状態</span></label>
@@ -590,23 +590,25 @@
         <div class="form-group">
             <label>Histórico de Hospitalização <span>入院歴</span></label>
             <select name="Hospitalizado">
-                <option value="Never hospitalizado">Nunca foi hospitalizado (入院歴なし)</option>
+                <option value="Nunca foi hospitalizado">Nunca foi hospitalizado (入院歴なし)</option>
                 <option value="Tem histórico">Tem histórico de hospitalização (入院歴あり)</option>
             </select>
         </div>
 
-        <div class="form-group">
+                <div class="form-group">
             <label>Doença crônica / Sintomas <span>慢性疾患・症状</span></label>
             <div class="options-vertical">
                 <label class="option-card"><input type="checkbox" name="Doenca_Cronica" value="Dor Lombar"> Dor Lombar (腰痛)</label>
                 <label class="option-card"><input type="checkbox" name="Doenca_Cronica" value="Hipertensão"> Hipertensão (高血圧)</label>
                 <label class="option-card"><input type="checkbox" name="Doenca_Cronica" value="Alergia (Solvente / Óleo)"> Alergia a Solvente / Óleo (アレルギー 溶剤・油)</label>
             </div>
+            <!-- Campo Outras com caixa de texto livre -->
             <div style="margin-top: 8px;">
                 <label style="font-size: 13px; font-weight: normal; margin-bottom: 4px;">Outras doenças ou sintomas <span>その他の慢性疾患・症状</span></label>
-                <input type="text" name="Doenca_Cronica_Outras" placeholder="Descreva outras condições ou alergias / そのその他の症状を記載してください">
+                <input type="text" name="Doenca_Cronica_Outras" placeholder="Descreva outras condições ou alergias / その他の症状を記載してください">
             </div>
         </div>
+
 
         <div class="grid-2">
             <div class="form-group">
@@ -673,8 +675,8 @@
                 </select>
             </div>
             <div class="form-group">
-                <label>Bebida alcóolica <span>飲酒習慣</span></label>
-                <select name="Bebida_Alcoolica">
+                <label>Bebendo álcool <span>飲酒習慣</span></label>
+                <select name="Bebendo_Alcool">
                     <option value="Não Beba">Não Beba (飲まない)</option>
                     <option value="Bebo">Bebo (飲む)</option>
                 </select>
@@ -684,7 +686,7 @@
         <div class="form-group">
             <label>Trabalho impossível <span>🚫 従事できない業務</span></label>
             <div class="options-vertical">
-                <label class="option-card"><input type="radio" name="Trabalho_Impossivel_Opcao" value="Não tem" checked> Não tem (特になし)</label>
+                <label class="option-card"><input type="radio" name="Trabalho_Impossivel_Opcao" value="Não tem" checked required> Não tem (特になし)</label>
                 <label class="option-card"><input type="radio" name="Trabalho_Impossivel_Opcao" value="Tem"> Tem (あり - 下記に記載)</label>
             </div>
             <input type="text" name="Trabalho_Impossivel_Detalhe" style="margin-top: 8px;" placeholder="Descreva qual trabalho não pode fazer">
@@ -693,7 +695,7 @@
 
         <!-- SEÇÃO 6: Disponibilidade e Histórico de Seguros -->
         <div class="section-title">6. Disponibilidade e Histórico de Seguros (就労可否・保険加入歴)</div>
-        
+
         <div class="form-group">
             <label>Quando participar / Início <span>📅 稼働開始希望日</span></label>
             <select name="Inicio_Disponibilidade">
@@ -702,7 +704,7 @@
             </select>
         </div>
 
-        <div class="form-group">
+          <div class="form-group">
             <label>Hora extra <span>⏰ 残業対応</span></label>
             <select name="Hora_Extra">
                 <option value="0 - Não posso fazer horas extras">0 - Não posso fazer horas extras (残業対応不可)</option>
@@ -721,7 +723,7 @@
             </div>
         </div>
 
-        <div class="form-group">
+         <div class="form-group">
             <label>Conta no Banco do Correio <span>🏦 ゆうちょ銀行口座</span></label>
             <select name="Conta_Yucho">
                 <option value="Abri (Tem cartão / Caderneta)">Abri / Possuo conta e cartão (口座あり・通帳/カード保持)</option>
@@ -737,7 +739,11 @@
             </select>
         </div>
 
-  <option value="Já contribuí Seguro Nacional (Kokumin Hoken)">Já contribuí Seguro Nacional (国民健康保険 / Kokumin Hoken)</option>
+        <div class="form-group">
+            <label>Seguro de saúde <span> (健康保険歴)</span></label>
+            <select name="Seguro_Saude">
+                <option value="Já contribuí Seguro Social (Shakai Hoken)">Já contribuí Seguro Social (社会保険 / Shakai Hoken)</option>
+                <option value="Já contribuí Seguro Nacional (Kokumin Hoken)">Já contribuí Seguro Nacional (国民健康保険 / Kokumin Hoken)</option>
                 <option value="Nunca juntei">Nunca juntei (加入歴なし)</option>
             </select>
         </div>
@@ -750,7 +756,7 @@
             </select>
         </div>
 
- <div class="form-group">
+        <div class="form-group">
             <label>Como conheceu a GORO? <span>🤝 応募のきっかけ</span></label>
             <select name="Como_Conheceu_Goro">
                 <option value="Internet (Facebook / Empregos)">Internet / Facebook / Sites de Emprego (インターネット・求人サイト)</option>
@@ -766,23 +772,27 @@
                 <li>Se houver falsidade no conteúdo preenchido, há possibilidade de cancelamento do emprego. (申告内容に虚偽があった場合、採用が取り消されることがあります。)</li>
                 <li>Se você se deslocar de carro, precisará apresentar a licença de condução e os seguros ativos. (車通勤の場合、運転免許証および有効な保険証券の提示が必要です。)</li>
                 <li>As configurações de salário final diferem dependendo se o seguro social está inscrito ou não. (社会保険の加入有無により、最終的な給与手取り額が異なります。)</li>
+                <!-- Nova frase adicionada -->
                 <li style="color: #9B2C2C; font-weight: bold;">No caso de mudança, consulte os termos de taxa de mudança com a empreiteira. (引越しをする場合、引越し費用や条件については派遣会社に確認してください。)</li>
             </ul>
             <label class="option-card" style="margin-top: 12px; background-color: #FFF;">
-                <input type="checkbox" name="Termos_Aceite" value="Sim"> Eu entendo o acima e concordo. (上記内容を理解し、同意します。)
+                <input type="checkbox" name="Termos_Aceite" value="Sim" required> Eu entendo o acima e concordo. (上記内容uを理解し、同意します。)
             </label>
         </div>
 
         <!-- Botões Finais do Formulário (Envio e Limpeza) -->
         <div class="btn-container" style="display: flex; gap: 12px; margin-top: 30px; margin-bottom: 20px;">
+            <!-- Botão de Apagar Tudo -->
             <button type="reset" class="btn-clear" style="background-color: #E2E8F0; color: #4A5568; font-size: 16px; font-weight: bold; padding: 16px; border: none; border-radius: 8px; cursor: pointer; flex: 1;">
                 🗑️ Apagar Tudo
             </button>
+
+            <!-- Botão de Enviar -->
             <button type="submit" class="btn-submit" style="background-color: #1A365D; color: white; font-size: 16px; font-weight: bold; padding: 16px; border: none; border-radius: 8px; cursor: pointer; flex: 2; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
                 🚀 Enviar Currículo
             </button>
         </div>
-        
+
         <div id="statusMessage" class="status-msg" style="text-align: center; color: #2B6CB0; font-weight: bold; margin-top: 8px; display: none;">
             ✓ Dados enviados com sucesso! Suas informações foram mantidas na tela para sua conferência.
         </div>
@@ -792,19 +802,20 @@
 
 <script>
     function enviarFormulario(event) {
-        event.preventDefault(); // Impede o recarregamento da página
-        
+        event.preventDefault(); // Impede o recarregamento automático da página
+
         const statusMsg = document.getElementById('statusMessage');
         const btnSubmit = document.querySelector('.btn-submit');
-        
+
         statusMsg.style.display = 'block';
         statusMsg.innerText = 'Enviando dados para o servidor GORO, por favor aguarde...';
-        btnSubmit.disabled = true; // Evita cliques duplos no celular
-        
+        statusMsg.style.color = '#2B6CB0';
+        btnSubmit.disabled = true; // Evita cliques duplos que geram linhas repetidas
+
         const form = document.getElementById('goroForm');
         const formData = new FormData(form);
-        
-        // Agrupa múltiplos checkboxes selecionados por vírgula
+
+        // Junta múltiplas seleções de checkboxes (como qualificações e doenças) separando por vírgula
         const dataParsed = {};
         for (const [key, value] of formData.entries()) {
             if (dataParsed[key]) {
@@ -813,22 +824,33 @@
                 dataParsed[key] = value;
             }
         }
-        
+
+        // Transforma os dados em formato de parâmetros de URL (?Sobrenome_Nome=...&Data_Nascimento=...)
         const urlParams = new URLSearchParams(dataParsed);
-        const urlWebhook = "https://google.com";
-        
+
+        // Link de integração Web App oficial criado por você
+        const urlWebhook = "https://script.google.com/macros/s/AKfycbzApfxWE-jf-gvt6iSxRqBCT9f8lqZJFpuarYsXd4f9qGwuoeVC3fWFZTTXoIt4_Yv-/exec";
+
+        // Faz o envio dos dados
         fetch(urlWebhook, {
             method: 'POST',
-            mode: 'no-cors',
+            mode: 'no-cors', // Mantido para evitar barreira de CORS clássica do Apps Script em POSTs diretos
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
             },
             body: urlParams.toString()
         })
         .then(() => {
+            // CORREÇÃO AQUI: Retirado o .style de innerText
             statusMsg.innerText = '✓ Dados enviados com sucesso! Suas informações foram mantidas na tela para sua conferência.';
             statusMsg.style.color = '#2F855A';
-            alert('✓ Currículo gravado com sucesso na planilha da GORO! Os seus dados foram mantidos na tela para conferência.');
+            
+            alert('✓ Currículo gravado com sucesso na planilha da GORO! Vamos gerar a sua folha de conferência montada para impressão.');
+            
+            // O PULO DO GATO: Redireciona o navegador para o link doGet passando todos os dados preenchidos na URL!
+            // Isso fará com que o template renderize o papel igual à foto, mas preenchido com os dados reais.
+            window.location.href = urlWebhook + "?" + urlParams.toString();
+            
             btnSubmit.disabled = false;
         })
         .catch(error => {
