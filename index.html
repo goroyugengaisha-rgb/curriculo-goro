@@ -556,7 +556,7 @@
             </div>
         </div>
 
-        <div class="form-group">
+  <div class="form-group">
             <label>Documentos do Veículo para Uso <span>📄 利用に必要な書類</span></label>
             <div class="options-vertical">
                 <label class="option-card"><input type="checkbox" name="Docs_Veiculo" value="Shaken"> Inspeção de veículos (車検証 / Shaken)</label>
@@ -567,7 +567,7 @@
 
         <!-- SEÇÃO 5: Estado de Saúde e Dados Físicos -->
         <div class="section-title">5. Estado de Saúde e Dados Físicos (健康状態・身体データ)</div>
-
+        
         <div class="grid-2">
             <div class="form-group">
                 <label>Estado da saúde <span>健康状態</span></label>
@@ -593,20 +593,18 @@
             </select>
         </div>
 
-                <div class="form-group">
+        <div class="form-group">
             <label>Doença crônica / Sintomas <span>慢性疾患・症状</span></label>
             <div class="options-vertical">
                 <label class="option-card"><input type="checkbox" name="Doenca_Cronica" value="Dor Lombar"> Dor Lombar (腰痛)</label>
                 <label class="option-card"><input type="checkbox" name="Doenca_Cronica" value="Hipertensão"> Hipertensão (高血圧)</label>
                 <label class="option-card"><input type="checkbox" name="Doenca_Cronica" value="Alergia (Solvente / Óleo)"> Alergia a Solvente / Óleo (アレルギー 溶剤・油)</label>
             </div>
-            <!-- Campo Outras com caixa de texto livre -->
             <div style="margin-top: 8px;">
                 <label style="font-size: 13px; font-weight: normal; margin-bottom: 4px;">Outras doenças ou sintomas <span>その他の慢性疾患・症状</span></label>
                 <input type="text" name="Doenca_Cronica_Outras" placeholder="Descreva outras condições ou alergias / その他の症状を記載してください">
             </div>
         </div>
-
 
         <div class="grid-2">
             <div class="form-group">
@@ -673,8 +671,8 @@
                 </select>
             </div>
             <div class="form-group">
-                <label>Bebendo álcool <span>飲酒習慣</span></label>
-                <select name="Bebendo_Alcool">
+                <label>Bebida alcóolica <span>飲酒習慣</span></label>
+                <select name="Bebida_Alcoolica">
                     <option value="Não Beba">Não Beba (飲まない)</option>
                     <option value="Bebo">Bebo (飲む)</option>
                 </select>
@@ -684,12 +682,11 @@
         <div class="form-group">
             <label>Trabalho impossível <span>🚫 従事できない業務</span></label>
             <div class="options-vertical">
-                <label class="option-card"><input type="radio" name="Trabalho_Impossivel_Opcao" value="Não tem" checked required> Não tem (特になし)</label>
+                <label class="option-card"><input type="radio" name="Trabalho_Impossivel_Opcao" value="Não tem" checked> Não tem (特になし)</label>
                 <label class="option-card"><input type="radio" name="Trabalho_Impossivel_Opcao" value="Tem"> Tem (あり - 下記に記載)</label>
             </div>
             <input type="text" name="Trabalho_Impossivel_Detalhe" style="margin-top: 8px;" placeholder="Descreva qual trabalho não pode fazer">
         </div>
-
 
         <!-- SEÇÃO 6: Disponibilidade e Histórico de Seguros -->
         <div class="section-title">6. Disponibilidade e Histórico de Seguros (就労可否・保険加入歴)</div>
