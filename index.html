@@ -748,7 +748,7 @@
             </select>
         </div>
 
-        <div class="form-group">
+  <div class="form-group">
             <label>Pensão <span>年金 (厚生年金・国民年金歴)</span></label>
             <select name="Contribuição_Nenkin">
                 <option value="Já contribuí">Já contribuí / Possuo caderneta (加入歴あり・年金手帳保持)</option>
@@ -772,31 +772,27 @@
                 <li>Se houver falsidade no conteúdo preenchido, há possibilidade de cancelamento do emprego. (申告内容に虚偽があった場合、採用が取り消されることがあります。)</li>
                 <li>Se você se deslocar de carro, precisará apresentar a licença de condução e os seguros ativos. (車通勤の場合、運転免許証および有効な保険証券の提示が必要です。)</li>
                 <li>As configurações de salário final diferem dependendo se o seguro social está inscrito ou não. (社会保険の加入有無により、最終的な給与手取り額が異なります。)</li>
-                <!-- Nova frase adicionada -->
                 <li style="color: #9B2C2C; font-weight: bold;">No caso de mudança, consulte os termos de taxa de mudança com a empreiteira. (引越しをする場合、引越し費用や条件については派遣会社に確認してください。)</li>
             </ul>
             <label class="option-card" style="margin-top: 12px; background-color: #FFF;">
-                <input type="checkbox" name="Termos_Aceite" value="Sim" required> Eu entendo o acima e concordo. (上記内容uを理解し、同意します。)
+                <input type="checkbox" name="Termos_Aceite" value="Sim" required> Eu entendo o acima e concordo. (上記内容を理解し、同意します。) *
             </label>
         </div>
 
         <!-- Botões Finais do Formulário (Envio e Limpeza) -->
         <div class="btn-container" style="display: flex; gap: 12px; margin-top: 30px; margin-bottom: 20px;">
-            <!-- Botão de Apagar Tudo -->
             <button type="reset" class="btn-clear" style="background-color: #E2E8F0; color: #4A5568; font-size: 16px; font-weight: bold; padding: 16px; border: none; border-radius: 8px; cursor: pointer; flex: 1;">
                 🗑️ Apagar Tudo
             </button>
-
-            <!-- Botão de Enviar -->
             <button type="submit" class="btn-submit" style="background-color: #1A365D; color: white; font-size: 16px; font-weight: bold; padding: 16px; border: none; border-radius: 8px; cursor: pointer; flex: 2; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
                 🚀 Enviar Currículo
             </button>
         </div>
-
+        
         <div id="statusMessage" class="status-msg" style="text-align: center; color: #2B6CB0; font-weight: bold; margin-top: 8px; display: none;">
             ✓ Dados enviados com sucesso! Suas informações foram mantidas na tela para sua conferência.
         </div>
-
+        
     </form>
 </div>
 
