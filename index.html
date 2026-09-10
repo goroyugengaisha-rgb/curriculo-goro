@@ -798,20 +798,19 @@
 
 <script>
     function enviarFormulario(event) {
-        event.preventDefault(); // Impede o recarregamento automático da página
-
+        event.preventDefault(); // Impede o recarregamento da página
+        
         const statusMsg = document.getElementById('statusMessage');
         const btnSubmit = document.querySelector('.btn-submit');
-
+        
         statusMsg.style.display = 'block';
         statusMsg.innerText = 'Enviando dados para o servidor GORO, por favor aguarde...';
-        statusMsg.style.color = '#2B6CB0';
-        btnSubmit.disabled = true; // Evita cliques duplos que geram linhas repetidas
-
+        btnSubmit.disabled = true; // Evita cliques duplos no celular
+        
         const form = document.getElementById('goroForm');
         const formData = new FormData(form);
-
-        // Junta múltiplas seleções de checkboxes (como qualificações e doenças) separando por vírgula
+        
+        // Agrupa múltiplos checkboxes selecionados por vírgula
         const dataParsed = {};
         for (const [key, value] of formData.entries()) {
             if (dataParsed[key]) {
@@ -820,33 +819,22 @@
                 dataParsed[key] = value;
             }
         }
-
-        // Transforma os dados em formato de parâmetros de URL (?Sobrenome_Nome=...&Data_Nascimento=...)
+        
         const urlParams = new URLSearchParams(dataParsed);
-
-        // Link de integração Web App oficial criado por você
-        const urlWebhook = "https://script.google.com/macros/s/AKfycbzApfxWE-jf-gvt6iSxRqBCT9f8lqZJFpuarYsXd4f9qGwuoeVC3fWFZTTXoIt4_Yv-/exec";
-
-        // Faz o envio dos dados
+        const urlWebhook = "https://google.com";
+        
         fetch(urlWebhook, {
             method: 'POST',
-            mode: 'no-cors', // Mantido para evitar barreira de CORS clássica do Apps Script em POSTs diretos
+            mode: 'no-cors',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
             },
             body: urlParams.toString()
         })
         .then(() => {
-            // CORREÇÃO AQUI: Retirado o .style de innerText
             statusMsg.innerText = '✓ Dados enviados com sucesso! Suas informações foram mantidas na tela para sua conferência.';
             statusMsg.style.color = '#2F855A';
-            
-            alert('✓ Currículo gravado com sucesso na planilha da GORO! Vamos gerar a sua folha de conferência montada para impressão.');
-            
-            // O PULO DO GATO: Redireciona o navegador para o link doGet passando todos os dados preenchidos na URL!
-            // Isso fará com que o template renderize o papel igual à foto, mas preenchido com os dados reais.
-            window.location.href = urlWebhook + "?" + urlParams.toString();
-            
+            alert('✓ Currículo gravado com sucesso na planilha da GORO! Os seus dados foram mantidos na tela para conferência.');
             btnSubmit.disabled = false;
         })
         .catch(error => {
@@ -859,3 +847,4 @@
 </script>
 </body>
 </html>
+
