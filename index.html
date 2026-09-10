@@ -179,24 +179,24 @@
         <h1>Currículo e Questionário</h1>
         <div class="subtitle">GORO DIGITAL RECRUITMENT</div>
 
-                     <!-- SEÇÃO 1: Dados Pessoais e Endereço / 個人情報と住所 -->
+        <!-- SEÇÃO 1: Dados Pessoais e Endereço / 個人情報 e 住所 -->
         <div class="section-title">1. Dados Pessoais e Endereço (個人情報と住所)</div>
         
         <div class="form-group">
-            <label for="nome">Sobrenome / Nome <span>氏名</span></label>
+            <label for="nome">Sobrenome / Nome <span>氏名 *</span></label>
             <input type="text" id="nome" name="Sobrenome_Nome" required placeholder="Digite seu nome completo / 氏名を入力してください">
         </div>
 
-       <div class="form-group">
-    <label for="data_nasc">Data de Nascimento <span>生年月日</span></label>
-    <!-- LINHA ALTERADA ABAIXO (Adicionado o value) -->
-    <input type="date" id="data_nasc" name="Data_Nascimento" value="<?= d.Data_Nascimento || '' ?>" required>
-</div>
-               <div class="form-group">
-            <label>Gênero <span>性別</span></label>
-            <div class="options-vertical">
-                <label class="option-card"><input type="radio" name="Genero" value="Masculino"> Masculino (男性)</label>
-                <label class="option-card"><input type="radio" name="Genero" value="Feminino"> Feminino (女性)</label>
+        <div class="form-group">
+            <label for="data_nasc">Data de Nascimento <span>生年月日 *</span></label>
+            <input type="date" id="data_nasc" name="Data_Nascimento" required>
+        </div>
+
+        <div class="form-group">
+            <label>Gênero <span>性別 *</span></label>
+            <div class="options-vertical" id="genero_container">
+                <label class="option-card"><input type="radio" name="Genero" id="genero_m" value="Masculino" required> Masculino (男性)</label>
+                <label class="option-card"><input type="radio" name="Genero" id="genero_f" value="Feminino"> Feminino (女性)</label>
             </div>
         </div>
 
