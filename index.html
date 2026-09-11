@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GORO - Currículo e Questionário Digital</title>
-    <style>
+       <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
             background-color: #F7FAFC;
@@ -46,6 +46,7 @@
             border-left: 5px solid #2B6CB0;
             border-radius: 4px;
             margin: 25px 0 15px 0;
+            grid-column: span 2; /* Garante que o título ocupe a largura total no grid */
         }
         .form-group {
             margin-bottom: 18px;
@@ -70,13 +71,16 @@
             border-radius: 8px;
             box-sizing: border-box;
             background-color: #FFF;
-            -webkit-appearance: none;
         }
+        
+        /* Grid corrigido para alinhar no topo e não esticar os campos */
         .grid-2 {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
             gap: 12px;
+            align-items: start;
         }
+        
         .options-vertical {
             display: flex;
             flex-direction: column;
@@ -102,7 +106,6 @@
         .table-responsive {
             width: 100%;
             overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
             margin-top: 8px;
             border: 1px solid #E2E8F0;
             border-radius: 8px;
@@ -121,10 +124,6 @@
         .lang-table th {
             background-color: #F7FAFC;
         }
-        .lang-table select {
-            padding: 6px;
-            font-size: 13px;
-        }
         .terms-box {
             background-color: #FFFAF0;
             border: 1px solid #FEEBC8;
@@ -138,32 +137,36 @@
             margin: 5px 0 0 0;
             padding-left: 20px;
         }
+        
+        /* Container dos botões corrigido com alinhamento centralizado para evitar esticamento */
         .btn-container {
             display: flex;
             gap: 12px;
             margin-top: 30px;
             margin-bottom: 20px;
+            align-items: center; 
+        }
+        /* Definição de altura fixa e estolização correta dos botões */
+        .btn-submit, .btn-clear {
+            height: 54px;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-sizing: border-box;
         }
         .btn-submit {
             background-color: #1A365D;
             color: white;
-            font-size: 16px;
-            font-weight: bold;
-            padding: 16px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
             flex: 2;
         }
         .btn-clear {
             background-color: #E2E8F0;
             color: #4A5568;
-            font-size: 16px;
-            font-weight: bold;
-            padding: 16px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
             flex: 1;
         }
         .status-msg {
@@ -173,14 +176,17 @@
             margin-top: 8px;
             display: none;
         }
+        
+        /* Ajustes específicos para smartphones */
         @media (max-width: 480px) {
             body { padding: 8px 4px; }
             .container { padding: 16px 12px; border-radius: 8px; }
             h1 { font-size: 18px; }
             .btn-container { flex-direction: column-reverse; }
-            .btn-submit, .btn-clear { width: 100%; padding: 14px; }
+            .btn-submit, .btn-clear { width: 100%; }
         }
     </style>
+
 </head>
 
 <body>
