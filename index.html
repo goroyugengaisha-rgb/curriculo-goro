@@ -5,9 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GORO - Currículo e Questionário Digital</title>
     <style>
-        /* Estilos Gerais Otimizados para Celular */
-        body {f
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
             background-color: #F7FAFC;
             color: #2D3748;
             margin: 0;
@@ -26,8 +25,7 @@
             font-size: 22px;
             color: #1A365D;
             text-align: center;
-            margin-top: 0;
-            margin-bottom: 5px;
+            margin: 0 0 5px 0;
             text-transform: uppercase;
         }
         .subtitle {
@@ -38,8 +36,6 @@
             border-bottom: 2px solid #E2E8F0;
             padding-bottom: 15px;
         }
-
-        /* Seções do Formulário */
         .section-title {
             font-size: 16px;
             font-weight: bold;
@@ -48,11 +44,8 @@
             padding: 10px;
             border-left: 5px solid #2B6CB0;
             border-radius: 4px;
-            margin-top: 25px;
-            margin-bottom: 15px;
+            margin: 25px 0 15px 0;
         }
-
-        /* Grupo de Campos */
         .form-group {
             margin-bottom: 18px;
         }
@@ -68,8 +61,6 @@
             color: #718096;
             font-weight: normal;
         }
-
-        /* Inputs de Texto/Número */
         input[type="text"], input[type="number"], input[type="date"], textarea, select {
             width: 100%;
             padding: 12px;
@@ -78,22 +69,12 @@
             border-radius: 8px;
             box-sizing: border-box;
             background-color: #FFF;
-            transition: border-color 0.2s;
         }
-        input[type="text"]:focus, input[type="number"]:focus, textarea:focus, select:focus {
-            border-color: #3182CE;
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.15);
-        }
-
-        /* Grid para inputs pequenos (Ex: Altura, Peso) */
         .grid-2 {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 12px;
         }
-
-        /* Opções de Seleção (Radio e Checkbox) Mobile-Friendly */
         .options-vertical {
             display: flex;
             flex-direction: column;
@@ -107,14 +88,14 @@
             border-radius: 8px;
             cursor: pointer;
             background-color: #F8FAFC;
+            font-size: 14px;
+            font-weight: 600;
         }
         .option-card input {
             margin-right: 12px;
             width: 18px;
             height: 18px;
         }
-
-        /* Tabela de Idiomas Otimizada */
         .lang-table {
             width: 100%;
             border-collapse: collapse;
@@ -129,8 +110,6 @@
         .lang-table th {
             background-color: #F7FAFC;
         }
-
-        /* Termos e Condições */
         .terms-box {
             background-color: #FFFAF0;
             border: 1px solid #FEEBC8;
@@ -144,27 +123,37 @@
             margin: 5px 0 0 0;
             padding-left: 20px;
         }
-
-        /* Botão Final */
         .btn-container {
-            text-align: center;
+            display: flex;
+            gap: 12px;
             margin-top: 30px;
             margin-bottom: 20px;
         }
         .btn-submit {
             background-color: #1A365D;
             color: white;
-            font-size: 17px;
+            font-size: 16px;
             font-weight: bold;
             padding: 16px;
             border: none;
             border-radius: 8px;
             cursor: pointer;
-            width: 100%;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            flex: 2;
+        }
+        .btn-clear {
+            background-color: #E2E8F0;
+            color: #4A5568;
+            font-size: 16px;
+            font-weight: bold;
+            padding: 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            flex: 1;
         }
         .status-msg {
-            color: #4A5568;
+            text-align: center;
+            font-weight: bold;
             font-size: 13px;
             margin-top: 8px;
             display: none;
@@ -172,26 +161,19 @@
     </style>
 </head>
 <body>
-
 <div class="container">
      <form id="goroForm" onsubmit="enviarFormulario(event)">
-        
         <h1>Currículo e Questionário</h1>
         <div class="subtitle">GORO DIGITAL RECRUITMENT</div>
-
-      <!-- SEÇÃO 1: Dados Pessoais e Endereço / 個人情報 e 住所 -->
         <div class="section-title">1. Dados Pessoais e Endereço (個人情報と住所)</div>
-        
         <div class="form-group">
             <label for="nome">Sobrenome / Nome <span>氏名 *</span></label>
             <input type="text" id="nome" name="Sobrenome_Nome" required placeholder="Digite seu nome completo / 氏名を入力してください">
         </div>
-
         <div class="form-group">
             <label for="data_nasc">Data de Nascimento <span>生年月日 *</span></label>
             <input type="date" id="data_nasc" name="Data_Nascimento" required>
         </div>
-
         <div class="form-group">
             <label>Gênero <span>性別 *</span></label>
             <div class="options-vertical" id="genero_container">
@@ -199,8 +181,6 @@
                 <label class="option-card"><input type="radio" name="Genero" id="genero_f" value="Feminino"> Feminino (女性)</label>
             </div>
         </div>
-
-
         <div class="form-group">
             <label>Estado Civil <span>婚姻状況</span></label>
             <div class="options-vertical">
@@ -249,28 +229,27 @@
         </div>
 
         <div class="form-group">
-            <label>Se mudou de endereço recente, descreva <span>最近引越しをした場合、詳細を記載</span></label>
+            <label>Se mudou de endereço recente, descreva <span>最近引越しをした場合、詳細 te 記載</span></label>
             <input type="text" name="Mudanca_Endereco_Detalhes" placeholder="Tipo / Detalhes / 理由や詳細を入力してください">
         </div>
-
 
         <div class="form-group">
             <label for="contatos">Contatos (Telefone / E-mail / Redes Sociais) <span>連絡先 (電話番号、メール、SNS)</span></label>
             <input type="text" id="contatos" name="Contatos" required placeholder="Telefone ou link do perfil / 連絡先を入力してください">
         </div>
 
-          <div class="form-group">
+        <div class="form-group">
             <label>Moradia após contratação <span>採用後の入居希望 *</span></label>
             <div class="options-vertical" id="moradia_container">
-                <label class="option-card"><input type="radio" name="Moradia_Apos_Contratacao" id="moradia_p" value="Pendulares"> Pendulares do endereço atual ou própria casa etc. (自宅から通勤・自己手配等)</label>
-                <label class="option-card"><input type="radio" name="Moradia_Apos_Contratacao" id="moradia_a" value="Precisa Alojamento"> Precisa de Alojamento da empresa (社宅への入居を希望)</label>
+                <label class="option-card"><input type="radio" name="Moradia_Apos_Contratacao" value="Pendulares"> Pendulares do endereço atual ou própria casa etc. (自宅から通勤・自己手配等)</label>
+                <label class="option-card"><input type="radio" name="Moradia_Apos_Contratacao" value="Precisa Alojamento"> Precisa de Alojamento da empresa (社宅への入居を希望)</label>
             </div>
         </div>
+
         <div class="form-group">
             <label>Qual era sua profissão no país de origem? <span>母国での職歴 (職種)</span></label>
             <input type="text" name="Profissao_Patria" placeholder="Ex: Mecânico, Vendedor, etc. / 職種を入力してください">
         </div>
-
 
         <!-- SEÇÃO 2: Histórico Profissional no Japão -->
         <div class="section-title">2. Histórico Profissional no Japão (Três Últimas Empresas)</div>
@@ -329,7 +308,6 @@
                 <input type="text" name="Empresa1_Motivo_Saida" placeholder="Razão do desligamento">
             </div>
         </div>
-
         <!-- 2ª Empresa -->
         <div style="border: 1px solid #CBD5E0; padding: 12px; border-radius: 8px; margin-bottom: 20px; background-color: #FFF;">
             <strong style="display: block; margin-bottom: 12px; color: #4A5568;">🏢 2ª Empresa (Anterior)</strong>
@@ -384,9 +362,10 @@
                 <input type="text" name="Empresa2_Motivo_Saida" placeholder="Razão do desligamento">
             </div>
         </div>
+
         <!-- 3ª Empresa -->
         <div style="border: 1px solid #CBD5E0; padding: 12px; border-radius: 8px; margin-bottom: 20px; background-color: #FFF;">
-            <strong style="display: block; margin-bottom: 12px; color: #718096;">🏢 3ª Empresa (Mais Antiga / 3番目の会社)</strong>
+            <strong style="display: block; margin-bottom: 12px; color: #718096;">🏢 3ª Empresa (Mais Antiga)</strong>
             <div class="grid-2">
                 <div class="form-group">
                     <label>Entrar 入社 <span>(Ano 年)</span></label>
@@ -443,20 +422,18 @@
         <div class="section-title">3. Familiares e Idioma (日本語スキル)</div>
 
         <div class="form-group">
-            <label>Parentes que moram no Japão <span>在日親族 (Nome, idade, relação, residência / 氏名、年齢、続柄、同居・別居)</span></label>
+            <label>Parentes que moram no Japão <span>在日親族 (Nome, idade, relação, residência)</span></label>
             <textarea name="Parentes_No_Japao" rows="2" placeholder="Ex: Maria Silva, 45 anos, Mãe, Aichi-ken"></textarea>
         </div>
 
-                <div class="form-group">
+        <div class="form-group">
             <label>Se tem filho(s) e mora com ele(s), existe alguém que cuide dele(s) além de você enquanto estiver no trabalho? <br><span>子供と同居している場合、勤務時間中にご自身以外に面倒を見てくれる人はいますか？</span></label>
             <div class="options-vertical">
                 <label class="option-card"><input type="checkbox" name="Cuidado_Filhos" value="Sim (parente ou creche)"> Sim - parente ou creche (はい - 親族や保育園など)</label>
-                <label class="option-card"><input type="checkbox" name="Cuidado_Filhos" value="Não tem"> Não tem / Ninguém além de mim (いいえ - 自分以外にいない)</label>
+                <label class="option-card"><input type="checkbox" name="Cuidado_Filhos" value="Não tem"> Não tem / Ninguém além de mijm (いいえ - 自分以外にいない)</label>
             </div>
         </div>
-
-
-            <div class="form-group">
+        <div class="form-group">
             <label>Nível de Japonês Falado e Compreensão <span>日本語会話・聴解力 *</span></label>
             <div class="options-vertical" id="nihongo_container">
                 <label class="option-card"><input type="radio" name="Nivel_Japones_Falado" id="nihongo_a" value="A) Quase completo (80%)"> A) Quase completo ・ ±80% (ほぼ完璧)</label>
@@ -465,7 +442,6 @@
                 <label class="option-card"><input type="radio" name="Nivel_Japones_Falado" id="nihongo_d" value="D) Nada (0%)"> D) Nada ・・・・・ 0% (全く話せない)</label>
             </div>
         </div>
-
 
         <div class="form-group">
             <label>Leitura e Escrita <span>読み・書き</span></label>
@@ -479,117 +455,111 @@
                 </thead>
                 <tbody>
                     <tr>
-    <td><strong>Hiragana ひらがな</strong></td>
-    <td>
-        <select name="Hiragana_Leitura">
-            <option value="" selected>----</option>
-            <option>Todo (全部)</option>
-            <option>Pouco (稍微)</option>
-            <option>Nada (全くない)</option>
-        </select>
-    </td>
-    <td>
-        <select name="Hiragana_Escrita">
-            <option value="" selected>----</option>
-            <option>Todo (全部)</option>
-            <option>Pouco (稍微)</option>
-            <option>Nada (全くない)</option>
-        </select>
-    </td>
-</tr>
-<tr>
-    <td><strong>Katakana カタカナ</strong></td>
-    <td>
-        <select name="Katakana_Leitura">
-            <option value="" selected>----</option>
-            <option>Todo (全部)</option>
-            <option>Pouco (稍微)</option>
-            <option>Nada (全くない)</option>
-        </select>
-    </td>
-    <td>
-        <select name="Katakana_Escrita">
-            <option value="" selected>----</option>
-            <option>Todo (全部)</option>
-            <option>Pouco (稍微)</option>
-            <option>Nada (全くない)</option>
-        </select>
-    </td>
-</tr>
-<tr>
-    <td><strong>Kanji 漢字</strong></td>
-    <td>
-        <select name="Kanji_Leitura">
-            <option value="" selected>----</option>
-            <option>Todo (全部)</option>
-            <option>Pouco (稍微)</option>
-            <option>Nada (全くない)</option>
-        </select>
-    </td>
-    <td>
-        <select name="Kanji_Escrita">
-            <option value="" selected>----</option>
-            <option>Todo (全部)</option>
-            <option>Pouco (稍微)</option>
-            <option>Nada (全くない)</option>
-        </select>
-    </td>
-</tr>
+                        <td><strong>Hiragana ひらがna</strong></td>
+                        <td>
+                            <select name="Hiragana_Leitura">
+                                <option value="" selected>----</option>
+                                <option>Todo (全部)</option>
+                                <option>Pouco (少し)</option>
+                                <option>Nada (全くない)</option>
+                            </select>
+                        </td>
+                        <td>
+                            <select name="Hiragana_Escrita">
+                                <option value="" selected>----</option>
+                                <option>Todo (全部)</option>
+                                <option>Pouco (少し)</option>
+                                <option>Nada (全くない)</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Katakana カタカナ</strong></td>
+                        <td>
+                            <select name="Katakana_Leitura">
+                                <option value="" selected>----</option>
+                                <option>Todo (全部)</option>
+                                <option>Pouco (少し)</option>
+                                <option>Nada (全くない)</option>
+                            </select>
+                        </td>
+                        <td>
+                            <select name="Katakana_Escrita">
+                                <option value="" selected>----</option>
+                                <option>Todo (全部)</option>
+                                <option>Pouco (稍微)</option>
+                                <option>Nada (全くない)</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Kanji 漢字</strong></td>
+                        <td>
+                            <select name="Kanji_Leitura">
+                                <option value="" selected>----</option>
+                                <option>Todo (全部)</option>
+                                <option>Pouco (稍微)</option>
+                                <option>Nada (全くない)</option>
+                            </select>
+                        </td>
+                        <td>
+                            <select name="Kanji_Escrita">
+                                <option value="" selected>----</option>
+                                <option>Todo (全部)</option>
+                                <option>Pouco (稍微)</option>
+                                <option>Nada (全くない)</option>
+                            </select>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         </div>
- <!-- SEÇÃO 4: Qualificações, Habilitação e Veículo -->
-<div class="section-title">4. Qualificações, Habilitação e Veículo (資格・免許・車両)</div>
+        <!-- SEÇÃO 4: Qualificações, Habilitação e Veículo -->
+        <div class="section-title">4. Qualificações, Habilitação e Veículo (資格・免許・車両)</div>
 
-<div class="form-group">
-    <label>Qualificação Profissional <span>📋 業務資格</span></label>
-    <div class="options-vertical">
-        <label class="option-card"><input type="checkbox" name="Qualificacao" value="Empilhadeira"> Empilhadeira (フォークリフト)</label>
-        <label class="option-card"><input type="checkbox" name="Qualificacao" value="Solda"> Solda (溶接)</label>
-        <label class="option-card"><input type="checkbox" name="Qualificacao" value="Guindaste"> Guindaste (クレーン)</label>
-        <label class="option-card"><input type="checkbox" name="Qualificacao" value="Prensa"> Prensa (プレス)</label>
-    </div>
-    <!-- Campo Outras com caixa de texto livre -->
-    <div style="margin-top: 8px;">
-        <label style="font-size: 13px; font-weight: normal; margin-bottom: 4px;">Outras qualificações <span>その他の資格</span></label>
-        <input type="text" name="Qualificacao_Outras" placeholder="Descreva outras qualificações que possui / その他の資格を記載してください">
-    </div>
-</div>
-
-<div class="form-group">
-    <label>Possui Habilitação? <span>🪪 運転免許の有無</span></label>
-    <div class="options-vertical">
-        <label class="option-card"><input type="radio" name="Habilitacao" value="Sim"> Sim (あり)</label>
-        <label class="option-card"><input type="radio" name="Habilitacao" value="Não"> Não (なし)</label>
-    </div>
-</div>
-
-<div class="form-group">
-    <label for="Habilitacao_Tipo">Categoria da CNH <span>運転免許種類</span></label>
-    <select id="Habilitacao_Tipo" name="Habilitacao_Tipo" class="form-control" style="width: 100%; padding: 8px; border: 1px solid #D1D5DB; border-radius: 4px; font-size: 14px; background-color: #FFFFFF;">
-        <option value="">Selecione... / 未選択</option>
-        <option value="Carro (普通自動車)">Carro / 普通自動車</option>
-        <option value="Moto (二輪車)">Moto / 二輪車</option>
-        <option value="Caminhão Chuugata (中型)">Caminhão Chuugata / 中型トラック</option>
-        <option value="Caminhão Ogata (大型)">Caminhão Ogata / 大型トラック</option>
-    </select>
-</div>
-
-<div class="form-group">
-    <label>Propriedade de Automóveis <span>🚗 車の保有</span></label>
-    <div class="options-vertical">
-        <!-- Opção Principal: Carro -->
-        <label class="option-card"><input type="checkbox" name="Propriedade_Veiculo" value="Carro"> Carro (自動車保有)</label>
-
-        <!-- Subopção de Carro -->
-        <div style="margin-left: 25px; margin-top: -4px; margin-bottom: 4px;">
-            <label class="option-card" style="background-color: #FFF; border-style: dashed;"><input type="checkbox" name="Propriedade_Veiculo_Inverno" value="Equipamento Inverno"> Possui Equipamento de Inverno? (冬用装備 / スタッドレスタイヤを保有しているか？)</label>
+        <div class="form-group">
+            <label>Qualificação Profissional <span>📋 業務資格</span></label>
+            <div class="options-vertical">
+                <label class="option-card"><input type="checkbox" name="Qualificacao" value="Empilhadeira"> Empilhadeira (フォークリフト)</label>
+                <label class="option-card"><input type="checkbox" name="Qualificacao" value="Solda"> Solda (溶接)</label>
+                <label class="option-card"><input type="checkbox" name="Qualificacao" value="Guindaste"> Guindaste (クレーン)</label>
+                <label class="option-card"><input type="checkbox" name="Qualificacao" value="Prensa"> Prensa (プレス)</label>
+            </div>
+            <div style="margin-top: 8px;">
+                <label style="font-size: 13px; font-weight: normal; margin-bottom: 4px;">Outras qualificações <span>その他の資格</span></label>
+                <input type="text" name="Qualificacao_Outras" placeholder="Descreva outras qualificações que possui / その他の資格を記載してください">
+            </div>
         </div>
 
-        <!-- Opção Principal: Moto -->
-        <label class="option-card"><input type="checkbox" name="Propriedade_Veiculo" value="Moto"> Moto (バイク保有)</label>
-    </div>
-</div>
+        <div class="form-group">
+            <label>Possui Habilitação? <span>🪪 運転免許の有無</span></label>
+            <div class="options-vertical">
+                <label class="option-card"><input type="radio" name="Habilitacao" value="Sim"> Sim (あり)</label>
+                <label class="option-card"><input type="radio" name="Habilitacao" value="Não"> Não (なし)</label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="Habilitacao_Tipo">Categoria da CNH <span>運転免許種類</span></label>
+            <select id="Habilitacao_Tipo" name="Habilitacao_Tipo">
+                <option value="" selected>---- Selecione / 未選択 ----</option>
+                <option value="Carro (普通自動車)">Carro / 普通自動車</option>
+                <option value="Moto (二輪車)">Moto / 二輪車</option>
+                <option value="Caminhão Chuugata (中型)">Caminhão Chuugata / 中型トラック</option>
+                <option value="Caminhão Ogata (大型)">Caminhão Ogata / 大型トラック</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Propriedade de Automóveis <span>🚗 車の保有</span></label>
+            <div class="options-vertical">
+                <label class="option-card"><input type="checkbox" name="Propriedade_Veiculo" value="Carro"> Carro (自動車保有)</label>
+                <div style="margin-left: 25px; margin-top: -4px; margin-bottom: 4px;">
+                    <label class="option-card" style="background-color: #FFF; border-style: dashed;"><input type="checkbox" name="Propriedade_Veiculo_Inverno" value="Equipamento Inverno"> Possui Equipamento de Inverno? (冬用装備 / スタッドレスタイヤを保有しているか？)</label>
+                </div>
+                <label class="option-card"><input type="checkbox" name="Propriedade_Veiculo" value="Moto"> Moto (バイク保有)</label>
+            </div>
+        </div>
 
         <div class="form-group">
             <label>Método de comutação / Transporte <span>🚲 通勤方法</span></label>
@@ -609,7 +579,6 @@
                 <label class="option-card"><input type="checkbox" name="Docs_Veiculo" value="Ninihoken"> Seguro voluntário (任意保険 / Ninihoken)</label>
             </div>
         </div>
-
         <!-- SEÇÃO 5: Estado de Saúde e Dados Físicos -->
         <div class="section-title">5. Estado de Saúde e Dados Físicos (健康状態・身体データ)</div>
         
@@ -652,7 +621,6 @@
         </div>
 
         <div class="grid-2">
-                    <div class="grid-2">
             <div class="form-group">
                 <label>Lateralidade <span>利き手</span></label>
                 <select name="Lateralidade">
@@ -670,6 +638,27 @@
                     <option value="AB">AB型</option>
                     <option value="O">O型</option>
                 </select>
+            </div>
+        </div>
+
+        <div class="grid-2">
+            <div class="form-group">
+                <label>Altura <span>身長 (cm)</span></label>
+                <input type="number" name="Altura" placeholder="Ex: 175">
+            </div>
+            <div class="form-group">
+                <label>Peso <span>体重 (kg)</span></label>
+                <input type="number" name="Peso" placeholder="Ex: 70">
+            </div>
+        </div>
+        <div class="grid-2">
+            <div class="form-group">
+                <label>Tamanho Camisa <span>作業服上</span></label>
+                <input type="text" name="Tamanho_Camisa" placeholder="Ex: S, M, L, LL, 3L">
+            </div>
+            <div class="form-group">
+                <label>Tamanho Calça <span>作業服下 (cm)</span></label>
+                <input type="number" name="Tamanho_Calca" placeholder="Largura da cintura em cm">
             </div>
         </div>
 
@@ -698,6 +687,7 @@
                     <option value="Fumar">Fumar (吸う)</option>
                 </select>
             </div>
+            <div class="grid-2">
             <div class="form-group">
                 <label>Bebida alcóolica <span>飲酒習慣</span></label>
                 <select name="Bebida_Alcoolica">
@@ -708,7 +698,6 @@
             </div>
         </div>
 
-
         <div class="form-group">
             <label>Trabalho impossível <span>🚫 従事できない業務</span></label>
             <div class="options-vertical">
@@ -717,7 +706,6 @@
             </div>
             <input type="text" name="Trabalho_Impossivel_Detalhe" style="margin-top: 8px;" placeholder="Descreva qual trabalho não pode fazer">
         </div>
-
 
         <!-- SEÇÃO 6: Disponibilidade e Histórico de Seguros -->
         <div class="section-title">6. Disponibilidade e Histórico de Seguros (就労可否・保険加入歴)</div>
@@ -729,15 +717,14 @@
                 <option value="Precisa tempo">Precisa de tempo (日数がかかる)</option>
             </select>
         </div>
-
         <div class="form-group">
             <label>Hora extra <span>⏰ 残業対応</span></label>
             <select name="Hora_Extra">
                 <option value="0 - Não posso fazer horas extras">0 - Não posso fazer horas extras (残業対応不可)</option>
                 <option value="Até 1 hora">Até 1 hora (1時間まで可能)</option>
-                <option value="Até 2 horas">Até 2 horas (2時間まで可能)</option>
-                <option value="Até 3 horas">Até 3 horas (3時間まで可能)</option>
-                <option value="Até 4 horas">Até 4 horas (4時間まで可能)</option>
+                <option value="Até 2 horas">Até 2 horas (2時間 até possível)</option>
+                <option value="Até 3 horas">Até 3 horas (3時間 até possível)</option>
+                <option value="Até 4 horas">Até 4 horas (4時間 até possível)</option>
             </select>
         </div>
 
@@ -747,6 +734,8 @@
                 <label class="option-card"><input type="checkbox" name="Disponibilidade_Turno" value="Trabalho ferias (Possivel)"> Trabalho em feriados / Férias possível (休日出勤可)</label>
                 <label class="option-card"><input type="checkbox" name="Disponibilidade_Turno" value="Apenas noturno / Turno alternado"> Apenas noturno / Turno alternado可 (夜勤専属・交替勤務可)</label>
             </div>
+        </div>
+
         <div class="form-group">
             <label>Conta no Banco do Correio <span>🏦 ゆうちょ銀行口座</span></label>
             <select name="Conta_Yucho">
@@ -794,14 +783,13 @@
             </select>
         </div>
 
-
         <!-- Termos e Condições Importantes -->
         <div class="terms-box">
             <strong>Observações importantes e Termos (重要事項・規約):</strong>
             <ul>
                 <li>Se houver falsidade no conteúdo preenchido, há possibilidade de cancelamento do emprego. (申告内容に虚偽があった場合、採用が取り消されることがあります。)</li>
                 <li>Se você se deslocar de carro, precisará apresentar a licença de condução e os seguros ativos. (車通勤の場合、運転免許証および有効な保険証券の提示が必要です。)</li>
-                <li>As configurações de salário final diferem dependendo se o seguro social está inscrito ou não. (社会保険の加入有無により、最終的な給y与手取り額が異なります。)</li>
+                <li>As configurações de salário final diferem dependendo se o seguro social está inscrito ou não. (社会保険の加入有無により、最終的な給y与手取り額 que difere.)</li>
                 <li style="color: #9B2C2C; font-weight: bold;">No caso de mudança, consulte os termos de taxa de mudança com a empreiteira. (引越しをする場合、引越し費用や条件については派遣会社に確認してください。)</li>
             </ul>
             <label class="option-card" style="margin-top: 12px; background-color: #FFF;">
@@ -810,17 +798,13 @@
         </div>
 
         <!-- Botões Finais do Formulário (Envio e Limpeza) -->
-        <div class="btn-container" style="display: flex; gap: 12px; margin-top: 30px; margin-bottom: 20px;">
-            <button type="reset" class="btn-clear" style="background-color: #E2E8F0; color: #4A5568; font-size: 16px; font-weight: bold; padding: 16px; border: none; border-radius: 8px; cursor: pointer; flex: 1;">
-                🗑️ Apagar Tudo
-            </button>
-            <button type="submit" class="btn-submit" style="background-color: #1A365D; color: white; font-size: 16px; font-weight: bold; padding: 16px; border: none; border-radius: 8px; cursor: pointer; flex: 2; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-                🚀 Enviar Currículo
-            </button>
+        <div class="btn-container">
+            <button type="reset" class="btn-clear">🗑️ Apagar Tudo</button>
+            <button type="submit" class="btn-submit">🚀 Enviar Currículo</button>
         </div>
         
-        <div id="statusMessage" class="status-msg" style="text-align: center; color: #2B6CB0; font-weight: bold; margin-top: 8px; display: none;">
-            ✓ Dados enviados com sucesso! Suas informações foram mantidas na tela para sua conferência.
+        <div id="statusMessage" class="status-msg" style="text-align: center; color: #2B6CB0; font-weight: bold; margin-top: 8px;">
+            Enviando dados para o servidor GORO, por favor aguarde...
         </div>
 
     </form>
@@ -828,12 +812,11 @@
 
 <script>
     function enviarFormulario(event) {
-        event.preventDefault(); // Impede o recarregamento automático da página
+        event.preventDefault();
         
         const statusMsg = document.getElementById('statusMessage');
         const btnSubmit = document.querySelector('.btn-submit');
         
-        // --- ELEMENTOS DO FORMULÁRIO ---
         const nomeField = document.getElementById('nome');
         const dataNascField = document.getElementById('data_nasc');
         const contatosField = document.getElementById('contatos');
@@ -842,7 +825,6 @@
         const dataNasc = dataNascField ? dataNascField.value : '';
         const contatos = contatosField ? contatosField.value.trim() : '';
         
-        // --- CAPTURA MOBILE BLINDADA (Usando querySelector nativo para Radio) ---
         const generoRadio = document.querySelector('input[name="Genero"]:checked');
         const generoValor = generoRadio ? generoRadio.value : "";
         
@@ -854,7 +836,6 @@
         
         const termos = document.querySelector('input[name="Termos_Aceite"]') ? document.querySelector('input[name="Termos_Aceite"]').checked : false;
         
-        // --- VALIDAÇÕES VISUAIS COMPATÍVEIS COM CELULAR ---
         if (!nome) { alert('Por favor, preencha o Nome.\n氏名を入力してください。'); nomeField.scrollIntoView({behavior: 'smooth', block: 'center'}); return; }
         if (!dataNasc) { alert('Por favor, preencha a Data de Nascimento.\n生年月日を入力してください。'); dataNascField.scrollIntoView({behavior: 'smooth', block: 'center'}); return; }
         if (!generoValor) { alert('Por favor, selecione o Gênero.\n性別を選択してください。'); document.getElementById('genero_container').scrollIntoView({behavior: 'smooth', block: 'center'}); return; }
@@ -864,17 +845,13 @@
         if (!termos) { alert('Por favor, aceite os termos para enviar.\n規約に同意してください。'); document.querySelector('.terms-box').scrollIntoView({behavior: 'smooth', block: 'center'}); return; }
 
         statusMsg.style.display = 'block';
-        statusMsg.innerText = 'Enviando dados para o servidor GORO, por favor aguarde...';
         statusMsg.style.color = '#2B6CB0';
         btnSubmit.disabled = true;
         
         const form = document.getElementById('goroForm');
         const formData = new FormData(form);
-        
-        // Cria um buscador de parâmetros no formato URL Encoded (Nativo e Blindado para Mobile)
         const urlParams = new URLSearchParams();
         
-        // Alimenta os dados do formulário tratando chaves repetidas (como múltiplos checkboxes)
         for (const [key, value] of formData.entries()) {
             if (urlParams.has(key)) {
                 urlParams.set(key, urlParams.get(key) + ", " + value);
@@ -883,7 +860,6 @@
             }
         }
         
-        // Força a gravação exata dos campos validados e cruciais
         const agora = new Date();
         urlParams.set('Carimbo_Data_Hora', agora.toLocaleDateString('pt-BR') + ' ' + agora.toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'}));
         urlParams.set('Sobrenome_Nome', nome);
@@ -896,7 +872,6 @@
         
         const urlWebhook = "https://script.google.com/macros/s/AKfycbzApfxWE-jf-gvt6iSxRqBCT9f8lqZJFpuarYsXd4f9qGwuoeVC3fWFZTTXoIt4_Yv-/exec";
         
-        // ENVIO EM FORMATO TEXT/PLAIN COMPATÍVEL COM NO-CORS PARA EVITAR QUE O CELULAR APAGUE O CONTEÚDO
         fetch(urlWebhook, {
             method: 'POST',
             mode: 'no-cors',
@@ -914,6 +889,3 @@
             statusMsg.innerText = 'Erro ao enviar dados. Tente novamente.';
             statusMsg.style.color = '#C53030';
             btnSubmit.disabled = false;
-        });
-    }
-</script>
