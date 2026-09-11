@@ -803,7 +803,7 @@
         const statusMsg = document.getElementById('statusMessage');
         const btnSubmit = document.querySelector('.btn-submit');
         
-        // --- VALIDAÇÃO EXCLUSIVA DE DADOS COMPATÍVEL COM SMARTPHONES ---
+        // --- VALIDAÇÃO COMPATÍVEL COM SMARTPHONES E DESKTOP ---
         const nome = document.getElementById('nome').value.trim();
         const dataNasc = document.getElementById('data_nasc').value;
         const generoM = document.getElementById('genero_m') ? document.getElementById('genero_m').checked : false;
@@ -837,13 +837,13 @@
         }
         
         const urlParams = new URLSearchParams(dataParsed);
-        const urlWebhook = "https://script.google.com/macros/library/d/18NK39vjjDFzUZyW27qGLVKxb-G0ACnR8azUCq8tu-MeKbndgzYo-w3ZF/30";
+        const urlWebhook = "https://script.google.com/macros/s/AKfycbzApfxWE-jf-gvt6iSxRqBCT9f8lqZJFpuarYsXd4f9qGwuoeVC3fWFZTTXoIt4_Yv-/exec";
         
+        // CORREÇÃO CIRÚRGICA: Envio limpo sem cabeçalhos restritivos para evitar bloqueio no mobile/PC
         fetch(urlWebhook, {
             method: 'POST',
             mode: 'no-cors',
-            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-            body: urlParams.toString()
+            body: urlParams
         })
         .then(() => {
             statusMsg.innerText = '✓ Dados enviados com sucesso! Suas informações foram mantidas na tela para sua conferência.';
