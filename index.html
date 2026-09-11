@@ -10,16 +10,17 @@
             background-color: #F7FAFC;
             color: #2D3748;
             margin: 0;
-            padding: 12px;
+            padding: 16px 8px;
             line-height: 1.6;
         }
         .container {
-            max-width: 600px;
+            max-width: 650px;
             margin: 0 auto;
             background: #FFFFFF;
-            padding: 20px 15px;
+            padding: 24px 16px;
             border-radius: 12px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            box-sizing: border-box;
         }
         h1 {
             font-size: 22px;
@@ -69,10 +70,11 @@
             border-radius: 8px;
             box-sizing: border-box;
             background-color: #FFF;
+            -webkit-appearance: none;
         }
         .grid-2 {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
             gap: 12px;
         }
         .options-vertical {
@@ -95,25 +97,38 @@
             margin-right: 12px;
             width: 18px;
             height: 18px;
+            flex-shrink: 0;
+        }
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin-top: 8px;
+            border: 1px solid #E2E8F0;
+            border-radius: 8px;
         }
         .lang-table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 8px;
+            min-width: 450px;
         }
         .lang-table th, .lang-table td {
             border: 1px solid #E2E8F0;
-            padding: 8px;
+            padding: 10px 8px;
             font-size: 13px;
             text-align: center;
         }
         .lang-table th {
             background-color: #F7FAFC;
         }
+        .lang-table select {
+            padding: 6px;
+            font-size: 13px;
+        }
         .terms-box {
             background-color: #FFFAF0;
             border: 1px solid #FEEBC8;
-            padding: 12px;
+            padding: 14px;
             border-radius: 8px;
             font-size: 13px;
             color: #744210;
@@ -158,8 +173,16 @@
             margin-top: 8px;
             display: none;
         }
+        @media (max-width: 480px) {
+            body { padding: 8px 4px; }
+            .container { padding: 16px 12px; border-radius: 8px; }
+            h1 { font-size: 18px; }
+            .btn-container { flex-direction: column-reverse; }
+            .btn-submit, .btn-clear { width: 100%; padding: 14px; }
+        }
     </style>
 </head>
+
 <body>
 <div class="container">
      <form id="goroForm" onsubmit="enviarFormulario(event)">
