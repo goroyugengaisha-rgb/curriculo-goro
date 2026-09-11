@@ -802,7 +802,7 @@
         const statusMsg = document.getElementById('statusMessage');
         const btnSubmit = document.querySelector('.btn-submit');
         
-        // --- VALIDAÇÃO DE DADOS HOMOLOGADA PARA SMARTPHONES (iOS/ANDROID) E PC ---
+        // --- ELEMENTOS DO FORMULÁRIO ---
         const nomeField = document.getElementById('nome');
         const dataNascField = document.getElementById('data_nasc');
         const contatosField = document.getElementById('contatos');
@@ -811,42 +811,49 @@
         const dataNasc = dataNascField ? dataNascField.value : '';
         const contatos = contatosField ? contatosField.value.trim() : '';
         
-        // Captura se alguma opção de Gênero foi marcada
+        // Captura Gênero
         const generoM = document.getElementById('genero_m') ? document.getElementById('genero_m').checked : false;
         const generoF = document.getElementById('genero_f') ? document.getElementById('genero_f').checked : false;
+        const generoValor = generoM ? "Masculino" : (generoF ? "Feminino" : "");
         
-        // Captura se alguma opção de Moradia foi marcada
+        // Captura Moradia
         const moradiaP = document.getElementById('moradia_p') ? document.getElementById('moradia_p').checked : false;
         const moradiaA = document.getElementById('moradia_a') ? document.getElementById('moradia_a').checked : false;
+        const moradiaValor = moradiaP ? "Pendulares" : (moradiaA ? "Precisa Alojamento" : "");
         
-        // Captura se alguma opção de Nihongo foi marcada
+        // Captura Nihongo
         const nihongoA = document.getElementById('nihongo_a') ? document.getElementById('nihongo_a').checked : false;
         const nihongoB = document.getElementById('nihongo_b') ? document.getElementById('nihongo_b').checked : false;
         const nihongoC = document.getElementById('nihongo_c') ? document.getElementById('nihongo_c').checked : false;
         const nihongoD = document.getElementById('nihongo_d') ? document.getElementById('nihongo_d').checked : false;
+        let nihongoValor = "";
+        if (nihongoA) nihongoValor = "A) Quase completo (80%)";
+        else if (nihongoB) nihongoValor = "B) Geralmente (50%)";
+        else if (nihongoC) nihongoValor = "C) Um pouco (20%)";
+        else if (nihongoD) nihongoValor = "D) Nada (0%)";
         
         // Captura o aceite dos termos
         const termos = document.querySelector('input[name="Termos_Aceite"]') ? document.querySelector('input[name="Termos_Aceite"]').checked : false;
         
-        // --- REGRAS DE VALIDAÇÃO VISUAL NA TELA ---
+        // --- VALIDAÇÕES VISUAIS ---
         if (!nome) { alert('Por favor, preencha o Nome.\n氏名を入力してください。'); nomeField.scrollIntoView({behavior: 'smooth', block: 'center'}); return; }
         if (!dataNasc) { alert('Por favor, preencha a Data de Nascimento.\n生年月日を入力してください。'); dataNascField.scrollIntoView({behavior: 'smooth', block: 'center'}); return; }
-        if (!generoM && !generoF) { alert('Por favor, selecione o Gênero.\n性別を選択してください。'); document.getElementById('genero_container').scrollIntoView({behavior: 'smooth', block: 'center'}); return; }
+        if (!generoValor) { alert('Por favor, selecione o Gênero.\n性別を選択してください。'); document.getElementById('genero_container').scrollIntoView({behavior: 'smooth', block: 'center'}); return; }
         if (!contatos) { alert('Por favor, preencha o campo de Contatos.\n連絡先を入力してください。'); contatosField.scrollIntoView({behavior: 'smooth', block: 'center'}); return; }
-        if (!moradiaP && !moradiaA) { alert('Por favor, selecione uma opção de Moradia.\n採用後の入居希望を選択してください。'); document.getElementById('moradia_container').scrollIntoView({behavior: 'smooth', block: 'center'}); return; }
-        if (!nihongoA && !nihongoB && !nihongoC && !nihongoD) { alert('Por favor, selecione seu Nível de Japonês.\n日本語会話力を選択してください。'); document.getElementById('nihongo_container').scrollIntoView({behavior: 'smooth', block: 'center'}); return; }
+        if (!moradiaValor) { alert('Por favor, selecione uma opção de Moradia.\n採用後の入居希望を選択してください。'); document.getElementById('moradia_container').scrollIntoView({behavior: 'smooth', block: 'center'}); return; }
+        if (!nihongoValor) { alert('Por favor, selecione seu Nível de Japonês.\n日本語会話力を選択してください。'); document.getElementById('nihongo_container').scrollIntoView({behavior: 'smooth', block: 'center'}); return; }
         if (!termos) { alert('Por favor, aceite os termos para enviar.\n規約に同意してください。'); document.querySelector('.terms-box').scrollIntoView({behavior: 'smooth', block: 'center'}); return; }
-        // -------------------------------------------------------------------------
 
         statusMsg.style.display = 'block';
         statusMsg.innerText = 'Enviando dados para o servidor GORO, por favor aguarde...';
         statusMsg.style.color = '#2B6CB0';
         btnSubmit.disabled = true;
         
+        // --- MAPEAMENTO BLINDADO DE DADOS (COMPATÍVEL COM IPHONE) ---
         const form = document.getElementById('goroForm');
         const formData = new FormData(form);
-        
         const dataParsed = {};
+        
         for (const [key, value] of formData.entries()) {
             if (dataParsed[key]) {
                 dataParsed[key] = dataParsed[key] + ", " + value;
@@ -854,6 +861,15 @@
                 dataParsed[key] = value;
             }
         }
+        
+        // Força a injeção manual das variáveis que o iOS costuma omitir ou corromper
+        dataParsed['Sobrenome_Nome'] = nome;
+        dataParsed['Data_Nascimento'] = dataNasc;
+        dataParsed['Genero'] = generoValor;
+        dataParsed['Contatos'] = contatos;
+        dataParsed['Moradia_Apos_Contratacao'] = moradiaValor;
+        dataParsed['Nivel_Japones_Falado'] = nihongoValor;
+        dataParsed['Termos_Aceite'] = termos ? "Sim" : "Não";
         
         const urlParams = new URLSearchParams(dataParsed);
         const urlWebhook = "https://script.google.com/macros/s/AKfycbzApfxWE-jf-gvt6iSxRqBCT9f8lqZJFpuarYsXd4f9qGwuoeVC3fWFZTTXoIt4_Yv-/exec";
@@ -877,4 +893,3 @@
         });
     }
 </script>
-
