@@ -803,19 +803,44 @@
         const statusMsg = document.getElementById('statusMessage');
         const btnSubmit = document.querySelector('.btn-submit');
         
-        // --- VALIDAÇÃO COMPATÍVEL COM SMARTPHONES E DESKTOP ---
-        const nome = document.getElementById('nome').value.trim();
-        const dataNasc = document.getElementById('data_nasc').value;
+        // --- VALIDAÇÃO COMPATÍVEL COM SMARTPHONES (iOS/ANDROID) E DESKTOP ---
+        const nomeField = document.getElementById('nome');
+        const dataNascField = document.getElementById('data_nasc');
+        const contatosField = document.getElementById('contatos');
+        const termosField = document.querySelector('input[name="Termos_Aceite"]');
+        
+        const nome = nomeField ? nomeField.value.trim() : '';
+        const dataNasc = dataNascField ? dataNascField.value : '';
         const generoM = document.getElementById('genero_m') ? document.getElementById('genero_m').checked : false;
         const generoF = document.getElementById('genero_f') ? document.getElementById('genero_f').checked : false;
-        const contatos = document.getElementById('contatos').value.trim();
-        const termos = document.querySelector('input[name="Termos_Aceite"]') ? document.querySelector('input[name="Termos_Aceite"]').checked : false;
+        const contatos = contatosField ? contatosField.value.trim() : '';
+        const termos = termosField ? termosField.checked : false;
         
-        if (!nome) { alert('Por favor, preencha o Nome.\n氏名を入力してください。'); document.getElementById('nome').focus(); return; }
-        if (!dataNasc) { alert('Por favor, preencha a Data de Nascimento.\n生年月日を入力してください。'); document.getElementById('data_nasc').focus(); return; }
-        if (!generoM && !generoF) { alert('Por favor, selecione o Gênero.\n性別を選択してください。'); document.getElementById('genero_container').scrollIntoView({behavior: 'smooth'}); return; }
-        if (!contatos) { alert('Por favor, preencha o campo de Contatos.\n連絡先を入力してください。'); document.getElementById('contatos').focus(); return; }
-        if (!termos) { alert('Por favor, aceite os termos para enviar.\n規約に同意してください。'); document.querySelector('input[name="Termos_Aceite"]').focus(); return; }
+        if (!nome) { 
+            alert('Por favor, preencha o Nome.\n氏名を入力してください。'); 
+            nomeField.scrollIntoView({behavior: 'smooth', block: 'center'}); 
+            return; 
+        }
+        if (!dataNasc) { 
+            alert('Por favor, preencha a Data de Nascimento.\n生年月日を入力してください。'); 
+            dataNascField.scrollIntoView({behavior: 'smooth', block: 'center'}); 
+            return; 
+        }
+        if (!generoM && !generoF) { 
+            alert('Por favor, selecione o Gênero.\n性別を選択してください。'); 
+            document.getElementById('genero_container').scrollIntoView({behavior: 'smooth', block: 'center'}); 
+            return; 
+        }
+        if (!contatos) { 
+            alert('Por favor, preencha o campo de Contatos.\n連絡先を入力してください。'); 
+            contatosField.scrollIntoView({behavior: 'smooth', block: 'center'}); 
+            return; 
+        }
+        if (!termos) { 
+            alert('Por favor, aceite os termos para enviar.\n規約に同意してください。'); 
+            document.querySelector('.terms-box').scrollIntoView({behavior: 'smooth', block: 'center'}); 
+            return; 
+        }
         // ---------------------------------------------------------------
 
         statusMsg.style.display = 'block';
@@ -839,7 +864,7 @@
         const urlParams = new URLSearchParams(dataParsed);
         const urlWebhook = "https://script.google.com/macros/s/AKfycbzApfxWE-jf-gvt6iSxRqBCT9f8lqZJFpuarYsXd4f9qGwuoeVC3fWFZTTXoIt4_Yv-/exec";
         
-        // CORREÇÃO CIRÚRGICA: Envio limpo sem cabeçalhos restritivos para evitar bloqueio no mobile/PC
+        // Envio limpo sem cabeçalhos restritivos para evitar bloqueio no mobile/PC
         fetch(urlWebhook, {
             method: 'POST',
             mode: 'no-cors',
@@ -859,5 +884,3 @@
         });
     }
 </script>
-</body>
-</html>
