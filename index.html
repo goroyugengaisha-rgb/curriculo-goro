@@ -811,30 +811,19 @@
         const dataNasc = dataNascField ? dataNascField.value : '';
         const contatos = contatosField ? contatosField.value.trim() : '';
         
-        // Captura Gênero
-        const generoM = document.getElementById('genero_m') ? document.getElementById('genero_m').checked : false;
-        const generoF = document.getElementById('genero_f') ? document.getElementById('genero_f').checked : false;
-        const generoValor = generoM ? "Masculino" : (generoF ? "Feminino" : "");
+        // --- CAPTURA MOBILE BLINDADA (Usando querySelector nativo para Radio) ---
+        const generoRadio = document.querySelector('input[name="Genero"]:checked');
+        const generoValor = generoRadio ? generoRadio.value : "";
         
-        // Captura Moradia
-        const moradiaP = document.getElementById('moradia_p') ? document.getElementById('moradia_p').checked : false;
-        const moradiaA = document.getElementById('moradia_a') ? document.getElementById('moradia_a').checked : false;
-        const moradiaValor = moradiaP ? "Pendulares" : (moradiaA ? "Precisa Alojamento" : "");
+        const moradiaRadio = document.querySelector('input[name="Moradia_Apos_Contratacao"]:checked');
+        const moradiaValor = moradiaRadio ? moradiaRadio.value : "";
         
-        // Captura Nihongo
-        const nihongoA = document.getElementById('nihongo_a') ? document.getElementById('nihongo_a').checked : false;
-        const nihongoB = document.getElementById('nihongo_b') ? document.getElementById('nihongo_b').checked : false;
-        const nihongoC = document.getElementById('nihongo_c') ? document.getElementById('nihongo_c').checked : false;
-        const nihongoD = document.getElementById('nihongo_d') ? document.getElementById('nihongo_d').checked : false;
-        let nihongoValor = "";
-        if (nihongoA) nihongoValor = "A) Quase completo (80%)";
-        else if (nihongoB) nihongoValor = "B) Geralmente (50%)";
-        else if (nihongoC) nihongoValor = "C) Um pouco (20%)";
-        else if (nihongoD) nihongoValor = "D) Nada (0%)";
+        const nihongoRadio = document.querySelector('input[name="Nivel_Japones_Falado"]:checked');
+        const nihongoValor = nihongoRadio ? nihongoRadio.value : "";
         
         const termos = document.querySelector('input[name="Termos_Aceite"]') ? document.querySelector('input[name="Termos_Aceite"]').checked : false;
         
-        // --- VALIDAÇÕES VISUAIS ---
+        // --- VALIDAÇÕES VISUAIS COMPATÍVEIS COM CELULAR ---
         if (!nome) { alert('Por favor, preencha o Nome.\n氏名を入力してください。'); nomeField.scrollIntoView({behavior: 'smooth', block: 'center'}); return; }
         if (!dataNasc) { alert('Por favor, preencha a Data de Nascimento.\n生年月日を入力してください。'); dataNascField.scrollIntoView({behavior: 'smooth', block: 'center'}); return; }
         if (!generoValor) { alert('Por favor, selecione o Gênero.\n性別を選択してください。'); document.getElementById('genero_container').scrollIntoView({behavior: 'smooth', block: 'center'}); return; }
@@ -852,6 +841,7 @@
         const formData = new FormData(form);
         const dataParsed = {};
         
+        // Agrupa múltiplos checkboxes com o mesmo name de forma correta (Ex: Qualificações)
         for (const [key, value] of formData.entries()) {
             if (dataParsed[key]) {
                 dataParsed[key] = dataParsed[key] + ", " + value;
@@ -860,7 +850,9 @@
             }
         }
         
-        // Garante os valores no dicionário
+        // Garante os valores validados de forma exata e adiciona o carimbo de data exigido pelo Apps Script
+        const agora = new Date();
+        dataParsed['Carimbo_Data_Hora'] = agora.toLocaleDateString('pt-BR') + ' ' + agora.toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'});
         dataParsed['Sobrenome_Nome'] = nome;
         dataParsed['Data_Nascimento'] = dataNasc;
         dataParsed['Genero'] = generoValor;
@@ -869,9 +861,9 @@
         dataParsed['Nivel_Japones_Falado'] = nihongoValor;
         dataParsed['Termos_Aceite'] = termos ? "Sim" : "Não";
         
-        const urlWebhook = "https://script.google.com/macros/s/AKfycbzApfxWE-jf-gvt6iSxRqBCT9f8lqZJFpuarYsXd4f9qGwuoeVC3fWFZTTXoIt4_Yv-/exec";
+        const urlWebhook = "https://google.com";
         
-        // ENGENHARIA MOBILE BLINDADA: Envio como Texto/JSON aceito 100% no iOS
+        // Envio estruturado ideal para navegadores móveis (Android e iOS)
         fetch(urlWebhook, {
             method: 'POST',
             mode: 'no-cors',
@@ -892,5 +884,3 @@
         });
     }
 </script>
-</body>
-</html>
