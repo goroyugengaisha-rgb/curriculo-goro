@@ -839,36 +839,38 @@
         
         const form = document.getElementById('goroForm');
         const formData = new FormData(form);
-        const dataParsed = {};
         
-        // Agrupa múltiplos checkboxes com o mesmo name de forma correta (Ex: Qualificações)
+        // Cria um buscador de parâmetros no formato URL Encoded (Nativo e Blindado para Mobile)
+        const urlParams = new URLSearchParams();
+        
+        // Alimenta os dados do formulário tratando chaves repetidas (como múltiplos checkboxes)
         for (const [key, value] of formData.entries()) {
-            if (dataParsed[key]) {
-                dataParsed[key] = dataParsed[key] + ", " + value;
+            if (urlParams.has(key)) {
+                urlParams.set(key, urlParams.get(key) + ", " + value);
             } else {
-                dataParsed[key] = value;
+                urlParams.set(key, value);
             }
         }
         
-        // Garante os valores validados de forma exata e adiciona o carimbo de data exigido pelo Apps Script
+        // Força a gravação exata dos campos validados e cruciais
         const agora = new Date();
-        dataParsed['Carimbo_Data_Hora'] = agora.toLocaleDateString('pt-BR') + ' ' + agora.toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'});
-        dataParsed['Sobrenome_Nome'] = nome;
-        dataParsed['Data_Nascimento'] = dataNasc;
-        dataParsed['Genero'] = generoValor;
-        dataParsed['Contatos'] = contatos;
-        dataParsed['Moradia_Apos_Contratacao'] = moradiaValor;
-        dataParsed['Nivel_Japones_Falado'] = nihongoValor;
-        dataParsed['Termos_Aceite'] = termos ? "Sim" : "Não";
+        urlParams.set('Carimbo_Data_Hora', agora.toLocaleDateString('pt-BR') + ' ' + agora.toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'}));
+        urlParams.set('Sobrenome_Nome', nome);
+        urlParams.set('Data_Nascimento', dataNasc);
+        urlParams.set('Genero', generoValor);
+        urlParams.set('Contatos', contatos);
+        urlParams.set('Moradia_Apos_Contratacao', moradiaValor);
+        urlParams.set('Nivel_Japones_Falado', nihongoValor);
+        urlParams.set('Termos_Aceite', termos ? "Sim" : "Não");
         
         const urlWebhook = "https://script.google.com/macros/s/AKfycbzApfxWE-jf-gvt6iSxRqBCT9f8lqZJFpuarYsXd4f9qGwuoeVC3fWFZTTXoIt4_Yv-/exec";
         
-        // Envio estruturado ideal para navegadores móveis (Android e iOS)
+        // ENVIO EM FORMATO TEXT/PLAIN COMPATÍVEL COM NO-CORS PARA EVITAR QUE O CELULAR APAGUE O CONTEÚDO
         fetch(urlWebhook, {
             method: 'POST',
             mode: 'no-cors',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(dataParsed)
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: urlParams.toString()
         })
         .then(() => {
             statusMsg.innerText = '✓ Dados enviados com sucesso! Suas informações foram mantidas na tela para sua conferência.';
