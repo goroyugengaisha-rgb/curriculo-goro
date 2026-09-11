@@ -747,54 +747,52 @@
                 <label class="option-card"><input type="checkbox" name="Disponibilidade_Turno" value="Trabalho ferias (Possivel)"> Trabalho em feriados / Férias possível (休日出勤可)</label>
                 <label class="option-card"><input type="checkbox" name="Disponibilidade_Turno" value="Apenas noturno / Turno alternado"> Apenas noturno / Turno alternado可 (夜勤専属・交替勤務可)</label>
             </div>
+        <div class="form-group">
+            <label>Conta no Banco do Correio <span>🏦 ゆうちょ銀行口座</span></label>
+            <select name="Conta_Yucho">
+                <option value="" selected>---- Selecione / 未選択 ----</option>
+                <option value="Abri (Tem cartão / Caderneta)">Abri / Possuo conta e cartão (口座あり・通帳/カード保持)</option>
+                <option value="Nunca abri">Nunca abri (口座なし)</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label>Seguro desemprego <span> (雇用保険歴)</span></label>
+            <select name="Seguro_Desemprego">
+                <option value="" selected>---- Selecione / 未選択 ----</option>
+                <option value="Já contribuí">Já contribuí (加入歴あり)</option>
+                <option value="Nunca juntei">Nunca juntei (加入歴なし)</option>
+            </select>
         </div>
 
         <div class="form-group">
-    <label>Conta no Banco do Correio <span>🏦 ゆうちょ銀行口座</span></label>
-    <select name="Conta_Yucho">
-        <option value="" selected>---- Selecione / 未選択 ----</option>
-        <option value="Abri (Tem cartão / Caderneta)">Abri / Possuo conta e cartão (口座あり・通帳/カード保持)</option>
-        <option value="Nunca abri">Nunca abri (口座なし)</option>
-    </select>
-</div>
+            <label>Seguro de saúde <span> (健康保険歴)</span></label>
+            <select name="Seguro_Saude">
+                <option value="" selected>---- Selecione / 未選択 ----</option>
+                <option value="Já contribuí Seguro Social (Shakai Hoken)">Já contribuí Seguro Social (社会保険 / Shakai Hoken)</option>
+                <option value="Já contribuí Seguro Nacional (Kokumin Hoken)">Já contribuí Seguro Nacional (国民健康保険 / Kokumin Hoken)</option>
+                <option value="Nunca juntei">Nunca juntei (加入歴なし)</option>
+            </select>
+        </div>
 
-<div class="form-group">
-    <label>Seguro desemprego <span> (雇用保険歴)</span></label>
-    <select name="Seguro_Desemprego">
-        <option value="" selected>---- Selecione / 未選択 ----</option>
-        <option value="Já contribuí">Já contribuí (加入歴あり)</option>
-        <option value="Nunca juntei">Nunca juntei (加入歴なし)</option>
-    </select>
-</div>
+        <div class="form-group">
+            <label>Pensão <span>年金 (厚生年金・国民年金歴)</span></label>
+            <select name="Contribuição_Nenkin">
+                <option value="" selected>---- Selecione / 未選択 ----</option>
+                <option value="Já contribuí">Já contribuí / Possuo caderneta (加入歴あり・年金手帳保持)</option>
+                <option value="Nunca juntei">Nunca juntei (加入歴なし)</option>
+            </select>
+        </div>
 
-<div class="form-group">
-    <label>Seguro de saúde <span> (健康保険歴)</span></label>
-    <select name="Seguro_Saude">
-        <option value="" selected>---- Selecione / 未選択 ----</option>
-        <option value="Já contribuí Seguro Social (Shakai Hoken)">Já contribuí Seguro Social (社会保険 / Shakai Hoken)</option>
-        <option value="Já contribuí Seguro Nacional (Kokumin Hoken)">Já contribuí Seguro Nacional (国民健康保険 / Kokumin Hoken)</option>
-        <option value="Nunca juntei">Nunca juntei (加入歴なし)</option>
-    </select>
-</div>
-
-<div class="form-group">
-    <label>Pensão <span>年金 (厚生年金・国民年金歴)</span></label>
-    <select name="Contribuição_Nenkin">
-        <option value="" selected>---- Selecione / 未選択 ----</option>
-        <option value="Já contribuí">Já contribuí / Possuo caderneta (加入歴あり・年金手帳保持)</option>
-        <option value="Nunca juntei">Nunca juntei (加入歴なし)</option>
-    </select>
-</div>
-
-<div class="form-group">
-    <label>Como conheceu a GORO? <span>🤝 応募 de きっかけ</span></label>
-    <select name="Como_Conheceu_Goro">
-        <option value="" selected>---- Selecione / 未選択 ----</option>
-        <option value="Internet (Facebook / Empregos)">Internet / Facebook / Sites de Emprego (インターネット・求人サイト)</option>
-        <option value="Jornal etc.">Jornal / Outras Mídias impressas (新聞・他媒体)</option>
-        <option value="Amigo / Indicação">Amigo / Indicação (友人・紹介)</option>
-    </select>
-</div>
+        <div class="form-group">
+            <label>Como conheceu a GORO? <span>🤝 応募 de きっかけ</span></label>
+            <select name="Como_Conheceu_Goro">
+                <option value="" selected>---- Selecione / 未選択 ----</option>
+                <option value="Internet (Facebook / Empregos)">Internet / Facebook / Sites de Emprego (インターネット・求人サイト)</option>
+                <option value="Jornal etc.">Jornal / Outras Mídias impressas (新聞・他媒体)</option>
+                <option value="Amigo / Indicação">Amigo / Indicação (友人・紹介)</option>
+            </select>
+        </div>
 
 
         <!-- Termos e Condições Importantes -->
