@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GORO - Currículo e Questionário Digital</title>
-       <style>
+    <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
             background-color: #F7FAFC;
@@ -14,7 +14,7 @@
             line-height: 1.6;
         }
         .container {
-            max-width: 600px; /* Reduzido levemente para se adequar melhor a uma coluna */
+            max-width: 600px; /* シングルカラムに最適な横幅に調整 */
             margin: 0 auto;
             background: #FFFFFF;
             padding: 24px 16px;
@@ -72,11 +72,11 @@
             background-color: #FFF;
         }
         
-        /* Alterado para exibir sempre em uma única coluna vertical */
+        /* 過去のグリッドレイアウトを完全に無効化し、1列に統一 */
         .grid-2 {
             display: flex;
             flex-direction: column;
-            gap: 0; /* Removido o espaçamento do grid antigo para seguir o padrão */
+            gap: 0;
         }
         
         .options-vertical {
@@ -94,6 +94,8 @@
             background-color: #F8FAFC;
             font-size: 14px;
             font-weight: 600;
+            width: 100%; /* 横幅いっぱいに広げて1列を維持 */
+            box-sizing: border-box;
         }
         .option-card input {
             margin-right: 12px;
@@ -101,27 +103,8 @@
             height: 18px;
             flex-shrink: 0;
         }
-        .table-responsive {
-            width: 100%;
-            overflow-x: auto;
-            margin-top: 8px;
-            border: 1px solid #E2E8F0;
-            border-radius: 8px;
-        }
-        .lang-table {
-            width: 100%;
-            border-collapse: collapse;
-            min-width: 450px;
-        }
-        .lang-table th, .lang-table td {
-            border: 1px solid #E2E8F0;
-            padding: 10px 8px;
-            font-size: 13px;
-            text-align: center;
-        }
-        .lang-table th {
-            background-color: #F7FAFC;
-        }
+        
+        /* 規約エリアのスタイル設定（確実に1列で下部に配置） */
         .terms-box {
             background-color: #FFFAF0;
             border: 1px solid #FEEBC8;
@@ -130,13 +113,17 @@
             font-size: 13px;
             color: #744210;
             margin-top: 20px;
+            width: 100%;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
         }
         .terms-box ul {
-            margin: 5px 0 0 0;
+            margin: 5px 0 12px 0;
             padding-left: 20px;
         }
         
-        /* Alinhamento dos botões corrigido */
+        /* ボタンのレイアウト設定 */
         .btn-container {
             display: flex;
             gap: 12px;
@@ -174,15 +161,16 @@
             display: none;
         }
         
-        /* Ajustes para smartphones */
+        /* スマートフォン用のレスポンシブ表示設定 */
         @media (max-width: 480px) {
             body { padding: 8px 4px; }
             .container { padding: 16px 12px; border-radius: 8px; }
             h1 { font-size: 18px; }
-            .btn-container { flex-direction: column-reverse; }
+            .btn-container { flex-direction: column-reverse; } /* スマホでは送信ボタンを押しやすい位置（上）に */
             .btn-submit, .btn-clear { width: 100%; }
         }
     </style>
+
 </head>
 
 <body>
