@@ -6,7 +6,7 @@
     <title>GORO - Currículo e Questionário Digital</title>
     <style>
         /* Estilos Gerais Otimizados para Celular */
-        body {
+        body {f
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             background-color: #F7FAFC;
             color: #2D3748;
@@ -652,9 +652,11 @@
         </div>
 
         <div class="grid-2">
+                    <div class="grid-2">
             <div class="form-group">
                 <label>Lateralidade <span>利き手</span></label>
                 <select name="Lateralidade">
+                    <option value="" selected>---- Selecione ----</option>
                     <option value="Destro">Destro (右手描き/右利き)</option>
                     <option value="Canhoto">Canhoto (左手描き/左利き)</option>
                 </select>
@@ -662,33 +664,12 @@
             <div class="form-group">
                 <label>Tipo Sanguíneo <span>血液型</span></label>
                 <select name="Tipo_Sanguineo">
+                    <option value="" selected>---- Selecione ----</option>
                     <option value="A">A型</option>
                     <option value="B">B型</option>
                     <option value="AB">AB型</option>
                     <option value="O">O型</option>
                 </select>
-            </div>
-        </div>
-
-        <div class="grid-2">
-            <div class="form-group">
-                <label>Altura <span>身長 (cm)</span></label>
-                <input type="number" name="Altura" placeholder="Ex: 175">
-            </div>
-            <div class="form-group">
-                <label>Peso <span>体重 (kg)</span></label>
-                <input type="number" name="Peso" placeholder="Ex: 70">
-            </div>
-        </div>
-
-        <div class="grid-2">
-            <div class="form-group">
-                <label>Tamanho Camisa <span>作業服上</span></label>
-                <input type="text" name="Tamanho_Camisa" placeholder="Ex: S, M, L, LL, 3L">
-            </div>
-            <div class="form-group">
-                <label>Tamanho Calça <span>作業服下 (cm)</span></label>
-                <input type="number" name="Tamanho_Calca" placeholder="Largura da cintura em cm">
             </div>
         </div>
 
@@ -700,6 +681,7 @@
             <div class="form-group">
                 <label>Visão <span>視力</span></label>
                 <select name="Visao">
+                    <option value="" selected>---- Selecione ----</option>
                     <option value="Olho nu">Olho nu (裸眼)</option>
                     <option value="Uso óculos">Uso óculos (眼鏡着用)</option>
                     <option value="Uso lentes">Uso lentes (コンタクト着用)</option>
@@ -711,6 +693,7 @@
             <div class="form-group">
                 <label>Tabagismo <span>喫煙習慣</span></label>
                 <select name="Tabagismo">
+                    <option value="" selected>---- Selecione ----</option>
                     <option value="Não Fumar">Não Fumar (吸わない)</option>
                     <option value="Fumar">Fumar (吸う)</option>
                 </select>
@@ -718,11 +701,13 @@
             <div class="form-group">
                 <label>Bebida alcóolica <span>飲酒習慣</span></label>
                 <select name="Bebida_Alcoolica">
+                    <option value="" selected>---- Selecione ----</option>
                     <option value="Não Beba">Não Beba (飲まない)</option>
                     <option value="Bebo">Bebo (飲む)</option>
                 </select>
             </div>
         </div>
+
 
         <div class="form-group">
             <label>Trabalho impossível <span>🚫 従事できない業務</span></label>
