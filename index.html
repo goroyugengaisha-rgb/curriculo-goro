@@ -259,12 +259,11 @@
             <input type="text" id="contatos" name="Contatos" required placeholder="Telefone ou link do perfil / 連絡先を入力してください">
         </div>
 
-        <div class="form-group">
-            <label>Moradia após contratação <span>採用後の入居希望</span></label>
-            <div class="options-vertical">
-                <label class="option-card"><input type="radio" name="Moradia_Apos_Contratacao" value="Pendulares" required> Pendulares do endereço atual ou própria casa etc. (自宅から通勤・自己手配等)</label>
-                <!-- Alterado de 企業寮 para 社宅 -->
-                <label class="option-card"><input type="radio" name="Moradia_Apos_Contratacao" value="Precisa Alojamento"> Precisa de Alojamento da empresa (社宅への入居を希望)</label>
+          <div class="form-group">
+            <label>Moradia após contratação <span>採用後の入居希望 *</span></label>
+            <div class="options-vertical" id="moradia_container">
+                <label class="option-card"><input type="radio" name="Moradia_Apos_Contratacao" id="moradia_p" value="Pendulares"> Pendulares do endereço atual ou própria casa etc. (自宅から通勤・自己手配等)</label>
+                <label class="option-card"><input type="radio" name="Moradia_Apos_Contratacao" id="moradia_a" value="Precisa Alojamento"> Precisa de Alojamento da empresa (社宅への入居を希望)</label>
             </div>
         </div>
         <div class="form-group">
@@ -457,13 +456,13 @@
         </div>
 
 
-               <div class="form-group">
-            <label>Nível de Japonês Falado e Compreensão <span>日本語会話・聴解力</span></label>
-            <div class="options-vertical">
-                <label class="option-card"><input type="radio" name="Nivel_Japones_Falado" value="A) Quase completo (80%)" required> A) Quase completo ・ ±80% (ほぼ完璧)</label>
-                <label class="option-card"><input type="radio" name="Nivel_Japones_Falado" value="B) Geralmente (50%)"> B) Geralmente ・・ ±50% (日常会話)</label>
-                <label class="option-card"><input type="radio" name="Nivel_Japones_Falado" value="C) Um pouco (20%)"> C) Um pouco ・・・ ±20% (挨拶程度)</label>
-                <label class="option-card"><input type="radio" name="Nivel_Japones_Falado" value="D) Nada (0%)"> D) Nada ・・・・・ 0% (全く話せない)</label>
+            <div class="form-group">
+            <label>Nível de Japonês Falado e Compreensão <span>日本語会話・聴解力 *</span></label>
+            <div class="options-vertical" id="nihongo_container">
+                <label class="option-card"><input type="radio" name="Nivel_Japones_Falado" id="nihongo_a" value="A) Quase completo (80%)"> A) Quase completo ・ ±80% (ほぼ完璧)</label>
+                <label class="option-card"><input type="radio" name="Nivel_Japones_Falado" id="nihongo_b" value="B) Geralmente (50%)"> B) Geralmente ・・ ±50% (日常会話)</label>
+                <label class="option-card"><input type="radio" name="Nivel_Japones_Falado" id="nihongo_c" value="C) Um pouco (20%)"> C) Um pouco ・・・ ±20% (挨拶程度)</label>
+                <label class="option-card"><input type="radio" name="Nivel_Japones_Falado" id="nihongo_d" value="D) Nada (0%)"> D) Nada ・・・・・ 0% (全く話せない)</label>
             </div>
         </div>
 
