@@ -174,12 +174,12 @@
 <body>
 
 <div class="container">
-   <form id="goroForm" onsubmit="enviarFormulario(event)" autocomplete="off">
-
+     <form id="goroForm" onsubmit="enviarFormulario(event)">
+        
         <h1>Currículo e Questionário</h1>
         <div class="subtitle">GORO DIGITAL RECRUITMENT</div>
 
-        <!-- SEÇÃO 1: Dados Pessoais e Endereço / 個人情報 e 住所 -->
+      <!-- SEÇÃO 1: Dados Pessoais e Endereço / 個人情報 e 住所 -->
         <div class="section-title">1. Dados Pessoais e Endereço (個人情報と住所)</div>
         
         <div class="form-group">
@@ -199,6 +199,7 @@
                 <label class="option-card"><input type="radio" name="Genero" id="genero_f" value="Feminino"> Feminino (女性)</label>
             </div>
         </div>
+
 
         <div class="form-group">
             <label>Estado Civil <span>婚姻状況</span></label>
@@ -220,7 +221,7 @@
         </div>
 
         <div class="form-group">
-            <label>Educação Final <span>最終学歴</span></label>
+            <label>Educação Final <span>学歴</span></label>
             <div class="options-vertical">
                 <label class="option-card"><input type="radio" name="Educacao_Final" value="Primário"> Primário (小学校)</label>
                 <label class="option-card"><input type="radio" name="Educacao_Final" value="Ginásio"> Ginásio (中学校)</label>
@@ -252,19 +253,20 @@
             <input type="text" name="Mudanca_Endereco_Detalhes" placeholder="Tipo / Detalhes / 理由や詳細を入力してください">
         </div>
 
+
         <div class="form-group">
-            <label for="contatos">Contatos (Telefone / E-mail / Redes Sociais) <span>連絡先 (電話番号、メール、SNS) *</span></label>
+            <label for="contatos">Contatos (Telefone / E-mail / Redes Sociais) <span>連絡先 (電話番号、メール、SNS)</span></label>
             <input type="text" id="contatos" name="Contatos" required placeholder="Telefone ou link do perfil / 連絡先を入力してください">
         </div>
 
         <div class="form-group">
             <label>Moradia após contratação <span>採用後の入居希望</span></label>
             <div class="options-vertical">
-                <label class="option-card"><input type="radio" name="Moradia_Apos_Contratacao" value="Pendulares"> Pendulares do endereço atual ou própria casa etc. (自宅から通勤・自己手配等)</label>
+                <label class="option-card"><input type="radio" name="Moradia_Apos_Contratacao" value="Pendulares" required> Pendulares do endereço atual ou própria casa etc. (自宅から通勤・自己手配等)</label>
+                <!-- Alterado de 企業寮 para 社宅 -->
                 <label class="option-card"><input type="radio" name="Moradia_Apos_Contratacao" value="Precisa Alojamento"> Precisa de Alojamento da empresa (社宅への入居を希望)</label>
             </div>
         </div>
-        
         <div class="form-group">
             <label>Qual era sua profissão no país de origem? <span>母国での職歴 (職種)</span></label>
             <input type="text" name="Profissao_Patria" placeholder="Ex: Mecânico, Vendedor, etc. / 職種を入力してください">
@@ -273,7 +275,7 @@
 
         <!-- SEÇÃO 2: Histórico Profissional no Japão -->
         <div class="section-title">2. Histórico Profissional no Japão (Três Últimas Empresas)</div>
-        
+
         <!-- 1ª Empresa -->
         <div style="border: 1px solid #CBD5E0; padding: 12px; border-radius: 8px; margin-bottom: 20px; background-color: #FFF;">
             <strong style="display: block; margin-bottom: 12px; color: #1A365D;">🏢 1ª Empresa (Mais Recente / Atual)</strong>
@@ -438,31 +440,33 @@
             </div>
         </div>
 
-              <!-- SEÇÃO 3: Familiares e Idioma -->
+        <!-- SEÇÃO 3: Familiares e Idioma -->
         <div class="section-title">3. Familiares e Idioma (日本語スキル)</div>
-        
+
         <div class="form-group">
-            <label>Parentes que moram no Japão <span>在日親族</span></label>
+            <label>Parentes que moram no Japão <span>在日親族 (Nome, idade, relação, residência / 氏名、年齢、続柄、同居・別居)</span></label>
             <textarea name="Parentes_No_Japao" rows="2" placeholder="Ex: Maria Silva, 45 anos, Mãe, Aichi-ken"></textarea>
         </div>
 
-        <div class="form-group">
-            <label>Se tem filho(s) e mora com ele(s)... <span>子供の面倒の有無</span></label>
+                <div class="form-group">
+            <label>Se tem filho(s) e mora com ele(s), existe alguém que cuide dele(s) além de você enquanto estiver no trabalho? <br><span>子供と同居している場合、勤務時間中にご自身以外に面倒を見てくれる人はいますか？</span></label>
             <div class="options-vertical">
-                <label class="option-card"><input type="checkbox" name="Cuidado_Filhos" value="Sim (parente ou creche)"> Sim - parente ou creche (はい)</label>
-                <label class="option-card"><input type="checkbox" name="Cuidado_Filhos" value="Não tem"> Não tem (いいえ)</label>
+                <label class="option-card"><input type="checkbox" name="Cuidado_Filhos" value="Sim (parente ou creche)"> Sim - parente ou creche (はい - 親族や保育園など)</label>
+                <label class="option-card"><input type="checkbox" name="Cuidado_Filhos" value="Não tem"> Não tem / Ninguém além de mim (いいえ - 自分以外にいない)</label>
             </div>
         </div>
 
-        <div class="form-group">
+
+               <div class="form-group">
             <label>Nível de Japonês Falado e Compreensão <span>日本語会話・聴解力</span></label>
             <div class="options-vertical">
-                <label class="option-card"><input type="radio" name="Nivel_Japones_Falado" value="A) Quase completo (80%)"> A) Quase completo ・ ±80% (ほぼ完璧)</label>
+                <label class="option-card"><input type="radio" name="Nivel_Japones_Falado" value="A) Quase completo (80%)" required> A) Quase completo ・ ±80% (ほぼ完璧)</label>
                 <label class="option-card"><input type="radio" name="Nivel_Japones_Falado" value="B) Geralmente (50%)"> B) Geralmente ・・ ±50% (日常会話)</label>
                 <label class="option-card"><input type="radio" name="Nivel_Japones_Falado" value="C) Um pouco (20%)"> C) Um pouco ・・・ ±20% (挨拶程度)</label>
                 <label class="option-card"><input type="radio" name="Nivel_Japones_Falado" value="D) Nada (0%)"> D) Nada ・・・・・ 0% (全く話せない)</label>
             </div>
         </div>
+
 
         <div class="form-group">
             <label>Leitura e Escrita <span>読み・書き</span></label>
@@ -549,14 +553,14 @@
         <div class="form-group">
             <label>Método de comutação / Transporte <span>🚲 通勤方法</span></label>
             <div class="options-vertical">
-                <label class="option-card"><input type="radio" name="Transporte" value="Souguei / Irapé" required> Souguei / A pé (送迎・徒歩)</label>
+                <label class="option-card"><input type="radio" name="Transporte" value="Souguei / Irapé"> Souguei / A pé (送迎・徒歩)</label>
                 <label class="option-card"><input type="radio" name="Transporte" value="Carro"> Carro (自家用車)</label>
                 <label class="option-card"><input type="radio" name="Transporte" value="Moto"> Moto 50cc ou acima (バイク 50cc以上)</label>
                 <label class="option-card"><input type="radio" name="Transporte" value="Bicicleta"> Bicicleta (自転車)</label>
             </div>
         </div>
 
-  <div class="form-group">
+        <div class="form-group">
             <label>Documentos do Veículo para Uso <span>📄 利用に必要な書類</span></label>
             <div class="options-vertical">
                 <label class="option-card"><input type="checkbox" name="Docs_Veiculo" value="Shaken"> Inspeção de veículos (車検証 / Shaken)</label>
@@ -588,7 +592,7 @@
         <div class="form-group">
             <label>Histórico de Hospitalização <span>入院歴</span></label>
             <select name="Hospitalizado">
-                <option value="Nunca foi hospitalizado">Nunca foi hospitalizado (入院歴なし)</option>
+                <option value="Never hospitalizado">Nunca foi hospitalizado (入院歴なし)</option>
                 <option value="Tem histórico">Tem histórico de hospitalização (入院歴あり)</option>
             </select>
         </div>
@@ -602,7 +606,7 @@
             </div>
             <div style="margin-top: 8px;">
                 <label style="font-size: 13px; font-weight: normal; margin-bottom: 4px;">Outras doenças ou sintomas <span>その他の慢性疾患・症状</span></label>
-                <input type="text" name="Doenca_Cronica_Outras" placeholder="Descreva outras condições ou alergias / その他の症状を記載してください">
+                <input type="text" name="Doenca_Cronica_Outras" placeholder="Descreva outras condições ou alergias / そのその他の症状を記載してください">
             </div>
         </div>
 
@@ -688,6 +692,7 @@
             <input type="text" name="Trabalho_Impossivel_Detalhe" style="margin-top: 8px;" placeholder="Descreva qual trabalho não pode fazer">
         </div>
 
+
         <!-- SEÇÃO 6: Disponibilidade e Histórico de Seguros -->
         <div class="section-title">6. Disponibilidade e Histórico de Seguros (就労可否・保険加入歴)</div>
         
@@ -725,7 +730,7 @@
                 <option value="Nunca abri">Nunca abri (口座なし)</option>
             </select>
         </div>
-
+        
         <div class="form-group">
             <label>Seguro desemprego <span> (雇用保険歴)</span></label>
             <select name="Seguro_Desemprego">
@@ -752,7 +757,7 @@
         </div>
 
         <div class="form-group">
-            <label>Como conheceu a GORO? <span>🤝 応募のきっかけ</span></label>
+            <label>Como conheceu a GORO? <span>🤝 応募 de きっかけ</span></label>
             <select name="Como_Conheceu_Goro">
                 <option value="Internet (Facebook / Empregos)">Internet / Facebook / Sites de Emprego (インターネット・求人サイト)</option>
                 <option value="Jornal etc.">Jornal / Outras Mídias impresas (新聞・他媒体)</option>
@@ -766,7 +771,7 @@
             <ul>
                 <li>Se houver falsidade no conteúdo preenchido, há possibilidade de cancelamento do emprego. (申告内容に虚偽があった場合、採用が取り消されることがあります。)</li>
                 <li>Se você se deslocar de carro, precisará apresentar a licença de condução e os seguros ativos. (車通勤の場合、運転免許証および有効な保険証券の提示が必要です。)</li>
-                <li>As configurações de salário final diferem dependendo se o seguro social está inscrito ou não. (社会保険の加入有無により、最終的な給与手取り額が異なります。)</li>
+                <li>As configurações de salário final diferem dependendo se o seguro social está inscrito ou não. (社会保険の加入有無により、最終的な給y与手取り額が異なります。)</li>
                 <li style="color: #9B2C2C; font-weight: bold;">No caso de mudança, consulte os termos de taxa de mudança com a empreiteira. (引越しをする場合、引越し費用や条件については派遣会社に確認してください。)</li>
             </ul>
             <label class="option-card" style="margin-top: 12px; background-color: #FFF;">
@@ -774,7 +779,7 @@
             </label>
         </div>
 
-        <!-- Botões Finais do Formulário -->
+        <!-- Botões Finais do Formulário (Envio e Limpeza) -->
         <div class="btn-container" style="display: flex; gap: 12px; margin-top: 30px; margin-bottom: 20px;">
             <button type="reset" class="btn-clear" style="background-color: #E2E8F0; color: #4A5568; font-size: 16px; font-weight: bold; padding: 16px; border: none; border-radius: 8px; cursor: pointer; flex: 1;">
                 🗑️ Apagar Tudo
@@ -793,33 +798,35 @@
 
 <script>
     function enviarFormulario(event) {
-        event.preventDefault();
+        event.preventDefault(); // Impede o recarregamento automático da página
         
         const statusMsg = document.getElementById('statusMessage');
         const btnSubmit = document.querySelector('.btn-submit');
         
-        // Validação Manual dos 5 itens obrigatórios
+        // --- VALIDAÇÃO EXCLUSIVA DE DADOS COMPATÍVEL COM SMARTPHONES ---
         const nome = document.getElementById('nome').value.trim();
         const dataNasc = document.getElementById('data_nasc').value;
-        const generoM = document.getElementById('genero_m').checked;
-        const generoF = document.getElementById('genero_f').checked;
+        const generoM = document.getElementById('genero_m') ? document.getElementById('genero_m').checked : false;
+        const generoF = document.getElementById('genero_f') ? document.getElementById('genero_f').checked : false;
         const contatos = document.getElementById('contatos').value.trim();
-        const termos = document.querySelector('input[name="Termos_Aceite"]').checked;
+        const termos = document.querySelector('input[name="Termos_Aceite"]') ? document.querySelector('input[name="Termos_Aceite"]').checked : false;
         
         if (!nome) { alert('Por favor, preencha o Nome.\n氏名を入力してください。'); document.getElementById('nome').focus(); return; }
         if (!dataNasc) { alert('Por favor, preencha a Data de Nascimento.\n生年月日を入力してください。'); document.getElementById('data_nasc').focus(); return; }
         if (!generoM && !generoF) { alert('Por favor, selecione o Gênero.\n性別を選択してください。'); document.getElementById('genero_container').scrollIntoView({behavior: 'smooth'}); return; }
         if (!contatos) { alert('Por favor, preencha o campo de Contatos.\n連絡先を入力してください。'); document.getElementById('contatos').focus(); return; }
         if (!termos) { alert('Por favor, aceite os termos para enviar.\n規約に同意してください。'); document.querySelector('input[name="Termos_Aceite"]').focus(); return; }
+        // ---------------------------------------------------------------
 
         statusMsg.style.display = 'block';
         statusMsg.innerText = 'Enviando dados para o servidor GORO, por favor aguarde...';
         statusMsg.style.color = '#2B6CB0';
-        btnSubmit.disabled = true;
+        btnSubmit.disabled = true; // Evita cliques duplos no celular
         
         const form = document.getElementById('goroForm');
         const formData = new FormData(form);
         
+        // Junta múltiplos checkboxes selecionados separando por vírgula
         const dataParsed = {};
         for (const [key, value] of formData.entries()) {
             if (dataParsed[key]) {
@@ -854,4 +861,3 @@
 </script>
 </body>
 </html>
-
