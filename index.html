@@ -161,24 +161,26 @@
         }
         
              /* スマートフォン用のレスポンシブ表示設定 */
+                       /* Configuração mobile corrigida para botões encorpados */
         @media (max-width: 480px) {
             body { padding: 8px 4px; }
             .container { padding: 16px 12px; border-radius: 8px; }
             h1 { font-size: 18px; }
             
-            /* Ajuste estético dos botões para telas mobile */
             .btn-container { 
-                flex-direction: column-reverse; /* Mantém o envio na posição principal superior */
+                flex-direction: column-reverse; 
                 gap: 12px;
                 align-items: center;
+                width: 100%;
             }
-          .btn-submit, .btn-clear { 
-                width: 90%; 
-                max-width: 260px; 
-                height: 56px; /* Aumentado de 48px para 56px (Altura premium e bem robusta) */
-                font-size: 16px; /* Aumentado levemente o texto para acompanhar o botão */
+            .btn-submit, .btn-clear { 
+                width: 85% !important; /* Mantém uma margem elegante nas laterais */
+                max-width: 280px !important;
+                height: 54px !important; /* Força a altura premium e robusta no celular */
+                font-size: 16px !important;
             }
         }
+
 
 
     </style>
