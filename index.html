@@ -123,35 +123,31 @@
             padding-left: 20px;
         }
         
-        /* ボタンのレイアウト設定 */
+      /* Configuração centralizada e robusta para os botões */
         .btn-container {
             display: flex;
-            gap: 12px;
+            gap: 16px;
             margin-top: 30px;
             margin-bottom: 20px;
-            align-items: center; 
+            justify-content: center; /* Centraliza horizontalmente no container */
+            width: 100%;
+            box-sizing: border-box;
         }
         .btn-submit, .btn-clear {
-            height: 54px;
-            font-size: 16px;
+            height: 50px;
+            font-size: 15px;
             font-weight: bold;
             border: none;
             border-radius: 8px;
             cursor: pointer;
             display: flex;
             align-items: center;
-            justy-content: center;
+            justify-content: center;
             box-sizing: border-box;
+            flex: 1; /* Distribui o mesmo tamanho exato para ambos, garantindo o centro */
+            max-width: 220px; /* Impede que os botões fiquem gigantescos no computador */
         }
-        .btn-submit {
-            background-color: #1A365D;
-            color: white;
-            flex: 2;
-        }
-        .btn-clear {
-            background-color: #E2E8F0;
-            color: #4A5568;
-            flex: 1;
+
         }
         .status-msg {
             text-align: center;
