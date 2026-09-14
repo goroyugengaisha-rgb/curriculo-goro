@@ -823,12 +823,36 @@
 <script>
     function enviarFormulario(event) {
         event.preventDefault();
-        function validarEIrPara(condicao, mensagem, elemento) {
+       function scrollSuaveManual(elemento, duracao = 500) {
+    const inicioY = window.pageYOffset;
+    const rect = elemento.getBoundingClientRect();
+    const alvoY = inicioY + rect.top - (window.innerHeight / 2) + (rect.height / 2);
+    const distancia = alvoY - inicioY;
+    let inicioTempo = null;
+
+    function passo(tempoAtual) {
+        if (!inicioTempo) inicioTempo = tempoAtual;
+        const decorrido = tempoAtual - inicioTempo;
+        const progresso = Math.min(decorrido / duracao, 1);
+        const facilitado = progresso < 0.5
+            ? 2 * progresso * progresso
+            : 1 - Math.pow(-2 * progresso + 2, 2) / 2; // easeInOutQuad
+
+        window.scrollTo(0, inicioY + distancia * facilitado);
+
+        if (decorrido < duracao) {
+            requestAnimationFrame(passo);
+        }
+    }
+    requestAnimationFrame(passo);
+}
+
+function validarEIrPara(condicao, mensagem, elemento) {
     if (!condicao) {
         alert(mensagem);
         if (elemento) {
             setTimeout(() => {
-                elemento.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                scrollSuaveManual(elemento, 500);
                 if (typeof elemento.focus === 'function') elemento.focus({ preventScroll: true });
             }, 300);
         }
