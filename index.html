@@ -161,12 +161,23 @@
         }
         
              /* スマートフォン用のレスポンシブ表示設定 */
-                       /* Configuração mobile corrigida para botões encorpados */
+         /* Configuração mobile corrigida para botões encorpados e datas em linha */
         @media (max-width: 480px) {
             body { padding: 8px 4px; }
             .container { padding: 16px 12px; border-radius: 8px; }
             h1 { font-size: 18px; }
             
+            /* Força as datas das empresas a continuarem lado a lado no celular */
+            .date-row-compact {
+                display: flex !important;
+                flex-direction: row !important;
+                gap: 8px !important;
+            }
+            .date-block {
+                flex: 1 !important;
+            }
+            
+            /* Mantém os botões finais encorpados e robustos */
             .btn-container { 
                 flex-direction: column-reverse; 
                 gap: 12px;
@@ -174,13 +185,12 @@
                 width: 100%;
             }
             .btn-submit, .btn-clear { 
-                width: 85% !important; /* Mantém uma margem elegante nas laterais */
+                width: 85% !important; 
                 max-width: 280px !important;
-                height: 54px !important; /* Força a altura premium e robusta no celular */
+                height: 54px !important; 
                 font-size: 16px !important;
             }
         }
-
 
 
     </style>
