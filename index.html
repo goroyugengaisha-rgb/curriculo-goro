@@ -156,39 +156,26 @@
         }
 
         
-        /* スマートフォン用のレスポンシブ表示設定 */
+             /* スマートフォン用のレスポンシブ表示設定 */
         @media (max-width: 480px) {
             body { padding: 8px 4px; }
             .container { padding: 16px 12px; border-radius: 8px; }
             h1 { font-size: 18px; }
-            .btn-container { flex-direction: column-reverse; } /* スマホでは送信ボタンを押しやすい位置（上）に */
-            .btn-submit, .btn-clear { width: 100%; }
+            
+            /* Ajuste estético dos botões para telas mobile */
+            .btn-container { 
+                flex-direction: column-reverse; /* Mantém o envio na posição principal superior */
+                gap: 12px;
+                align-items: center;
+            }
+            .btn-submit, .btn-clear { 
+                width: 90%; /* Deixa uma margem elegante nas laterais do celular */
+                max-width: 260px; /* Alarga o botão levemente para melhor ergonomia */
+                height: 48px; /* Altura ideal e encorpada para clique com o polegar */
+                font-size: 15px;
+            }
         }
 
-                /* Grid horizontal compacta para datas do histórico */
-        .date-row-compact {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-            margin-bottom: 12px;
-            width: 100%;
-        }
-        .date-block {
-            flex: 1;
-            min-width: 0;
-        }
-        .date-block label {
-            font-size: 12px !important;
-            margin-bottom: 3px !important;
-            color: #4A5568;
-        }
-        .date-group-title {
-            font-size: 13px;
-            font-weight: bold;
-            color: #4A5568;
-            margin-bottom: 6px;
-            display: block;
-        }
 
     </style>
 
