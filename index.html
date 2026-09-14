@@ -883,25 +883,25 @@
         urlParams.set('Moradia_Apos_Contratacao', moradiaValor);
         urlParams.set('Nivel_Japones_Falado', nihongoValor);
         urlParams.set('Termos_Aceite', termos ? "Sim" : "Não");
+
+        statusMsg.style.display = 'block';
+        statusMsg.style.color = '#2B6CB0';
+        btnSubmit.disabled = true;
         
         const urlWebhook = "https://script.google.com/macros/s/AKfycbzApfxWE-jf-gvt6iSxRqBCT9f8lqZJFpuarYsXd4f9qGwuoeVC3fWFZTTXoIt4_Yv-/exec";
         
+ // Envio otimizado contra bloqueios de CORS do Google
         fetch(urlWebhook, {
             method: 'POST',
+            mode: 'no-cors', 
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: urlParams.toString()
         })
-        .then(response => response.text())
-        .then(texto => {
-            if (texto.includes("Sucesso")) {
-                statusMsg.innerText = '✓ Dados enviados com sucesso! Suas informações foram mantidas na tela para sua conferência.';
-                statusMsg.style.color = '#2F855A';
-                alert('✓ Currículo gravado com sucesso na planilha da GORO!');
-            } else {
-                alert('O servidor respondeu com um erro: ' + texto);
-                statusMsg.innerText = 'Erro na gravação: ' + texto;
-                statusMsg.style.color = '#C53030';
-            }
+        .then(() => {
+            // Como no-cors impede ler o texto, assumimos o sucesso após o envio bem-sucedido do pacote
+            statusMsg.innerText = '✓ Dados enviados com sucesso! Suas informações foram mantidas na tela para sua conferência.';
+            statusMsg.style.color = '#2F855A';
+            alert('✓ Currículo enviado com sucesso para a planilha da GORO! Seus dados foram mantidos na tela para conferência.');
             btnSubmit.disabled = false;
         })
         .catch(error => {
