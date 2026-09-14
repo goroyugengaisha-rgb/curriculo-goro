@@ -814,7 +814,7 @@
         <!-- Botões Finais do Formulário (Envio e Limpeza) -->
         <div class="btn-container">
             <button type="reset" class="btn-clear">🗑️ Apagar Tudo</button>
-            <button type="submit" class="btn-submit">🚀 Enviar Currículo</button>
+           <button type="submit" class="btn-submit">🚀 Enviar Currículo</button>
         </div>
         
         <div id="statusMessage" class="status-msg" style="text-align: center; color: #2B6CB0; font-weight: bold; margin-top: 8px;">
@@ -893,15 +893,14 @@
  // Envio otimizado contra bloqueios de CORS do Google
         fetch(urlWebhook, {
             method: 'POST',
-            mode: 'no-cors', 
+            mode: 'no-cors',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: urlParams.toString()
         })
         .then(() => {
-            // Como no-cors impede ler o texto, assumimos o sucesso após o envio bem-sucedido do pacote
             statusMsg.innerText = '✓ Dados enviados com sucesso! Suas informações foram mantidas na tela para sua conferência.';
             statusMsg.style.color = '#2F855A';
-            alert('✓ Currículo enviado com sucesso para a planilha da GORO! Seus dados foram mantidos na tela para conferência.');
+            alert('✓ Currículo gravado com sucesso na planilha da GORO! Os seus dados foram mantidos na tela para conferência.');
             btnSubmit.disabled = false;
         })
         .catch(error => {
@@ -910,3 +909,5 @@
             statusMsg.style.color = '#C53030';
             btnSubmit.disabled = false;
         });
+    }
+</script>
