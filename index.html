@@ -288,7 +288,11 @@
         <!-- SEÇÃO 2: Histórico Profissional no Japão -->
         <div class="section-title">2. Histórico Profissional no Japão (Três Últimas Empresas)</div>
 
-                 <span class="date-group-title">🛫 Entrada (入社)</span>
+                       <!-- 1ª Empresa Completa Corrigida (Apenas Ano/Mês) -->
+        <div style="border: 1px solid #CBD5E0; padding: 12px; border-radius: 8px; margin-bottom: 20px; background-color: #FFF;">
+            <strong style="display: block; margin-bottom: 15px; color: #1A365D; border-bottom: 1px dashed #E2E8F0; padding-bottom: 4px;">🏢 1ª Empresa (Mais Recente / Atual)</strong>
+            
+            <span class="date-group-title">🛫 Entrada (入社)</span>
             <div class="date-row-compact">
                 <div class="date-block">
                     <label>Ano <span>年</span></label>
@@ -311,6 +315,39 @@
                     <input type="number" name="Empresa1_Saida_Mes" placeholder="08" min="1" max="12">
                 </div>
             </div>
+
+            <div class="form-group" style="margin-top: 10px;">
+                <label>Nome da Empreiteira <span>派遣会社名</span></label>
+                <input type="text" name="Empresa1_Empreiteira" placeholder="Nome da agência / contratante">
+            </div>
+            <div class="form-group">
+                <label>Nome da Fábrica <span>工場名 / 企業名</span></label>
+                <input type="text" name="Empresa1_Fabrica" placeholder="Nome da fábrica de destino">
+            </div>
+            <div class="grid-2">
+                <div class="form-group">
+                    <label>Província (Prefeitura) <span>都道府県</span></label>
+                    <input type="text" name="Empresa1_Provincia" placeholder="Ex: Aichi-ken">
+                </div>
+                <div class="form-group">
+                    <label>Cidade <span>市区町村</span></label>
+                    <input type="text" name="Empresa1_Cidade" placeholder="Ex: Ichinomiya-shi">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Categoria <span>業種</span></label>
+                <input type="text" name="Empresa1_Categoria" placeholder="Ex: Autopeças">
+            </div>
+            <div class="form-group">
+                <label>Descrição (Função) <span>職種 / 作業内容</span></label>
+                <input type="text" name="Empresa1_Descricao" placeholder="Ex: Operador / Kensa">
+            </div>
+            <div class="form-group">
+                <label>Motivo da Saída <span>退職理由</span></label>
+                <input type="text" name="Empresa1_Motivo_Saida" placeholder="Razão do desligamento">
+            </div>
+        </div>
+
 
 
 
