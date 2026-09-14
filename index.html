@@ -888,14 +888,20 @@
         
         fetch(urlWebhook, {
             method: 'POST',
-            mode: 'no-cors',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: urlParams.toString()
         })
-        .then(() => {
-            statusMsg.innerText = '✓ Dados enviados com sucesso! Suas informações foram mantidas na tela para sua conferência.';
-            statusMsg.style.color = '#2F855A';
-            alert('✓ Currículo gravado com sucesso na planilha da GORO! Os seus dados foram mantidos na tela para conferência.');
+        .then(response => response.text())
+        .then(texto => {
+            if (texto.includes("Sucesso")) {
+                statusMsg.innerText = '✓ Dados enviados com sucesso! Suas informações foram mantidas na tela para sua conferência.';
+                statusMsg.style.color = '#2F855A';
+                alert('✓ Currículo gravado com sucesso na planilha da GORO!');
+            } else {
+                alert('O servidor respondeu com um erro: ' + texto);
+                statusMsg.innerText = 'Erro na gravação: ' + texto;
+                statusMsg.style.color = '#C53030';
+            }
             btnSubmit.disabled = false;
         })
         .catch(error => {
@@ -903,3 +909,4 @@
             statusMsg.innerText = 'Erro ao enviar dados. Tente novamente.';
             statusMsg.style.color = '#C53030';
             btnSubmit.disabled = false;
+        });
