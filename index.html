@@ -850,12 +850,12 @@
         
         const termos = document.querySelector('input[name="Termos_Aceite"]') ? document.querySelector('input[name="Termos_Aceite"]').checked : false;
         
-        if (!nome) { alert('Por favor, preencha o Nome.\n氏名を入力してください。'); if(nomeField) nomeField.focus(); return; }
-        if (!dataNasc) { alert('Por favor, preencha a Data de Nascimento.\n生年月日を入力してください。'); if(dataNascField) dataNascField.focus(); return; }
-        if (!generoValor) { alert('Por favor, selecione o Gênero.\n性別を選択してください。'); return; }
-        if (!contatos) { alert('Por favor, preencha o campo de Contatos.\n連絡先を入力してください。'); if(contatosField) contatosField.focus(); return; }
-        if (!moradiaValor) { alert('Por favor, selecione uma opção de Moradia.\n採用後の入居希望を選択してください。'); if(document.getElementById('moradia_container')) document.getElementById('moradia_container').scrollIntoView(); return; }
-        if (!nihongoValor) { alert('Por favor, selecione seu Nível de Japonês.\n日本語会話力を選択してください。'); if(document.getElementById('nihongo_container')) document.getElementById('nihongo_container').scrollIntoView(); return; }
+        if (!nome) { alert('Por favor, preencha o Nome.\n氏名を入力してください。'); if(nomeField) { nomeField.focus(); nomeField.scrollIntoView({ block: 'center' }); } return; }
+        if (!dataNasc) { alert('Por favor, preencha a Data de Nascimento.\n生年月日を入力してください。'); if(dataNascField) { dataNascField.focus(); dataNascField.scrollIntoView({ block: 'center' }); } return; }
+        if (!generoValor) { alert('Por favor, selecione o Gênero.\n性別を選択してください。'); if(document.getElementById('genero_container')) document.getElementById('genero_container').scrollIntoView({ block: 'center' }); return; }
+        if (!contatos) { alert('Por favor, preencha o campo de Contatos.\n連絡先を入力してください。'); if(contatosField) { contatosField.focus(); contatosField.scrollIntoView({ block: 'center' }); } return; }
+        if (!moradiaValor) { alert('Por favor, selecione uma opção de Moradia.\n採用後の入居希望を選択してください。'); if(document.getElementById('moradia_container')) document.getElementById('moradia_container').scrollIntoView({ block: 'center' }); return; }
+        if (!nihongoValor) { alert('Por favor, selecione seu Nível de Japonês.\n日本語会話力を選択してください。'); if(document.getElementById('nihongo_container')) document.getElementById('nihongo_container').scrollIntoView({ block: 'center' }); return; }
         if (!termos) { alert('Por favor, aceite os termos para enviar.\n規約に同意してください。'); return; }
 
         statusMsg.style.display = 'block';
