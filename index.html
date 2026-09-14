@@ -357,30 +357,43 @@
         </div>
 
 
-        <!-- 2ª Empresa -->
+               <!-- 2ª Empresa Unificada e Condensada -->
         <div style="border: 1px solid #CBD5E0; padding: 12px; border-radius: 8px; margin-bottom: 20px; background-color: #FFF;">
-            <strong style="display: block; margin-bottom: 12px; color: #4A5568;">🏢 2ª Empresa (Anterior)</strong>
-            <div class="grid-2">
-                <div class="form-group">
-                    <label>Entrar 入社 <span>(Ano 年)</span></label>
-                    <input type="number" name="Empresa2_Entrada_Ano" placeholder="Ex: 2022">
+            <strong style="display: block; margin-bottom: 15px; color: #4A5568; border-bottom: 1px dashed #E2E8F0; padding-bottom: 4px;">🏢 2ª Empresa (Anterior)</strong>
+            
+            <span class="date-group-title">🛫 Entrada (入社)</span>
+            <div class="date-row-compact">
+                <div class="date-block">
+                    <label>Ano <span>年</span></label>
+                    <input type="number" name="Empresa2_Entrada_Ano" placeholder="Ex: 2022" min="1980" max="2030">
                 </div>
-                <div class="form-group">
-                    <label>Entrar 入社 <span>(Mês 月)</span></label>
-                    <input type="number" name="Empresa2_Entrada_Mes" placeholder="Ex: 06">
+                <div class="date-block">
+                    <label>Mês <span>月</span></label>
+                    <input type="number" name="Empresa2_Entrada_Mes" placeholder="06" min="1" max="12">
                 </div>
-            </div>
-            <div class="grid-2">
-                <div class="form-group">
-                    <label>Sair 退社 <span>(Ano 年)</span></label>
-                    <input type="number" name="Empresa2_Saida_Ano" placeholder="Ex: 2024">
-                </div>
-                <div class="form-group">
-                    <label>Sair 退社 <span>(Mês 月)</span></label>
-                    <input type="number" name="Empresa2_Saida_Mes" placeholder="Ex: 03">
+                <div class="date-block">
+                    <label>Dia <span>日</span></label>
+                    <input type="number" name="Empresa2_Entrada_Dia" placeholder="01" min="1" max="31">
                 </div>
             </div>
-            <div class="form-group">
+
+            <span class="date-group-title">🛬 Saída (退社)</span>
+            <div class="date-row-compact">
+                <div class="date-block">
+                    <label>Ano <span>年</span></label>
+                    <input type="number" name="Empresa2_Saida_Ano" placeholder="Ex: 2024" min="1980" max="2030">
+                </div>
+                <div class="date-block">
+                    <label>Mês <span>月</span></label>
+                    <input type="number" name="Empresa2_Saida_Mes" placeholder="03" min="1" max="12">
+                </div>
+                <div class="date-block">
+                    <label>Dia <span>日</span></label>
+                    <input type="number" name="Empresa2_Saida_Dia" placeholder="30" min="1" max="31">
+                </div>
+            </div>
+
+            <div class="form-group" style="margin-top: 10px;">
                 <label>Nome da Empreiteira <span>派遣会社名</span></label>
                 <input type="text" name="Empresa2_Empreiteira" placeholder="Nome da agência / contratante">
             </div>
@@ -411,6 +424,7 @@
                 <input type="text" name="Empresa2_Motivo_Saida" placeholder="Razão do desligamento">
             </div>
         </div>
+
 
         <!-- 3ª Empresa -->
         <div style="border: 1px solid #CBD5E0; padding: 12px; border-radius: 8px; margin-bottom: 20px; background-color: #FFF;">
