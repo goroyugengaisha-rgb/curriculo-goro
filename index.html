@@ -184,11 +184,30 @@
         }
 
 
+        .progress-bar-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background-color: #E2E8F0;
+            z-index: 1000;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            width: 0%;
+            background-color: #1A365D;
+            transition: width 0.1s ease-out;
+        }
+
     </style>
 
 </head>
 
 <body>
+<div class="progress-bar-container">
+    <div class="progress-bar-fill" id="progressBarFill"></div>
+</div>
 <div class="container">
      <form id="goroForm" onsubmit="enviarFormulario(event)">
         <h1>Currículo e Questionário</h1>
@@ -860,6 +879,20 @@
 </div>
 
 <script>
+    // --- Barra de progresso (rolagem do formulário) ---
+    function atualizarProgresso() {
+        const scrollTop = window.scrollY || document.documentElement.scrollTop;
+        const alturaTotal = document.documentElement.scrollHeight - window.innerHeight;
+        const progresso = alturaTotal > 0 ? (scrollTop / alturaTotal) * 100 : 0;
+        document.getElementById('progressBarFill').style.width = Math.min(progresso, 100) + '%';
+    }
+    window.addEventListener('scroll', atualizarProgresso);
+    window.addEventListener('resize', atualizarProgresso);
+    window.addEventListener('load', atualizarProgresso);
+
+    // --- Controle para evitar envio duplicado (clique duplo / duplo toque) ---
+    let enviandoFormulario = false;
+
     function toggleDiasEspera(valor) {
         const container = document.getElementById('dias_espera_container');
         const input = document.getElementById('inicio_disponibilidade_dias');
@@ -873,6 +906,8 @@
 
     function enviarFormulario(event) {
         event.preventDefault();
+
+        if (enviandoFormulario) return;
        function scrollSuaveManual(elemento, duracao = 500) {
     const inicioY = window.pageYOffset;
     const rect = elemento.getBoundingClientRect();
@@ -941,7 +976,7 @@ if (!validarEIrPara(moradiaValor, 'Por favor, selecione uma opção de Moradia.\
 if (!validarEIrPara(nihongoValor, 'Por favor, selecione seu Nível de Japonês.\n日本語会話力を選択してください。', document.getElementById('nihongo_container'))) return;
 if (!termos) { alert('Por favor, aceite os termos para enviar.\n規約に同意してください。'); return; }
 
-        statusMsg.style.display = 'block';
+        enviandoFormulario = true;
         statusMsg.style.display = 'block';
         statusMsg.style.color = '#2B6CB0';
         btnSubmit.disabled = true;
@@ -968,10 +1003,6 @@ if (!termos) { alert('Por favor, aceite os termos para enviar.\n規約に同意�
         urlParams.set('Nivel_Japones_Falado', nihongoValor);
         urlParams.set('Termos_Aceite', termos ? "Sim" : "Não");
 
-        statusMsg.style.display = 'block';
-        statusMsg.style.color = '#2B6CB0';
-        btnSubmit.disabled = true;
-        
         const urlWebhook = "https://script.google.com/macros/s/AKfycbzApfxWE-jf-gvt6iSxRqBCT9f8lqZJFpuarYsXd4f9qGwuoeVC3fWFZTTXoIt4_Yv-/exec";
         
  // Envio otimizado contra bloqueios de CORS do Google
@@ -986,12 +1017,14 @@ if (!termos) { alert('Por favor, aceite os termos para enviar.\n規約に同意�
             statusMsg.style.color = '#2F855A';
             alert('✓ Currículo gravado com sucesso na planilha da GORO! Os seus dados foram mantidos na tela para conferência.');
             btnSubmit.disabled = false;
+            enviandoFormulario = false;
         })
         .catch(error => {
             console.error('Erro:', error);
             statusMsg.innerText = 'Erro ao enviar dados. Tente novamente.';
             statusMsg.style.color = '#C53030';
             btnSubmit.disabled = false;
+            enviandoFormulario = false;
         });
     }
 </script>
