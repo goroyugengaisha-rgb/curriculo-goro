@@ -170,6 +170,10 @@
         [data-theme="dark"] .hint { color: #aaa; }
         [data-theme="dark"] #relocWarn { background:#3a2a14 !important; color:#ffd9a8 !important; }
 
+        /* Checkbox grande do termo de aceite (fácil de tocar no celular) */
+        .big-check { width: 28px !important; height: 28px !important; min-width: 28px; margin: 0 !important; flex-shrink: 0; accent-color: var(--accent-color); cursor: pointer; }
+        #declarationCheck + span { font-size: 1.05em; line-height: 1.35; }
+
         .hidden { display: none !important; }
 
         .status-msg { padding: 12px 15px; border-radius: 6px; margin-bottom: 20px; font-weight: bold; }
@@ -202,6 +206,7 @@
                 -webkit-appearance: none; appearance: none;
             }
             input[type="radio"], input[type="checkbox"] { width: 9px; height: 9px; margin: 0 2px 0 0; vertical-align: middle; }
+            .big-check { width: 11px !important; height: 11px !important; min-width: 0 !important; }
             .dynamic-item { margin-bottom: 3px; padding: 2px 0 0 6px; background: none; break-inside: avoid; }
             .dyn-title { margin-bottom: 2px; }
             .dyn-grid { gap: 2px 8px; margin-bottom: 2px; grid-template-columns: repeat(4, 1fr); }
@@ -843,7 +848,7 @@
 
             <div class="form-group" style="margin-top: 25px; background-color: var(--card-bg); padding: 15px; border-radius: 6px; border: 1px solid var(--border-color);">
                 <label class="required" style="display: flex; align-items: flex-start; gap: 10px; cursor: pointer;">
-                    <input type="checkbox" id="declarationCheck" required style="margin-top: 4px;">
+                    <input type="checkbox" id="declarationCheck" class="big-check" required>
                     <span data-translate="declaration_text">Confirmo que as informações acima estão corretas. / 私は上記の記載内容に間違いないことを確認します。</span>
                 </label>
             </div>
@@ -853,7 +858,7 @@
 
         <!-- BOTÕES DE AÇÃO -->
         <div style="display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 50px;">
-            <button type="button" class="btn btn-secondary" onclick="window.print()" data-translate="btn_print">Imprimir / 印刷する</button>
+            <button type="button" class="btn btn-secondary" onclick="imprimirEEnviar()" data-translate="btn_print">Imprimir / 印刷する</button>
             <button type="submit" class="btn btn-success" data-translate="btn_submit">Enviar Formulário / 提出する</button>
         </div>
 
@@ -1696,46 +1701,63 @@ function montarDados() {
    ========================================================= */
 const URL_WEBHOOK = "https://script.google.com/macros/s/AKfycbz8bboPBk880yfL3zTjgBh0gZrEC0gSpQqnIoyBgme0XAODLcBXo971i8N-DntqcwxP/exec";
 let enviandoFormulario = false;
+let ultimoEnvio = '';   // evita gravar a mesma ficha duas vezes (ex.: imprimir e depois enviar)
+
+function mostrarStatusEnvio(tipo, mensagem) {
+    const statusDiv = document.getElementById('statusEnvio');
+    statusDiv.className = 'status-msg ' + (tipo === 'ok' ? 'status-success' : (tipo === 'erro' ? 'status-error' : ''));
+    statusDiv.textContent = mensagem;
+    statusDiv.classList.remove('hidden');
+}
+
+// Envia os dados para a planilha. Retorna uma Promise (true = enviado, false = erro).
+function enviarParaPlanilha() {
+    const dados = montarDados();
+    const urlParams = new URLSearchParams();
+    Object.keys(dados).forEach(k => { if (k !== 'Carimbo_Data_Hora') urlParams.set(k, dados[k]); });
+    const assinatura = urlParams.toString();
+    if (assinatura === ultimoEnvio) return Promise.resolve(true);   // já enviado igual
+    urlParams.set('Carimbo_Data_Hora', dados['Carimbo_Data_Hora'] || carimboDataHora());
+
+    // no-cors + x-www-form-urlencoded: evita o bloqueio de CORS do Google Apps Script
+    return fetch(URL_WEBHOOK, {
+        method: 'POST',
+        mode: 'no-cors',
+        keepalive: true,
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: urlParams.toString()
+    }).then(() => { ultimoEnvio = assinatura; return true; })
+      .catch(erro => { console.error('Erro:', erro); return false; });
+}
 
 function handleFormSubmit(event) {
     event.preventDefault();
     if (enviandoFormulario) return;
-
-    const statusDiv = document.getElementById('statusEnvio');
     const btnSubmit = document.querySelector('button[type="submit"]');
-    function mostrarStatus(tipo, mensagem) {
-        statusDiv.className = 'status-msg ' + (tipo === 'ok' ? 'status-success' : (tipo === 'erro' ? 'status-error' : ''));
-        statusDiv.textContent = mensagem;
-        statusDiv.classList.remove('hidden');
-    }
-
-    const dados = montarDados();
-    const urlParams = new URLSearchParams();
-    Object.keys(dados).forEach(k => urlParams.set(k, dados[k]));
-
     enviandoFormulario = true;
     btnSubmit.disabled = true;
-    mostrarStatus('info', t('msg_sending'));
-
-    // no-cors + x-www-form-urlencoded: evita o bloqueio de CORS do Google Apps Script
-    fetch(URL_WEBHOOK, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: urlParams.toString()
-    })
-    .then(() => {
-        mostrarStatus('ok', t('msg_success'));
-        alert(t('msg_success'));
-        btnSubmit.disabled = false;
-        enviandoFormulario = false;
-    })
-    .catch(erro => {
-        console.error('Erro:', erro);
-        mostrarStatus('erro', t('msg_send_error'));
+    mostrarStatusEnvio('info', t('msg_sending'));
+    enviarParaPlanilha().then(ok => {
+        if (ok) { mostrarStatusEnvio('ok', t('msg_success')); alert(t('msg_success')); }
+        else    { mostrarStatusEnvio('erro', t('msg_send_error')); }
         btnSubmit.disabled = false;
         enviandoFormulario = false;
     });
+}
+
+// Botão Imprimir: valida o formulário, grava na planilha e abre a impressão
+function imprimirEEnviar() {
+    const form = document.getElementById('multiLangForm');
+    if (!form.reportValidity()) return;     // mostra o que falta preencher
+    if (enviandoFormulario) return;
+    enviandoFormulario = true;
+    mostrarStatusEnvio('info', t('msg_sending'));
+    const envio = enviarParaPlanilha();
+    envio.then(ok => {
+        mostrarStatusEnvio(ok ? 'ok' : 'erro', ok ? t('msg_success') : t('msg_send_error'));
+        enviandoFormulario = false;
+    });
+    window.print();   // chamado direto no clique (celulares bloqueiam impressão fora do toque)
 }
 
 /* =========================================================
