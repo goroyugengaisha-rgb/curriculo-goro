@@ -1,1030 +1,1752 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="ja">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GORO - Currículo e Questionário Digital</title>
+    <title>履歴書およびアンケート / Currículo e Questionário</title>
     <style>
+        /* --- ESTILOS GERAIS --- */
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #333333;
+            --card-bg: #f9f9f9;
+            --border-color: #cccccc;
+            --accent-color: #007bff;
+            --required-color: #dc3545;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #121212;
+            --text-color: #e0e0e0;
+            --card-bg: #1e1e1e;
+            --border-color: #444444;
+            --accent-color: #375a7f;
+        }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-            background-color: #F7FAFC;
-            color: #2D3748;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
             margin: 0;
-            padding: 16px 8px;
-            line-height: 1.6;
+            padding: 20px;
+            transition: background-color 0.3s, color 0.3s;
         }
+
         .container {
-            max-width: 600px; /* シングルカラムに最適な横幅に調整 */
+            max-width: 900px;
             margin: 0 auto;
-            background: #FFFFFF;
-            padding: 24px 16px;
-            border-radius: 12px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-            box-sizing: border-box;
+            padding: 20px;
         }
-        h1 {
-            font-size: 22px;
-            color: #1A365D;
-            text-align: center;
-            margin: 0 0 5px 0;
-            text-transform: uppercase;
-        }
-        .subtitle {
-            text-align: center;
-            font-size: 13px;
-            color: #718096;
-            margin-bottom: 25px;
-            border-bottom: 2px solid #E2E8F0;
-            padding-bottom: 15px;
-        }
-        .section-title {
-            font-size: 16px;
-            font-weight: bold;
-            color: #2B6CB0;
-            background-color: #EBF8FF;
-            padding: 10px;
-            border-left: 5px solid #2B6CB0;
-            border-radius: 4px;
-            margin: 25px 0 15px 0;
-        }
-        .form-group {
-            margin-bottom: 18px;
-        }
-        label {
-            display: block;
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 6px;
-            color: #2D3748;
-        }
-        label span {
-            font-size: 12px;
-            color: #718096;
-            font-weight: normal;
-        }
-        input[type="text"], input[type="number"], input[type="date"], textarea, select {
-            width: 100%;
-            padding: 12px;
-            font-size: 15px;
-            border: 1px solid #CBD5E0;
+
+        /* Controles Globais Superior */
+        .global-controls {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            background-color: var(--card-bg);
+            padding: 15px;
             border-radius: 8px;
-            box-sizing: border-box;
-            background-color: #FFF;
+            border: 1px solid var(--border-color);
+            margin-bottom: 25px;
         }
-        
-        /* 過去のグリッドレイアウトを完全に無効化し、1列に統一 */
-        .grid-2 {
-            display: flex;
-            flex-direction: column;
-            gap: 0;
-        }
-        
-        .options-vertical {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-        .option-card {
+
+        .control-group {
             display: flex;
             align-items: center;
-            padding: 12px;
-            border: 1px solid #E2E8F0;
+            gap: 10px;
+        }
+
+        select, input[type="text"], input[type="tel"], input[type="email"], input[type="number"], input[type="date"], textarea {
+            padding: 8px 12px;
+            border-radius: 4px;
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+
+        /* Evita que listas com textos longos estourem a largura da tela */
+        select { max-width: 100%; box-sizing: border-box; }
+
+        /* Responsividade Forçada por Botão ou Automática */
+        .view-mobile .container { max-width: 100%; padding: 5px; }
+
+        /* Separador entre blocos (usado no layout de coluna única / celular) */
+        .sep { border-top: 1px dashed var(--border-color); padding-top: 15px; }
+
+        /* Layout PC: container largo e seções em 2 colunas.
+           "wide" = bloco que ocupa a linha inteira (listas longas, tabelas, textos). */
+        .view-pc .container { max-width: 1280px; }
+        .view-pc .section-card { display: grid; grid-template-columns: 1fr 1fr; column-gap: 48px; align-items: start; padding: 24px 28px; }
+        .view-pc .section-card > .section-title,
+        .view-pc .section-card > .wide { grid-column: 1 / -1; }
+        .view-pc .section-card > .form-group { margin-bottom: 22px; }
+        .view-pc .section-card .sep { border-top: none; padding-top: 0; }
+
+        /* No PC, opções de marcar (rádio/checkbox) ficam lado a lado em vez de empilhadas */
+        .view-pc .section-card .form-group label:has(> input[type="radio"], > input[type="checkbox"]) { display: inline-block; margin-right: 20px; }
+
+        @media (min-width: 1000px) {
+            .view-auto .section-card .form-group label:has(> input[type="radio"], > input[type="checkbox"]) { display: inline-block; margin-right: 20px; }
+            .view-auto .container { max-width: 1280px; }
+            .view-auto .section-card { display: grid; grid-template-columns: 1fr 1fr; column-gap: 48px; align-items: start; padding: 24px 28px; }
+            .view-auto .section-card > .section-title,
+            .view-auto .section-card > .wide { grid-column: 1 / -1; }
+            .view-auto .section-card > .form-group { margin-bottom: 22px; }
+            .view-auto .section-card .sep { border-top: none; padding-top: 0; }
+        }
+        .view-mobile input[type="text"], .view-mobile input[type="email"], .view-mobile input[type="tel"] { width: 100% !important; max-width: 100% !important; }
+
+        /* Seções e Formulários */
+        .section-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
             border-radius: 8px;
-            cursor: pointer;
-            background-color: #F8FAFC;
-            font-size: 14px;
-            font-weight: 600;
-            width: 100%; /* 横幅いっぱいに広げて1列を維持 */
-            box-sizing: border-box;
+            padding: 20px;
+            margin-bottom: 25px;
         }
-        .option-card input {
-            margin-right: 12px;
-            width: 18px;
-            height: 18px;
-            flex-shrink: 0;
+
+        .section-title {
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 8px;
+            margin-top: 0;
         }
-        
-        /* 規約エリアのスタイル設定（確実に1列で下部に配置） */
-        .terms-box {
-            background-color: #FFFAF0;
-            border: 1px solid #FEEBC8;
-            padding: 14px;
-            border-radius: 8px;
-            font-size: 13px;
-            color: #744210;
-            margin-top: 20px;
-            width: 100%;
-            box-sizing: border-box;
-            display: flex;
-            flex-direction: column;
+
+        .form-group {
+            margin-bottom: 15px;
         }
-        .terms-box ul {
-            margin: 5px 0 12px 0;
-            padding-left: 20px;
-        }
-        
-        /* Configuração de Cores e Estilo Geral dos Botões */
-        .btn-container {
-            display: flex;
-            gap: 16px;
-            margin-top: 30px;
-            margin-bottom: 20px;
-            justify-content: center;
-            width: 100%;
-            box-sizing: border-box;
-        }
-        .btn-submit, .btn-clear {
-            height: 52px;
-            font-size: 15px;
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
             font-weight: bold;
+        }
+
+        .required::after {
+            content: " *";
+            color: var(--required-color);
+        }
+
+        .dynamic-item {
+            border-left: 3px solid var(--accent-color);
+            padding-left: 15px;
+            padding-top: 10px;
+            padding-bottom: 5px;
+            margin-bottom: 15px;
+            position: relative;
+            background: rgba(0,0,0,0.02);
+        }
+
+        .btn {
+            padding: 10px 20px;
             border: none;
-            border-radius: 8px;
+            border-radius: 4px;
             cursor: pointer;
-            width: 220px;
-            box-sizing: border-box;
-        }
-        .btn-submit {
-            background-color: #1A365D;
-            color: #FFFFFF;
-        }
-        .btn-clear {
-            background-color: #E2E8F0;
-            color: #4A5568;
-        }
-        
-             /* スマートフォン用のレスポンシブ表示設定 */
-         /* Configuração mobile corrigida para botões encorpados e datas em linha */
-        @media (max-width: 480px) {
-            body { padding: 8px 4px; }
-            .container { padding: 16px 12px; border-radius: 8px; }
-            h1 { font-size: 18px; }
-            
-            /* Força as datas das empresas a continuarem lado a lado no celular */
-            .date-row-compact {
-                display: flex !important;
-                flex-direction: row !important;
-                gap: 8px !important;
-            }
-            .date-block {
-                flex: 1 !important;
-            }
-            
-            /* Mantém os botões finais encorpados e robustos */
-            .btn-container { 
-                flex-direction: column-reverse; 
-                gap: 12px;
-                align-items: stretch;
-                width: 100%;
-            }
-            .btn-submit, .btn-clear { 
-                width: 100%;
-                height: 54px;
-                font-size: 16px;
-            }
+            font-weight: bold;
         }
 
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
-        .progress-bar-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 6px;
-            background-color: #E2E8F0;
-            z-index: 1000;
-        }
-        .progress-bar-fill {
-            height: 100%;
-            width: 0%;
-            background-color: #1A365D;
-            transition: width 0.1s ease-out;
-        }
+        /* Blocos dinâmicos (experiências e parentes) */
+        .dyn-title { display: block; margin-bottom: 10px; color: var(--accent-color); }
+        .dyn-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px 16px; margin-bottom: 10px; }
+        .dyn-grid-short { grid-template-columns: repeat(4, 1fr); }
+        .dyn-field label { display: block; font-weight: bold; font-size: 0.9em; margin-bottom: 4px; }
+        .dyn-field input, .dyn-field select { width: 100%; box-sizing: border-box; }
+        @media (max-width: 560px) { .dyn-grid-short { grid-template-columns: repeat(2, 1fr); } }
 
+        .btn-primary { background-color: var(--accent-color); color: #fff; }
+        .btn-success { background-color: #28a745; color: #fff; }
+        .btn-danger { background-color: #dc3545; color: #fff; }
+        .btn-secondary { background-color: #6c757d; color: #fff; }
+        .btn-remove-item { background-color: #dc3545; color: #fff; padding: 4px 10px; font-size: 0.85em; float: right; }
+
+        .hint {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 2px;
+        }
+        [data-theme="dark"] .hint { color: #aaa; }
+        [data-theme="dark"] #relocWarn { background:#3a2a14 !important; color:#ffd9a8 !important; }
+
+        .hidden { display: none !important; }
+
+        .status-msg { padding: 12px 15px; border-radius: 6px; margin-bottom: 20px; font-weight: bold; }
+        .status-success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .status-error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+
+        @media print {
+            @page { size: A4; margin: 6mm; }
+            :root, [data-theme="dark"], body { --bg-color:#fff; --text-color:#000; --card-bg:#fff; --border-color:#999; --accent-color:#1f4e79; }
+            html, body { background:#fff !important; color:#000 !important; font-size: 7.4pt; line-height: 1.1; }
+            body { padding: 0 !important; }
+            .global-controls, .btn, .hint, #statusMsg, .status-msg, .btn-remove-item, form > button, .form-actions { display: none !important; }
+            .container, body .container { max-width: 100% !important; padding: 0 !important; margin: 0 !important; }
+            h1 { font-size: 13pt; margin: 0 0 4px; }
+            .section-card, body .section-card {
+                display: grid !important; grid-template-columns: 1fr 1fr !important; column-gap: 14px !important; align-items: start;
+                border: none !important; border-top: 1.5px solid #1f4e79 !important; border-radius: 0 !important;
+                padding: 3px 0 0 !important; margin: 0 0 4px !important; background:#fff !important;
+            }
+            .section-card > .section-title, .section-card > .wide { grid-column: 1 / -1 !important; }
+            .section-title { font-size: 9.5pt; margin: 0 0 2px; padding: 0 0 2px; border-bottom: 1px solid #1f4e79; }
+            .section-card > .form-group, body .section-card > .form-group { margin: 0 0 2px !important; }
+            .section-card .sep { border-top: none !important; padding-top: 0 !important; }
+            .form-group label { margin-bottom: 1px; }
+            .form-group label:has(> input[type="radio"], > input[type="checkbox"]) { display: inline-block !important; margin-right: 8px; }
+            h4 { margin: 2px 0; font-size: 9pt; }
+            select, input[type="text"], input[type="tel"], input[type="email"], input[type="number"], input[type="date"], textarea {
+                padding: 0 3px !important; font-size: 7.4pt; background:#fff !important; color:#000 !important;
+                border: none !important; border-bottom: 1px solid #777 !important; border-radius: 0 !important;
+                -webkit-appearance: none; appearance: none;
+            }
+            input[type="radio"], input[type="checkbox"] { width: 9px; height: 9px; margin: 0 2px 0 0; vertical-align: middle; }
+            .dynamic-item { margin-bottom: 3px; padding: 2px 0 0 6px; background: none; break-inside: avoid; }
+            .dyn-title { margin-bottom: 2px; }
+            .dyn-grid { gap: 2px 8px; margin-bottom: 2px; grid-template-columns: repeat(4, 1fr); }
+            .dyn-field label { font-size: 8pt; margin-bottom: 0; }
+            div[style*="grid-template-columns"] { gap: 1px 6px !important; margin-top: 1px !important; }
+            #relocWarn { background:#fff !important; color:#000 !important; padding: 2px 6px !important; margin-top: 2px !important; }
+            table { font-size: 8pt; border-collapse: collapse; }
+            td, th { padding: 1px 3px !important; }
+            .form-group, .dynamic-item { break-inside: avoid; }
+        }
     </style>
-
 </head>
+<body data-theme="light" class="view-auto">
 
-<body>
-<div class="progress-bar-container">
-    <div class="progress-bar-fill" id="progressBarFill"></div>
-</div>
 <div class="container">
-     <form id="goroForm" onsubmit="enviarFormulario(event)">
-        <h1>Currículo e Questionário</h1>
-        <div class="subtitle">GORO DIGITAL RECRUITMENT</div>
-        <div class="section-title">1. Dados Pessoais e Endereço (個人情報と住所)</div>
-        <div class="form-group">
-            <label for="nome">Sobrenome / Nome <span>氏名 *</span></label>
-            <input type="text" id="nome" name="Sobrenome_Nome" required placeholder="Digite seu nome completo / 氏名を入力してください">
-        </div>
-        <div class="form-group">
-            <label for="data_nasc">Data de Nascimento <span>生年月日 *</span></label>
-            <input type="date" id="data_nasc" name="Data_Nascimento" required>
-        </div>
-        <div class="form-group">
-            <label>Gênero <span>性別 *</span></label>
-            <div class="options-vertical" id="genero_container">
-                <label class="option-card"><input type="radio" name="Genero" id="genero_m" value="Masculino" required> Masculino (男性)</label>
-                <label class="option-card"><input type="radio" name="Genero" id="genero_f" value="Feminino"> Feminino (女性)</label>
-            </div>
-        </div>
-        <div class="form-group">
-            <label>Estado Civil <span>婚姻状況</span></label>
-            <div class="options-vertical">
-                <label class="option-card"><input type="radio" name="Estado_Civil" value="Solteiro"> Solteiro (独身)</label>
-                <label class="option-card"><input type="radio" name="Estado_Civil" value="Casado"> Casado (既婚)</label>
-                <label class="option-card"><input type="radio" name="Estado_Civil" value="Divórcio"> Divórcio (離婚)</label>
-            </div>
-        </div>
 
-        <div class="form-group">
-            <label>Geração (Nikkeis) <span>日系世代</span></label>
-            <div class="options-vertical">
-                <label class="option-card"><input type="radio" name="Geracao_Nikkei" value="2sei (Nissei)"> Nissei / 2sei (日系二世)</label>
-                <label class="option-card"><input type="radio" name="Geracao_Nikkei" value="3sei (Sansei)"> Sansei / 3sei (日系三世)</label>
-                <label class="option-card"><input type="radio" name="Geracao_Nikkei" value="4sei (Yonsei)"> Yonsei / 4sei (日系四世)</label>
-                <label class="option-card"><input type="radio" name="Geracao_Nikkei" value="Não é japonês"> Não é descendente de japonês (日系人ではない)</label>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label>Educação Final <span>学歴</span></label>
-            <div class="options-vertical">
-                <label class="option-card"><input type="radio" name="Educacao_Final" value="Primário"> Primário (小学校)</label>
-                <label class="option-card"><input type="radio" name="Educacao_Final" value="Ginásio"> Ginásio (中学校)</label>
-                <label class="option-card"><input type="radio" name="Educacao_Final" value="Colegial"> Colegial (高等学校)</label>
-                <label class="option-card"><input type="radio" name="Educacao_Final" value="Universidade"> Universidade (大学)</label>
-                <label class="option-card"><input type="radio" name="Educacao_Final" value="Profissionalizante"> Profissionalizante (専門学校)</label>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label>Status da Educação <span>学歴状況</span></label>
-            <div class="options-vertical">
-                <label class="option-card"><input type="radio" name="Status_Educacao" value="Completo"> Completo (卒業)</label>
-                <label class="option-card"><input type="radio" name="Status_Educacao" value="Incompleto"> Incompleto (中退)</label>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label>Endereço Atual <span>現住所</span></label>
-            <div class="options-vertical">
-                <label class="option-card"><input type="radio" name="Endereco_Atual" value="O mesmo do ZAIRYU-CARD"> O mesmo do ZAIRYU-CARD / Registro Residencial (在留カード・住民票と同じ)</label>
-                <label class="option-card"><input type="radio" name="Endereco_Atual" value="Diferente do ZAIRYU-CARD"> Diferente do ZAIRYU-CARD / Registro Residencial (在留カード・住民票と異なる)</label>
-                <label class="option-card"><input type="radio" name="Endereco_Atual" value="Possuo Nacionalidade Japonesa"> Possuo Nacionalidade Japonesa / Não tenho Zairyu Card (日本国籍所有・在留カードなし)</label>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label>Endereço atual (cidade e prefeitura) <span>現在の住所（市区町村・都道府県）</span></label>
-            <input type="text" name="Mudanca_Endereco_Detalhes" placeholder="Ex: Nagoya-shi, Aichi-ken">
-        </div>
-
-        <div class="form-group">
-            <label for="contatos">Contatos (Telefone / E-mail / Redes Sociais) <span>連絡先 (電話番号、メール、SNS)</span></label>
-            <input type="text" id="contatos" name="Contatos" required placeholder="Telefone ou link do perfil / 連絡先を入力してください">
-        </div>
-
-        <div class="form-group">
-            <label>Moradia após contratação <span>採用後の入居希望 *</span></label>
-            <div class="options-vertical" id="moradia_container">
-                <label class="option-card"><input type="radio" name="Moradia_Apos_Contratacao" value="Pendulares"> Pendulares do endereço atual ou própria casa etc. (自宅から通勤・自己手配等)</label>
-                <label class="option-card"><input type="radio" name="Moradia_Apos_Contratacao" value="Precisa Alojamento"> Precisa de Alojamento da empresa (社宅への入居を希望)</label>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label>Qual era sua profissão no país de origem? <span>母国での職歴 (職種)</span></label>
-            <input type="text" name="Profissao_Patria" placeholder="Ex: Mecânico, Vendedor, etc. / 職種を入力してください">
-        </div>
-
-        <!-- SEÇÃO 2: Histórico Profissional no Japão -->
-        <div class="section-title">2. Histórico Profissional no Japão (Três Últimas Empresas)</div>
-
-        <!-- 1ª Empresa Grade Nativa Corrigida -->
-        <div style="border: 1px solid #CBD5E0; padding: 12px; border-radius: 8px; margin-bottom: 20px; background-color: #FFF;">
-            <strong style="display: block; margin-bottom: 15px; color: #1A365D; border-bottom: 1px dashed #E2E8F0; padding-bottom: 4px;">🏢 1ª Empresa (Mais Recente / Atual)</strong>
-            
-            <div style="display: flex; gap: 12px; margin-bottom: 10px;">
-                <div class="form-group" style="flex: 1; margin-bottom: 0;">
-                    <label>Entrar Ano <span>年</span></label>
-                    <input type="number" name="Empresa1_Entrada_Ano" placeholder="Ex: 2024">
-                </div>
-                <div class="form-group" style="flex: 1; margin-bottom: 0;">
-                    <label>Entrar Mês <span>月</span></label>
-                    <input type="number" name="Empresa1_Entrada_Mes" placeholder="Ex: 04">
-                </div>
-            </div>
-
-            <div style="display: flex; gap: 12px; margin-bottom: 15px;">
-                <div class="form-group" style="flex: 1; margin-bottom: 0;">
-                    <label>Sair Ano <span>年</span></label>
-                    <input type="number" name="Empresa1_Saida_Ano" placeholder="Ex: 2026">
-                </div>
-                <div class="form-group" style="flex: 1; margin-bottom: 0;">
-                    <label>Sair Mês <span>月</span></label>
-                    <input type="number" name="Empresa1_Saida_Mes" placeholder="Ex: 08">
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label>Nome da Empreiteira <span>派遣会社名</span></label>
-                <input type="text" name="Empresa1_Empreiteira" placeholder="Nome da agência / contratante">
-            </div>
-            <div class="form-group">
-                <label>Nome da Fábrica <span>工場名 / 企業名</span></label>
-                <input type="text" name="Empresa1_Fabrica" placeholder="Nome da fábrica de destino">
-            </div>
-            <div class="grid-2">
-                <div class="form-group">
-                    <label>Província (Prefeitura) <span>都道府県</span></label>
-                    <input type="text" name="Empresa1_Provincia" placeholder="Ex: Aichi-ken">
-                </div>
-                <div class="form-group">
-                    <label>Cidade <span>市区町村</span></label>
-                    <input type="text" name="Empresa1_Cidade" placeholder="Ex: Ichinomiya-shi">
-                </div>
-            </div>
-            <div class="form-group">
-                <label>Categoria <span>業種</span></label>
-                <input type="text" name="Empresa1_Categoria" placeholder="Ex: Autopeças">
-            </div>
-            <div class="form-group">
-                <label>Descrição (Função) <span>職種 / 作業内容</span></label>
-                <input type="text" name="Empresa1_Descricao" placeholder="Ex: Operador / Kensa">
-            </div>
-            <div class="form-group">
-                <label>Motivo da Saída <span>退職理由</span></label>
-                <input type="text" name="Empresa1_Motivo_Saida" placeholder="Razão do desligamento">
-            </div>
-        </div>
-
-        <!-- 2ª Empresa - Layout Padronizado e Protegido -->
-        <div style="border: 1px solid #CBD5E0; padding: 12px; border-radius: 8px; margin-bottom: 20px; background-color: #FFF;">
-            <strong style="display: block; margin-bottom: 15px; color: #4A5568; border-bottom: 1px dashed #E2E8F0; padding-bottom: 4px;">🏢 2ª Empresa (Anterior)</strong>
-            
-            <div style="display: flex; gap: 12px; margin-bottom: 10px;">
-                <div class="form-group" style="flex: 1; margin-bottom: 0;">
-                    <label>Entrar Ano <span>年</span></label>
-                    <input type="number" name="Empresa2_Entrada_Ano" placeholder="Ex: 2022">
-                </div>
-                <div class="form-group" style="flex: 1; margin-bottom: 0;">
-                    <label>Entrar Mês <span>月</span></label>
-                    <input type="number" name="Empresa2_Entrada_Mes" placeholder="Ex: 06">
-                </div>
-            </div>
-
-            <div style="display: flex; gap: 12px; margin-bottom: 15px;">
-                <div class="form-group" style="flex: 1; margin-bottom: 0;">
-                    <label>Sair Ano <span>年</span></label>
-                    <input type="number" name="Empresa2_Saida_Ano" placeholder="Ex: 2024">
-                </div>
-                <div class="form-group" style="flex: 1; margin-bottom: 0;">
-                    <label>Sair Mês <span>月</span></label>
-                    <input type="number" name="Empresa2_Saida_Mes" placeholder="Ex: 03">
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label>Nome da Empreiteira <span>派遣会社名</span></label>
-                <input type="text" name="Empresa2_Empreiteira" placeholder="Nome da agência / contratante">
-            </div>
-            <div class="form-group">
-                <label>Nome da Fábrica <span>工場名 / 企業名</span></label>
-                <input type="text" name="Empresa2_Fabrica" placeholder="Nome da fábrica de destino">
-            </div>
-            <div class="grid-2">
-                <div class="form-group">
-                    <label>Província (Prefeitura) <span>都道府県</span></label>
-                    <input type="text" name="Empresa2_Provincia" placeholder="Ex: Shizuoka-ken">
-                </div>
-                <div class="form-group">
-                    <label>Cidade <span>市区町村</span></label>
-                    <input type="text" name="Empresa2_Cidade" placeholder="Ex: Hamamatsu-shi">
-                </div>
-            </div>
-            <div class="form-group">
-                <label>Categoria <span>業種</span></label>
-                <input type="text" name="Empresa2_Categoria" placeholder="Ex: Eletrônicos">
-            </div>
-            <div class="form-group">
-                <label>Descrição (Função) <span>職種 / 作業内容</span></label>
-                <input type="text" name="Empresa2_Descricao" placeholder="Ex: Montagem">
-            </div>
-            <div class="form-group">
-                <label>Motivo da Saída <span>退職理由</span></label>
-                <input type="text" name="Empresa2_Motivo_Saida" placeholder="Razão do desligamento">
-            </div>
-        </div>
-```
-
-        <!-- 3ª Empresa - Layout Padronizado e Protegido -->
-        <div style="border: 1px solid #CBD5E0; padding: 12px; border-radius: 8px; margin-bottom: 20px; background-color: #FFF;">
-            <strong style="display: block; margin-bottom: 15px; color: #718096; border-bottom: 1px dashed #E2E8F0; padding-bottom: 4px;">🏢 3ª Empresa (Mais Antiga)</strong>
-            
-            <div style="display: flex; gap: 12px; margin-bottom: 10px;">
-                <div class="form-group" style="flex: 1; margin-bottom: 0;">
-                    <label>Entrar Ano <span>年</span></label>
-                    <input type="number" name="Empresa3_Entrada_Ano" placeholder="Ex: 2020">
-                </div>
-                <div class="form-group" style="flex: 1; margin-bottom: 0;">
-                    <label>Entrar Mês <span>月</span></label>
-                    <input type="number" name="Empresa3_Entrada_Mes" placeholder="Ex: 01">
-                </div>
-            </div>
-
-            <div style="display: flex; gap: 12px; margin-bottom: 15px;">
-                <div class="form-group" style="flex: 1; margin-bottom: 0;">
-                    <label>Sair Ano <span>年</span></label>
-                    <input type="number" name="Empresa3_Saida_Ano" placeholder="Ex: 2022">
-                </div>
-                <div class="form-group" style="flex: 1; margin-bottom: 0;">
-                    <label>Sair Mês <span>月</span></label>
-                    <input type="number" name="Empresa3_Saida_Mes" placeholder="Ex: 05">
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label>Nome da Empreiteira <span>派遣会社名</span></label>
-                <input type="text" name="Empresa3_Empreiteira" placeholder="派遣会社名を入力">
-            </div>
-            <div class="form-group">
-                <label>Nome da Fábrica <span>工場名 / 企業名</span></label>
-                <input type="text" name="Empresa3_Fabrica" placeholder="工場名を入力">
-            </div>
-            <div class="grid-2">
-                <div class="form-group">
-                    <label>Província (Prefeitura) <span>都道府県</span></label>
-                    <input type="text" name="Empresa3_Provincia" placeholder="Ex: Mie-ken">
-                </div>
-                <div class="form-group">
-                    <label>Cidade <span>市区町村</span></label>
-                    <input type="text" name="Empresa3_Cidade" placeholder="Ex: Suzuka-shi">
-                </div>
-            </div>
-            <div class="form-group">
-                <label>Categoria <span>業種</span></label>
-                <input type="text" name="Empresa3_Categoria" placeholder="Ex: Alimentos 食品">
-            </div>
-            <div class="form-group">
-                <label>Descrição (Função) <span>職種 / 作業内容</span></label>
-                <input type="text" name="Empresa3_Descricao" placeholder="Ex: Embalagem 梱包">
-            </div>
-            <div class="form-group">
-                <label>Motivo da Saída <span>退職理由</span></label>
-                <input type="text" name="Empresa3_Motivo_Saida" placeholder="退職理由を入力">
-            </div>
-        </div>
-
-        <!-- SEÇÃO 3: Familiares e Idioma -->
-        <div class="section-title">3. Familiares e Idioma (日本語スキル)</div>
-
-        <div class="form-group">
-            <label>Parentes que moram no Japão <span>在日親族 (Nome, idade, relação, residência)</span></label>
-            <textarea name="Parentes_No_Japao" rows="2" placeholder="Ex: Maria Silva, 45 anos, Mãe, Aichi-ken"></textarea>
-        </div>
-
-        <div class="form-group">
-            <label>Se tem filho(s) e mora com ele(s), existe alguém que cuide dele(s) além de você enquanto estiver no trabalho? <br><span>子供と同居している場合、勤務時間中にご自身以外に面倒を見てくれる人はいますか？</span></label>
-            <div class="options-vertical">
-                <label class="option-card"><input type="checkbox" name="Cuidado_Filhos" value="Sim (parente ou creche)"> Sim - parente ou creche (はい - 親族や保育園など)</label>
-                <label class="option-card"><input type="checkbox" name="Cuidado_Filhos" value="Não tem"> Não tem / Ninguém além de mijm (いいえ - 自分以外にいない)</label>
-            </div>
-        </div>
-              <div class="form-group">
-            <label>Nível de Japonês Falado e Compreensão <span>日本語会話・聴解力 *</span></label>
-            <div class="options-vertical" id="nihongo_container">
-                <label class="option-card"><input type="radio" name="Nivel_Japones_Falado" id="nihongo_a" value="A) Quase completo (80%)"> A) Quase completo ・ ±80% (ほぼ完璧)</label>
-                <label class="option-card"><input type="radio" name="Nivel_Japones_Falado" id="nihongo_b" value="B) Geralmente (50%)"> B) Geralmente ・・ ±50% (日常会話)</label>
-                <label class="option-card"><input type="radio" name="Nivel_Japones_Falado" id="nihongo_c" value="C) Um pouco (20%)"> C) Um pouco ・・・ ±20% (挨拶程度)</label>
-                <label class="option-card"><input type="radio" name="Nivel_Japones_Falado" id="nihongo_d" value="D) Nada (0%)"> D) Nada ・・・・・ 0% (全く話せない)</label>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label>Leitura e Escrita <span>読み・書き</span></label>
-            <table class="lang-table">
-                <thead>
-                    <tr>
-                        <th>Alfabeto 文字</th>
-                        <th>Leitura (読み)</th>
-                        <th>Escrita (書き)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><strong>Hiragana ひらがna</strong></td>
-
-                        <td>
-                            <select name="Hiragana_Leitura">
-                                <option value="" selected>----</option>
-                                <option>Todo (全部)</option>
-                                <option>Pouco (少し)</option>
-                                <option>Nada (全くない)</option>
-                            </select>
-                        </td>
-                        <td>
-                            <select name="Hiragana_Escrita">
-                                <option value="" selected>----</option>
-                                <option>Todo (全部)</option>
-                                <option>Pouco (少し)</option>
-                                <option>Nada (全くない)</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><strong>Katakana カタカナ</strong></td>
-                        <td>
-                            <select name="Katakana_Leitura">
-                                <option value="" selected>----</option>
-                                <option>Todo (全部)</option>
-                                <option>Pouco (少し)</option>
-                                <option>Nada (全くない)</option>
-                            </select>
-                        </td>
-                        <td>
-                            <select name="Katakana_Escrita">
-                                <option value="" selected>----</option>
-                                <option>Todo (全部)</option>
-                                <option>Pouco (稍微)</option>
-                                <option>Nada (全くない)</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><strong>Kanji 漢字</strong></td>
-                        <td>
-                            <select name="Kanji_Leitura">
-                                <option value="" selected>----</option>
-                                <option>Todo (全部)</option>
-                                <option>Pouco (稍微)</option>
-                                <option>Nada (全くない)</option>
-                            </select>
-                        </td>
-                        <td>
-                            <select name="Kanji_Escrita">
-                                <option value="" selected>----</option>
-                                <option>Todo (全部)</option>
-                                <option>Pouco (稍微)</option>
-                                <option>Nada (全くない)</option>
-                            </select>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <!-- SEÇÃO 4: Qualificações, Habilitação e Veículo -->
-        <div class="section-title">4. Qualificações, Habilitação e Veículo (資格・免許・車両)</div>
-
-        <div class="form-group">
-            <label>Qualificação Profissional <span>📋 業務資格</span></label>
-            <div class="options-vertical">
-                <label class="option-card"><input type="checkbox" name="Qualificacao" value="Empilhadeira"> Empilhadeira (フォークリフト)</label>
-                <label class="option-card"><input type="checkbox" name="Qualificacao" value="Solda"> Solda (溶接)</label>
-                <label class="option-card"><input type="checkbox" name="Qualificacao" value="Guindaste"> Guindaste (クレーン)</label>
-                <label class="option-card"><input type="checkbox" name="Qualificacao" value="Prensa"> Prensa (プレス)</label>
-            </div>
-            <div style="margin-top: 8px;">
-                <label style="font-size: 13px; font-weight: normal; margin-bottom: 4px;">Outras qualificações <span>その他の資格</span></label>
-                <input type="text" name="Qualificacao_Outras" placeholder="Descreva outras qualificações que possui / その他の資格を記載してください">
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label>Possui Habilitação? <span>🪪 運転免許の有無</span></label>
-            <div class="options-vertical">
-                <label class="option-card"><input type="radio" name="Habilitacao" value="Sim"> Sim (あり)</label>
-                <label class="option-card"><input type="radio" name="Habilitacao" value="Não"> Não (なし)</label>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label for="Habilitacao_Tipo">Categoria da CNH <span>運転免許種類</span></label>
-            <select id="Habilitacao_Tipo" name="Habilitacao_Tipo">
-                <option value="" selected>---- Selecione / 未選択 ----</option>
-                <option value="Carro (普通自動車)">Carro / 普通自動車</option>
-                <option value="Moto (二輪車)">Moto / 二輪車</option>
-                <option value="Caminhão Chuugata (中型)">Caminhão Chuugata / 中型トラック</option>
-                <option value="Caminhão Ogata (大型)">Caminhão Ogata / 大型トラック</option>
+    <!-- CONTROLES GLOBAIS -->
+    <div class="global-controls">
+        <!-- Idiomas -->
+        <div class="control-group">
+            <label for="langSelector">🌐 Idioma / 言語:</label>
+            <select id="langSelector" onchange="changeLanguage(this.value)">
+                <option value="ja">日本語 (Japanese)</option>
+                <option value="pt">Português (Portuguese)</option>
+                <option value="en">English</option>
+                <option value="tl">Filipino (Tagalog)</option>
             </select>
         </div>
 
-        <div class="form-group">
-            <label>Propriedade de Automóveis <span>🚗 車の保有</span></label>
-            <div class="options-vertical">
-                <label class="option-card"><input type="checkbox" name="Propriedade_Veiculo" value="Carro"> Carro (自動車保有)</label>
-                <div style="margin-left: 25px; margin-top: -4px; margin-bottom: 4px;">
-                    <label class="option-card" style="background-color: #FFF; border-style: dashed;"><input type="checkbox" name="Propriedade_Veiculo_Inverno" value="Equipamento Inverno"> Possui Equipamento de Inverno? (冬用装備 / スタッドレスタイヤを保有しているか？)</label>
-                </div>
-                <label class="option-card"><input type="checkbox" name="Propriedade_Veiculo" value="Moto"> Moto (バイク保有)</label>
-            </div>
+        <!-- Layout PC / Celular -->
+        <div class="control-group">
+            <label for="viewSelector">📱 Layout:</label>
+            <select id="viewSelector" onchange="changeView(this.value)">
+                <option value="auto">Automático</option>
+                <option value="pc">Desktop (PC)</option>
+                <option value="mobile">Mobile (Celular)</option>
+            </select>
         </div>
 
-        <div class="form-group">
-            <label>Método de comutação / Transporte <span>🚲 通勤方法</span></label>
-            <div class="options-vertical">
-                <label class="option-card"><input type="radio" name="Transporte" value="Souguei / Irapé"> Souguei / A pé (送迎・徒歩)</label>
-                <label class="option-card"><input type="radio" name="Transporte" value="Carro"> Carro (自家用車)</label>
-                <label class="option-card"><input type="radio" name="Transporte" value="Moto"> Moto 50cc ou acima (バイク 50cc以上)</label>
-                <label class="option-card"><input type="radio" name="Transporte" value="Bicicleta"> Bicicleta (自転車)</label>
-            </div>
+        <!-- Modo Escuro -->
+        <div class="control-group">
+            <label for="themeSelector">🌓 Tema:</label>
+            <select id="themeSelector" onchange="changeTheme(this.value)">
+                <option value="light">Claro / Light</option>
+                <option value="dark">Escuro / Dark</option>
+            </select>
         </div>
+    </div>
 
-        <div class="form-group">
-            <label>Documentos do Veículo para Uso <span>📄 利用に必要な書類</span></label>
-            <div class="options-vertical">
-                <label class="option-card"><input type="checkbox" name="Docs_Veiculo" value="Shaken"> Inspeção de veículos (車検証 / Shaken)</label>
-                <label class="option-card"><input type="checkbox" name="Docs_Veiculo" value="Seguro Obrigatorio"> Seguro de Responsabilidade Obrigatório (自賠責保険)</label>
-                <label class="option-card"><input type="checkbox" name="Docs_Veiculo" value="Ninihoken"> Seguro voluntário (任意保険 / Ninihoken)</label>
-            </div>
-        </div>
-        <!-- SEÇÃO 5: Estado de Saúde e Dados Físicos -->
-        <div class="section-title">5. Estado de Saúde e Dados Físicos (健康状態・身体データ)</div>
-        
-        <div class="grid-2">
+    <!-- CABEÇALHO DO FORMULÁRIO -->
+    <div style="text-align: center; margin-bottom: 25px;">
+        <h1 data-translate="main_title">履歴書およびアンケート</h1>
+        <p data-translate="main_subtitle">Currículo e Questionário</p>
+    </div>
+
+    <!-- O FORMULÁRIO COMEÇA AQUI -->
+    <form id="multiLangForm" onsubmit="handleFormSubmit(event)">
+
+        <!-- ==========================================
+             PARTE 1: INFORMAÇÕES BÁSICAS (OBRIGATÓRIO)
+             ========================================== -->
+        <div class="section-card">
+            <h3 class="section-title" data-translate="part1_title">Parte 1: Informações Básicas / 基本情報</h3>
+
             <div class="form-group">
-                <label>Estado da saúde <span>健康状態</span></label>
-                <select name="Estado_Saude">
-                    <option value="" selected>---- Selecione / 未選択 ----</option>
-                    <option value="Sem problemas">Sem problemas (問題なし)</option>
-                    <option value="Tenho lesão ou doença">Tenho lesão ou doença (傷病あり)</option>
+                <label class="required" data-translate="label_lastname">Sobrenome / Nome da família (姓)</label>
+                <input type="text" id="lastname" required style="width: 90%; max-width: 400px;">
+            </div>
+
+            <div class="form-group">
+                <label class="required" data-translate="label_firstname">Nome (名)</label>
+                <input type="text" id="firstname" required style="width: 90%; max-width: 400px;">
+            </div>
+
+            <div class="form-group">
+                <label class="required" data-translate="label_birthdate">Data de Nascimento (生年月日)</label>
+                <input type="date" id="birthdate" required>
+            </div>
+
+            <div class="form-group">
+                <label class="required" data-translate="label_gender">Sexo (性別)</label>
+                <label><input type="radio" name="gender" value="male" required> <span data-translate="gender_male">Homem / 男</span></label> &nbsp;&nbsp;
+                <label><input type="radio" name="gender" value="female" required> <span data-translate="gender_female">Mulher / 女</span></label>
+            </div>
+
+            <div class="form-group">
+                <label data-translate="label_marital">Estado Civil (婚姻状況)</label>
+                <label><input type="radio" name="maritalStatus" value="single"> <span data-translate="mar_single">Solteiro(a) / 独身</span></label>
+                <label><input type="radio" name="maritalStatus" value="married"> <span data-translate="mar_married">Casado(a) / 既婚</span></label>
+                <label><input type="radio" name="maritalStatus" value="divorced"> <span data-translate="mar_divorced">Divorciado(a) / 離婚</span></label>
+            </div>
+
+            <div class="form-group">
+                <label class="required" data-translate="label_residence">Situação de residência (在留資格)</label>
+                <select id="residenceStatus" required>
+                    <option value="" data-translate="select_default">Escolha... / 選択してください</option>
+                    <option value="permanent_resident" data-translate="res_permanent">Residente Permanente / 永住者 (Eijūsha)</option>
+                    <option value="long_term" data-translate="res_longterm">Residente de Longo Termo / 定住者 (Teijūsha)</option>
+                    <option value="spouse_japanese" data-translate="res_spouse">Cônjuge de um cidadão japonês, etc. / 日本人の配偶者等 (Nihonjin no haigūsha nado)</option>
+                    <option value="japanese" data-translate="res_japanese">Sou japonês(a) / 日本人 (Nihonjin)</option>
                 </select>
             </div>
+
             <div class="form-group">
-                <label>Status médico <span>治療状況</span></label>
-                <select name="Status_Medico">
-                    <option value="" selected>---- Selecione / 未選択 ----</option>
-                    <option value="Não precisa tratamento">Não precisa tratamento (治療不要)</option>
-                    <option value="Sob tratamento">Sob tratamento (治療中)</option>
+                <label class="required" data-translate="label_nikkei">Origem Nikkei (日系)</label>
+                <select id="nikkeiOrigin" required>
+                    <option value="" data-translate="select_default">Escolha... / 選択してください</option>
+                    <option value="japanese" data-translate="nikkei_japanese">Sou japonês(a) / 日本人です</option>
+                    <option value="1st" data-translate="nikkei_1st">1ª Geração (Issei) / 一世</option>
+                    <option value="2nd" data-translate="nikkei_2nd">2ª Geração (Nissei) / 二世</option>
+                    <option value="3rd" data-translate="nikkei_3rd">3ª Geração (Sansei) / 三世</option>
+                    <option value="4th" data-translate="nikkei_4th">4ª Geração (Yonsei) / 四世</option>
+                    <option value="non_nikkei" data-translate="nikkei_non">Não-japonês / 非日系</option>
                 </select>
             </div>
-        </div>
 
-        <div class="form-group">
-            <label>Histórico de Hospitalização <span>入院歴</span></label>
-            <select name="Hospitalizado">
-                <option value="" selected>---- Selecione / 未選択 ----</option>
-                <option value="Nunca foi hospitalizado">Nunca foi hospitalizado (入院歴なし)</option>
-                <option value="Tem histórico">Tem histórico de hospitalização (入院歴あり)</option>
-            </select>
-        </div>
 
-        <div class="form-group">
-            <label>Doença crônica / Sintomas <span>慢性疾患・症状</span></label>
-            <div class="options-vertical">
-                <label class="option-card"><input type="checkbox" name="Doenca_Cronica" value="Dor Lombar"> Dor Lombar (腰痛)</label>
-                <label class="option-card"><input type="checkbox" name="Doenca_Cronica" value="Hipertensão"> Hipertensão (高血圧)</label>
-                <label class="option-card"><input type="checkbox" name="Doenca_Cronica" value="Alergia (Solvente / Óleo)"> Alergia a Solvente / Óleo (アレルギー 溶剤・油)</label>
-            </div>
-            <div style="margin-top: 8px;">
-                <label style="font-size: 13px; font-weight: normal; margin-bottom: 4px;">Outras doenças ou sintomas <span>その他の慢性疾患・症状</span></label>
-                <input type="text" name="Doenca_Cronica_Outras" placeholder="Descreva outras condições ou alergias / そのその他の症状を記載してください">
-            </div>
-        </div>
-
-        <div class="grid-2">
             <div class="form-group">
-                <label>Lateralidade <span>利き手</span></label>
-                <select name="Lateralidade">
-                    <option value="" selected>---- Selecione ----</option>
-                    <option value="Destro">Destro (右手描き/右利き)</option>
-                    <option value="Canhoto">Canhoto (左手描き/左利き)</option>
+                <label class="required" data-translate="label_mobile">Celular (携帯)</label>
+                <input type="tel" id="mobile" required style="width: 90%; max-width: 300px;">
+            </div>
+
+            <div class="form-group">
+                <label class="required" data-translate="label_email">E-Mail</label>
+                <input type="email" id="email" required style="width: 90%; max-width: 400px;">
+            </div>
+
+            <div class="form-group">
+                <label data-translate="label_sns">SNS</label>
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; margin-top: 5px;">
+                    <label><input type="checkbox" name="sns" value="LINE"> LINE</label>
+                    <label><input type="checkbox" name="sns" value="WhatsApp"> WhatsApp</label>
+                    <label><input type="checkbox" name="sns" value="Messenger"> Messenger</label>
+                    <label><input type="checkbox" name="sns" value="Other"> <span data-translate="sns_other">Outro / その他</span></label>
+                </div>
+            </div>
+            <div class="form-group wide">
+                <label class="required" data-translate="label_address">Endereço atual (現住所)</label>
+                <input type="text" id="currentAddress" required style="width: 95%;">
+            </div>
+        </div>
+
+        <!-- ==========================================
+             PARTE 2: ESCOLARIDADE E HISTÓRICO PROFISSIONAL
+             ========================================== -->
+        <div class="section-card">
+            <h3 class="section-title" data-translate="part2_title">Parte 2: Escolaridade e Histórico Profissional / 学歴・職歴</h3>
+
+            <div class="form-group wide">
+                <label data-translate="label_education">Última instituição de ensino da qual me formei / 最終学歴</label>
+                <div style="margin-bottom: 8px;">
+                    <label><input type="radio" name="education" value="elementary"> <span data-translate="edu_elementary">Primário / 小学校</span></label> &nbsp;&nbsp;
+                    <label><input type="radio" name="education" value="junior_high"> <span data-translate="edu_junior">Ginásio / 中学校</span></label> &nbsp;&nbsp;
+                    <label><input type="radio" name="education" value="high_school"> <span data-translate="edu_high">Colegial / 高校</span></label> &nbsp;&nbsp;
+                    <label><input type="radio" name="education" value="university"> <span data-translate="edu_university">Universidade / 大学</span></label>
+                </div>
+                <div style="margin-bottom: 8px;">
+                    <span data-translate="label_edu_status">Status da educação (学歴状況):</span> &nbsp;
+                    <label><input type="radio" name="eduStatus" value="completed"> <span data-translate="edu_completed">Completo / 卒業</span></label> &nbsp;&nbsp;
+                    <label><input type="radio" name="eduStatus" value="incomplete"> <span data-translate="edu_incomplete">Incompleto / 中退</span></label>
+                </div>
+                <label data-translate="label_edu_notes">Observações / 注釈(備考):</label>
+                <input type="text" id="educationNotes" style="width: 95%;">
+            </div>
+
+            <div class="form-group sep">
+                <label data-translate="label_origin_job">Profissões no país de origem / 母国での職業</label>
+                <input type="text" id="originJob" style="width: 55%; max-width: 360px;">
+                <span data-translate="label_years">Anos / 年</span> <input type="number" id="originJobYears" min="0" style="width: 60px;">
+            </div>
+
+            <!-- Pergunta condicional de experiência no Japão -->
+            <div class="form-group sep">
+                <label data-translate="question_japan_exp">Você tem experiência profissional no Japão? / 日本での職歴はありますか？</label>
+                <label><input type="radio" name="hasJapanExp" value="no" checked onclick="toggleJapanExperience(false)"> <span data-translate="opt_no">Não / なし</span></label> &nbsp;&nbsp;
+                <label><input type="radio" name="hasJapanExp" value="yes" onclick="toggleJapanExperience(true)"> <span data-translate="opt_yes">Sim / あり</span></label>
+            </div>
+
+            <!-- Container Dinâmico de Experiências (Max 5) -->
+            <div id="japanExperienceContainer" class="hidden wide">
+                <h4 data-translate="sub_japan_exp">Experiência profissional no Japão / 日本での職歴</h4>
+                <div id="experienceList"></div>
+                <button type="button" class="btn btn-primary" id="btnAddExperience" onclick="addExperienceField()">＋ <span data-translate="btn_add_exp">Adicionar Experiência / 職歴を追加</span></button>
+            </div>
+        </div>
+        <!-- ==========================================
+             PARTE 3: FAMÍLIA E QUALIFICAÇÕES
+             ========================================== -->
+        <div class="section-card">
+            <h3 class="section-title" data-translate="part3_title">Parte 3: Família e Qualificações / 家族・資格</h3>
+
+            <!-- Pergunta condicional de Parentes no Japão -->
+            <div class="form-group wide">
+                <label data-translate="question_japan_family">Você possui parentes que moram no Japão? / 在日親族はいますか？</label>
+                <label><input type="radio" name="hasJapanFamily" value="no" checked onclick="toggleJapanFamily(false)"> <span data-translate="opt_no">Não / なし</span></label> &nbsp;&nbsp;
+                <label><input type="radio" name="hasJapanFamily" value="yes" onclick="toggleJapanFamily(true)"> <span data-translate="opt_yes">Sim / あり</span></label>
+            </div>
+
+            <!-- Container Dinâmico de Parentes (Max 5) -->
+            <div id="japanFamilyContainer" class="hidden wide">
+                <h4 data-translate="sub_japan_family">Parentes que moram no Japão / 在日親族</h4>
+                <div id="familyList"></div>
+                <button type="button" class="btn btn-primary" id="btnAddFamily" onclick="addFamilyField()">＋ <span data-translate="btn_add_family">Adicionar Parente / 親族を追加</span></button>
+            </div>
+
+            <!-- Habilitações -->
+            <div class="form-group sep wide">
+                <label data-translate="label_driving_license">● Carteira de motorista / 運転免許:</label>
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 8px; margin-top: 5px;">
+                    <label><input type="checkbox" name="license" value="Comum"> <span data-translate="lic_comum">Comum / 普通</span></label>
+                    <label><input type="checkbox" name="license" value="AT"> <span data-translate="lic_at">AT limitado / AT限定</span></label>
+                    <label><input type="checkbox" name="license" value="Semi-medio"> <span data-translate="lic_semimedio">Semi-médio / 準中型</span></label>
+                    <label><input type="checkbox" name="license" value="Medio"> <span data-translate="lic_medio">Médio / 中型</span></label>
+                    <label><input type="checkbox" name="license" value="Grande"> <span data-translate="lic_grande">Grande / 大型</span></label>
+                    <label><input type="checkbox" name="license" value="Ciclomotor"> <span data-translate="lic_ciclomotor">Ciclomotor / 原付</span></label>
+                    <label><input type="checkbox" name="license" value="Moto-Medio"> <span data-translate="lic_moto_medio">Motocicleta de Médio Porte / 中型二輪</span></label>
+                    <label><input type="checkbox" name="license" value="Moto-Grande"> <span data-translate="lic_moto_grande">Motocicleta de Grande Porte / 大型二輪</span></label>
+                </div>
+            </div>
+
+            <!-- Qualificações Profissionais (+ Outros) -->
+            <div class="form-group sep wide">
+                <label data-translate="label_job_qualification">● Qualificação profissional / 職能資格:</label>
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 8px; margin-top: 5px;">
+                    <label><input type="checkbox" name="qualification" value="Empilhadeira"> <span data-translate="qual_forklift">Empilhadeira / フォークリフト</span></label>
+                    <label><input type="checkbox" name="qualification" value="Solda"> <span data-translate="qual_solda">Solda / 溶接</span></label>
+                    <label><input type="checkbox" name="qualification" value="Tamakake"> <span data-translate="qual_tamakake">Tamakake / 玉掛</span></label>
+                    <label><input type="checkbox" name="qualification" value="Guindaste"> <span data-translate="qual_crane">Guindaste / クレーン</span></label>
+                    <label><input type="checkbox" name="qualification" value="Prensa"> <span data-translate="qual_press">Prensa / プレス</span></label>
+                    <label><input type="checkbox" name="qualification" value="Outro" onclick="toggleQualOther(this)"> <span data-translate="qual_other">Outros / その他</span></label>
+                </div>
+                <input type="text" id="qualOtherDetail" class="hidden" data-translate-placeholder="qual_other_placeholder" placeholder="Especifique o(s) certificado(s) / 資格を記入してください" style="width: 95%; margin-top: 8px;">
+            </div>
+
+            <!-- Métodos de deslocamento (escolha única) -->
+            <div class="form-group sep wide">
+                <label data-translate="label_commute">⑬ Métodos de deslocamento / 通勤方法</label>
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 8px; margin-top: 5px;">
+                    <label><input type="radio" name="commute" value="Moto"> <span data-translate="com_moto">de Moto / バイク ※</span></label>
+                    <label><input type="radio" name="commute" value="Ciclomotor"> <span data-translate="com_ciclo">de Ciclomotor / 原付 ※</span></label>
+                    <label><input type="radio" name="commute" value="Carro"> <span data-translate="com_car">de Carro / 自動車 ※</span></label>
+                    <label><input type="radio" name="commute" value="Bicicleta"> <span data-translate="com_bike">de Bicicleta / 自転車 ※</span></label>
+                    <label><input type="radio" name="commute" value="Sougei"> <span data-translate="com_sougei">Transporte da empresa (Sougei) / 送迎</span></label>
+                    <label><input type="radio" name="commute" value="Caminhada"> <span data-translate="com_walk">Caminhada / 徒歩</span></label>
+                </div>
+                <div style="margin-top: 12px;">
+                    <strong data-translate="veh_label">Documentos do veículo que possui / 所持している書類</strong>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 8px; margin-top: 5px;">
+                        <label><input type="checkbox" name="vehDocs" value="Shakken"> <span data-translate="veh_shaken">Shakken (inspeção veicular) / 車検証</span></label>
+                        <label><input type="checkbox" name="vehDocs" value="Jibaiseki"> <span data-translate="veh_jibai">Jibaiseki hoken (seguro obrigatório) / 自賠責保険</span></label>
+                        <label><input type="checkbox" name="vehDocs" value="Nini"> <span data-translate="veh_nini">Nin'i hoken (seguro voluntário) / 任意保険</span></label>
+                    </div>
+                </div>
+                <div class="hint" data-translate="hint_commute" style="margin-top: 8px;">
+                    ※ Você deverá apresentar documentos como sua carteira de habilitação, certificado de registro do veículo, certificado de seguro obrigatório de responsabilidade civil para automóveis, certificado de seguro opcional para automóveis e certificado de seguro para bicicletas.<br>
+                    運転免許証・車検証・自賠責保険証・任意保険証・自転車保険証などの提出が必須です。
+                </div>
+            </div>
+        </div>
+        <!-- ==========================================
+             PARTE 4: CONDIÇÕES DE SAÚDE E FÍSICAS
+             ========================================== -->
+        <div class="section-card">
+            <h3 class="section-title" data-translate="part4_title">Parte 4: Condições de Saúde e Físicas / 健康状態・体格</h3>
+
+            <div class="form-group wide">
+                <label data-translate="label_chronic_diseases">⑭ Doenças crônicas e enfermidades crônicas (慢性疾患および持病)</label>
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 8px; margin-top: 5px;">
+                    <label><input type="checkbox" name="chronic" value="Nenhum"> <span data-translate="chr_none">Não tem / なし</span></label>
+                    <label><input type="checkbox" name="chronic" value="Lombar"> <span data-translate="chr_back">Dor lombar / 腰痛</span></label>
+                    <label><input type="checkbox" name="chronic" value="Diabetes"> <span data-translate="chr_diabetes">Diabetes / 糖尿病</span></label>
+                    <label><input type="checkbox" name="chronic" value="Pressao"> <span data-translate="chr_pressure">Pressão alta / 高血圧</span></label>
+                    <label><input type="checkbox" name="chronic" value="Mental"> <span data-translate="chr_mental">Doença mental / 精神疾患</span></label>
+                    <label><input type="checkbox" name="chronic" value="Tratamento"> <span data-translate="chr_treatment">Em tratamento, tomo medicação / 治療中・服薬中</span></label>
+                </div>
+            </div>
+
+            <!-- Alergias (+ Alimentos) -->
+            <div class="form-group sep">
+                <label data-translate="label_allergies">Alergia / アレルギー</label>
+                <div style="margin-top: 5px;">
+                    <label><input type="checkbox" name="allergy" value="Oleo"> <span data-translate="all_oil">Óleo / 油</span></label> &nbsp;&nbsp;
+                    <label><input type="checkbox" name="allergy" value="Solvente"> <span data-translate="all_solvent">Solvente / 溶剤</span></label> &nbsp;&nbsp;
+                    <label><input type="checkbox" name="allergy" value="Alimentos" onclick="toggleAllergyFood(this)"> <span data-translate="all_food">Alimentos / 食品</span></label>
+                </div>
+                <input type="text" id="allergyFoodDetail" class="hidden" data-translate-placeholder="all_food_placeholder" placeholder="Especifique a alergia alimentar / 食品アレルギーを記入してください" style="width: 95%; margin-top: 8px;">
+            </div>
+
+            <div class="form-group sep">
+                <label data-translate="label_health_status">⑮ Estado de saúde atual (現在の健康状態)</label>
+                <div style="margin-top: 5px;">
+                    <label><input type="radio" name="healthStatus" value="ok"> <span data-translate="health_ok">Sem problemas / 問題なし</span></label> &nbsp;&nbsp;
+                    <label><input type="radio" name="healthStatus" value="treatment"> <span data-translate="health_treatment">Em tratamento / 加療中</span></label>
+                </div>
+                <div style="margin-top: 5px;">
+                    <label><input type="checkbox" name="absenceNeed" value="yes"> <span data-translate="abs_required">Ausência necessária / 要欠勤</span></label> &nbsp;&nbsp;
+                    <label><input type="checkbox" name="absenceNeed" value="no"> <span data-translate="abs_not_required">Sem necessidade de ausência / 欠勤不要</span></label>
+                </div>
+            </div>
+
+            <div class="form-group sep">
+                <label data-translate="label_hospitalized">Histórico de hospitalização (入院歴)</label>
+                <select id="hospitalized">
+                    <option value="">----</option>
+                    <option value="Nunca foi hospitalizado" data-translate="hosp_never">Nunca foi hospitalizado / 入院歴なし</option>
+                    <option value="Tem histórico" data-translate="hosp_yes">Tem histórico de hospitalização / 入院歴あり</option>
                 </select>
             </div>
+
+            <div class="form-group sep">
+                <label data-translate="label_work_restrictions">⑯ Restrições de trabalho (就労(作業)制限)</label>
+                <label><input type="radio" name="workRestrictions" value="none"> <span data-translate="rest_none">Sem problemas / 問題なし</span></label> &nbsp;&nbsp;
+                <label><input type="radio" name="workRestrictions" value="heavy"> <span data-translate="rest_heavy">Trabalho muscular pesado / 重筋作業</span></label>
+            </div>
+
+            <div class="form-group sep">
+                <label data-translate="label_overtime">⑰ Horas extras (残業)</label>
+                <label><input type="radio" name="overtime" value="none"> <span data-translate="ot_none">Sem restrições / 制限なし</span></label> &nbsp;&nbsp;
+                <label><input type="radio" name="overtime" value="restricted"> <span data-translate="ot_restricted">Aplicam-se restrições / 制限あり</span></label>
+                <div style="margin-top: 5px;">
+                    <span data-translate="ot_until">Até</span>
+                    <input type="number" id="overtimeHours" min="0" style="width: 60px;">
+                    <span data-translate="ot_unit">H/dia (時/日まで)</span>
+                </div>
+            </div>
+
+            <!-- Disponibilidade de Turnos -->
+            <div class="form-group sep">
+                <label data-translate="label_shifts">Disponibilidade de Turnos</label>
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; margin-top: 5px;">
+                    <div>
+                        <span data-translate="shift_weekend">⑱ Finais de semana/Feriados (休日出勤):</span><br>
+                        <label><input type="radio" name="shiftWeekend" value="yes"> <span data-translate="opt_possible">Possível / 可能</span></label> &nbsp;
+                        <label><input type="radio" name="shiftWeekend" value="no"> <span data-translate="opt_impossible">Impossível / 不可能</span></label>
+                    </div>
+                    <div>
+                        <span data-translate="shift_night">⑲ Turno da noite (夜勤):</span><br>
+                        <label><input type="radio" name="shiftNight" value="yes"> <span data-translate="opt_possible">Possível / 可能</span></label> &nbsp;
+                        <label><input type="radio" name="shiftNight" value="no"> <span data-translate="opt_impossible">Impossível / 不可能</span></label>
+                    </div>
+                    <div>
+                        <span data-translate="shift_alternate">⑳ Turno alternado (交代勤務):</span><br>
+                        <label><input type="radio" name="shiftAlternate" value="yes"> <span data-translate="opt_possible">Possível / 可能</span></label> &nbsp;
+                        <label><input type="radio" name="shiftAlternate" value="no"> <span data-translate="opt_impossible">Impossível / 不可能</span></label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tipo físico -->
+            <div class="form-group sep wide">
+                <label data-translate="label_body_size">㉑ Tipo físico (tamanho da roupa), etc. / 体格(服のサイズ)など</label>
+                <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-top: 5px;">
+                    <label><span data-translate="body_height">Altura</span> <input type="number" id="bodyHeight" style="width: 70px;"> cm</label>
+                    <label><span data-translate="body_weight">Peso</span> <input type="number" id="bodyWeight" style="width: 70px;"> Kg</label>
+                    <label><span data-translate="body_waist">Cintura</span> <input type="text" id="bodyWaist" style="width: 90px;" placeholder="cm / size"></label>
+                    <label><span data-translate="body_jacket">Camisa</span>
+                        <select id="bodyJacket">
+                            <option value="">----</option>
+                            <option value="S">S</option><option value="M">M</option><option value="L">L</option><option value="2L">2L</option><option value="3L">3L</option><option value="4L">4L</option><option value="5L">5L</option><option value="6L">6L</option><option value="7L">7L</option>
+                        </select>
+                    </label>
+                    <label><span data-translate="body_shoes">Sapato</span> <input type="number" step="0.5" id="bodyShoes" style="width: 70px;"> cm</label>
+                </div>
+                <div style="display: flex; flex-wrap: wrap; gap: 20px; margin-top: 10px;">
+                    <div>
+                        <span data-translate="body_hand">Mão Dominante / 利き手:</span> &nbsp;
+                        <label><input type="radio" name="dominantHand" value="right"> <span data-translate="hand_right">Destro / 右</span></label> &nbsp;
+                        <label><input type="radio" name="dominantHand" value="left"> <span data-translate="hand_left">Canhoto / 左</span></label>
+                    </div>
+                    <div>
+                        <span data-translate="body_blood">Tipo Sanguíneo / 血液型:</span> &nbsp;
+                        <select id="bloodType">
+                            <option value="">----</option>
+                            <option value="A">A</option><option value="B">B</option><option value="AB">AB</option><option value="O">O</option>
+                        </select>
+                    </div>
+                </div>
+                <div style="margin-top: 10px;">
+                    <span data-translate="body_vision">Visão R L:</span> R <input type="text" id="visaoR" style="width: 60px;"> L <input type="text" id="visaoL" style="width: 60px;"> &nbsp;&nbsp;
+                    <label><input type="checkbox" name="visionAid" value="glasses"> <span data-translate="vis_glasses">Usa Óculos / 眼鏡</span></label> &nbsp;&nbsp;
+                    <label><input type="checkbox" name="visionAid" value="contacts"> <span data-translate="vis_contacts">Usa Lentes / コンタクト</span></label>
+                </div>
+            </div>
+        </div>
+        <!-- ==========================================
+             PARTE 5: IDIOMA E HÁBITOS
+             ========================================== -->
+        <div class="section-card">
+            <h3 class="section-title" data-translate="part5_title">Parte 5: Idioma e Hábitos / 日本語能力・生活習慣</h3>
+
+            <div class="form-group wide">
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px;">
+                    <div>
+                        <label data-translate="lang_comprehension">㉒ Compreensão / 理解力</label>
+                        <select id="langComprehension" style="width: 100%;">
+                            <option value="">----</option>
+                            <option value="A">(A) 80%~</option>
+                            <option value="B">(B) 40~80%</option>
+                            <option value="C">(C) 10~40%</option>
+                            <option value="D">(D) 0~10%</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label data-translate="lang_conversation">Conversação / 会話力</label>
+                        <select id="langConversation" style="width: 100%;">
+                            <option value="">----</option>
+                            <option value="A">(A) 80%~</option>
+                            <option value="B">(B) 40~80%</option>
+                            <option value="C">(C) 10~40%</option>
+                            <option value="D">(D) 0~10%</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group sep wide" style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse; min-width: 450px;">
+                    <thead>
+                        <tr style="border-bottom: 2px solid var(--border-color); text-align: left;">
+                            <th style="padding: 8px;" data-translate="th_skill">Habilidade</th>
+                            <th style="padding: 8px;" data-translate="th_all">Todo / 全て</th>
+                            <th style="padding: 8px;" data-translate="th_little">Pouco / 少し</th>
+                            <th style="padding: 8px;" data-translate="th_none">Nada / 全く</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="border-bottom: 1px solid var(--border-color);">
+                            <td style="padding: 8px;" data-translate="skill_hira_read">Hiragana - Leitura / ひらがな 読み</td>
+                            <td style="padding: 8px;"><input type="radio" name="hiraRead" value="all"></td>
+                            <td style="padding: 8px;"><input type="radio" name="hiraRead" value="little"></td>
+                            <td style="padding: 8px;"><input type="radio" name="hiraRead" value="none"></td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid var(--border-color);">
+                            <td style="padding: 8px;" data-translate="skill_hira_write">Hiragana - Escrita / ひらがな 書き</td>
+                            <td style="padding: 8px;"><input type="radio" name="hiraWrite" value="all"></td>
+                            <td style="padding: 8px;"><input type="radio" name="hiraWrite" value="little"></td>
+                            <td style="padding: 8px;"><input type="radio" name="hiraWrite" value="none"></td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid var(--border-color);">
+                            <td style="padding: 8px;" data-translate="skill_kata_read">Katakana - Leitura / カタカナ 読み</td>
+                            <td style="padding: 8px;"><input type="radio" name="kataRead" value="all"></td>
+                            <td style="padding: 8px;"><input type="radio" name="kataRead" value="little"></td>
+                            <td style="padding: 8px;"><input type="radio" name="kataRead" value="none"></td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid var(--border-color);">
+                            <td style="padding: 8px;" data-translate="skill_kata_write">Katakana - Escrita / カタカナ 書き</td>
+                            <td style="padding: 8px;"><input type="radio" name="kataWrite" value="all"></td>
+                            <td style="padding: 8px;"><input type="radio" name="kataWrite" value="little"></td>
+                            <td style="padding: 8px;"><input type="radio" name="kataWrite" value="none"></td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid var(--border-color);">
+                            <td style="padding: 8px;" data-translate="skill_kanji_read">Kanji - Leitura / 漢字 読み</td>
+                            <td style="padding: 8px;"><input type="radio" name="kanjiRead" value="all"></td>
+                            <td style="padding: 8px;"><input type="radio" name="kanjiRead" value="little"></td>
+                            <td style="padding: 8px;"><input type="radio" name="kanjiRead" value="none"></td>
+                        </tr>
+                        <tr style="border-bottom: 1px solid var(--border-color);">
+                            <td style="padding: 8px;" data-translate="skill_kanji_write">Kanji - Escrita / 漢字 書き</td>
+                            <td style="padding: 8px;"><input type="radio" name="kanjiWrite" value="all"></td>
+                            <td style="padding: 8px;"><input type="radio" name="kanjiWrite" value="little"></td>
+                            <td style="padding: 8px;"><input type="radio" name="kanjiWrite" value="none"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="form-group sep">
+                <label data-translate="label_smoking">㉓ Tabagismo / 喫煙</label>
+                <label><input type="radio" name="smoking" value="no"> <span data-translate="smoke_no">Não fumo / しない</span></label> &nbsp;&nbsp;
+                <label><input type="radio" name="smoking" value="yes"> <span data-translate="smoke_yes">Fumo / 喫煙</span></label>
+                <div style="margin-top: 5px;">
+                    <input type="number" id="smokeAmount" min="0" style="width: 60px;"> <span data-translate="smoke_unit">Cigarros/dia (本/日)</span>
+                </div>
+            </div>
+
+            <div class="form-group sep">
+                <label data-translate="label_drinking">㉔ Álcool / 飲酒</label>
+                <label><input type="radio" name="drinking" value="no"> <span data-translate="drink_no">Não bebo / 飲まない</span></label> &nbsp;&nbsp;
+                <label><input type="radio" name="drinking" value="yes"> <span data-translate="drink_yes">Bebo / 飲酒</span></label>
+                <div style="margin-top: 5px;">
+                    <input type="number" id="drinkAmount" min="0" style="width: 70px;"> <span data-translate="drink_unit">ml/dia (ml/日)</span>
+                </div>
+            </div>
+        </div>
+        <!-- ==========================================
+             PARTE 6: SITUAÇÃO ATUAL E PREFERÊNCIAS
+             ========================================== -->
+        <div class="section-card">
+            <h3 class="section-title" data-translate="part6_title">Parte 6: Situação Atual e Preferências / 就労状況・希望</h3>
+
             <div class="form-group">
-                <label>Tipo Sanguíneo <span>血液型</span></label>
-                <select name="Tipo_Sanguineo">
-                    <option value="" selected>---- Selecione ----</option>
-                    <option value="A">A型</option>
-                    <option value="B">B型</option>
-                    <option value="AB">AB型</option>
-                    <option value="O">O型</option>
+                <label data-translate="label_current_job_status">㉕ Situação profissional atual (現在の就労状況)</label>
+                <div style="margin-top: 5px;">
+                    <label><input type="radio" name="currentJobStatus" value="employed"> <span data-translate="status_employed">Atualmente empregado / 就労中</span></label>
+                    <div style="margin-left: 20px; margin-top: 5px; margin-bottom: 10px;">
+                        <span data-translate="label_leave_date">Data de saída prevista / 離職予定日:</span> <input type="date" id="leaveDate">
+                    </div>
+                    <label><input type="radio" name="currentJobStatus" value="unemployed"> <span data-translate="status_unemployed">Estou fora do trabalho / 離職中</span></label><br>
+                    <label><input type="radio" name="currentJobStatus" value="ui_benefits"> <span data-translate="status_ui">Recebendo auxílio-desemprego / 失業給付金受給中</span></label><br>
+                    <label><input type="radio" name="currentJobStatus" value="seikatsu_hogo"> <span data-translate="status_welfare">Seikatsu Hogo / 生活保護</span></label>
+                </div>
+            </div>
+
+            <div class="form-group sep">
+                <label data-translate="label_start_date">㉖ Data de início (いつから就労できますか?)</label>
+                <div style="margin-top: 5px;">
+                    <label><input type="radio" name="startAvailability" value="immediate"> <span data-translate="start_immediate">Imediatamente / すぐに可能</span></label><br>
+                    <label><input type="radio" name="startAvailability" value="after_days"> <span data-translate="start_after">Após</span></label>
+                    <input type="number" id="startDaysAfter" min="0" style="width: 60px;"> <span data-translate="start_days_unit">dias (日後)</span>
+                </div>
+            </div>
+
+            <div class="form-group sep wide">
+                <label data-translate="label_how_known">㉗ Como conheceu a nossa empresa? (きっかけ)</label>
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 8px; margin-top: 5px;">
+                    <label><input type="checkbox" name="howKnown" value="Facebook"> Facebook</label>
+                    <label><input type="checkbox" name="howKnown" value="Google"> Google</label>
+                    <label><input type="checkbox" name="howKnown" value="Flyer"> <span data-translate="known_flyer">Folheto da loja / 店舗のチラシ</span></label>
+                    <label><input type="checkbox" name="howKnown" value="Introduction" onclick="document.getElementById('introName').classList.toggle('hidden', !this.checked)"> <span data-translate="known_intro">Indicação de conhecido / 知人の紹介</span></label>
+                </div>
+                <input type="text" id="introName" class="hidden" data-translate-placeholder="intro_name_ph" placeholder="Nome de quem indicou / 紹介者の名前" style="width: 95%; margin-top: 8px;">
+            </div>
+
+            <div class="form-group sep">
+                <label data-translate="label_children">㉘ Filhos que moram junto? (同居する子供)</label>
+                <div style="margin-top: 5px;">
+                    <label><input type="radio" name="hasChildren" value="no" onclick="toggleChildren(false)"> <span data-translate="child_no">Não tem / 居ない</span></label> &nbsp;&nbsp;
+                    <label><input type="radio" name="hasChildren" value="yes" onclick="toggleChildren(true)"> <span data-translate="child_yes">Tem / 居る</span></label>
+                </div>
+            </div>
+
+            <div id="childrenContainer" class="hidden wide">
+                <div id="childList"></div>
+                <button type="button" class="btn btn-primary" id="btnAddChild" onclick="addChildField()">＋ <span data-translate="btn_add_child">Adicionar filho / 子供を追加</span></button>
+            </div>
+
+            <div class="form-group sep">
+                <label data-translate="label_childcare">㉙ Quem cuidará do filho? (育児)</label>
+                <div style="margin-top: 5px;">
+                    <label><input type="radio" name="childcare" value="self"> <span data-translate="care_self">Só eu / 自分のみ</span></label> &nbsp;&nbsp;
+                    <label><input type="radio" name="childcare" value="others"> <span data-translate="care_others">Existem outros / 他にも居る</span></label>
+                </div>
+            </div>
+
+            <div class="form-group sep">
+                <label data-translate="label_company_lunch">㉚ Almoço da empresa (お弁当)</label>
+                <div style="margin-top: 5px;">
+                    <label><input type="radio" name="companyLunch" value="yes"> <span data-translate="lunch_yes">Pedir marmita / Sim はい</span></label><br>
+                    <label><input type="radio" name="companyLunch" value="no"> <span data-translate="lunch_no">Eu mesmo levarei / いいえ</span></label><br>
+                    <label><input type="radio" name="companyLunch" value="unknown"> <span data-translate="lunch_unknown">Não sei ainda / わからない</span></label>
+                </div>
+            </div>
+
+            <div class="form-group sep">
+                <label data-translate="label_dormitory">㉛ Deseja usar o dormitório? (社員寮)</label>
+                <div style="margin-top: 5px;">
+                    <label><input type="radio" name="useDormitory" value="yes"> <span data-translate="dorm_yes">Sim / はい ※1</span></label> &nbsp;&nbsp;
+                    <label><input type="radio" name="useDormitory" value="no"> <span data-translate="dorm_no">Não, vou de casa / いいえ</span></label>
+                </div>
+            </div>
+
+            <div class="form-group sep">
+                <label data-translate="label_relocation_help">㉜ Precisa de ajuda com a mudança? (引越しの手伝い)</label>
+                <div style="margin-top: 5px;">
+                    <label><input type="radio" name="relocationHelp" value="yes" onclick="toggleRelocWarn(true)"> <span data-translate="reloc_yes">Sim / はい ※2</span></label> &nbsp;&nbsp;
+                    <label><input type="radio" name="relocationHelp" value="no" onclick="toggleRelocWarn(false)"> <span data-translate="reloc_no">Não, faço sozinho / いいえ</span></label>
+                </div>
+                <div id="relocWarn" class="hidden" role="alert" style="margin-top:8px;padding:10px 12px;border-left:4px solid #e67e22;background:#fff4e5;color:#7a4300;border-radius:4px;font-size:.92em;" data-translate="reloc_warn">⚠ Haverá taxas. Solicite à sua empreiteira os termos de mudança. / 費用が発生します。派遣会社に引越しの規約をご確認ください。</div>
+            </div>
+
+            <div class="form-group sep">
+                <label data-translate="label_initial_money">㉝ Dinheiro para subsistência inicial? (生活費)</label>
+                <div style="margin-top: 5px;">
+                    <label><input type="radio" name="initialMoney" value="ok"> <span data-translate="money_ok">Sim, possuo / はい、有ります</span></label><br>
+                    <label><input type="radio" name="initialMoney" value="anxious"> <span data-translate="money_anxious">Um pouco preocupado / 少し不安です</span></label><br>
+                    <label><input type="radio" name="initialMoney" value="none"> <span data-translate="money_none">Quase nada / ほとんどない</span></label>
+                </div>
+            </div>
+
+            <div class="form-group sep">
+                <label data-translate="label_yucho">Conta no Banco do Correio (ゆうちょ銀行口座)</label>
+                <select id="contaYucho">
+                    <option value="">----</option>
+                    <option value="Abri (Tem cartão / Caderneta)" data-translate="yucho_have">Abri / Possuo conta e cartão / 口座あり</option>
+                    <option value="Possuo apenas o cartão" data-translate="yucho_card">Possuo apenas o cartão / カードのみ所持</option>
+                    <option value="Possuo apenas a caderneta" data-translate="yucho_book">Possuo apenas a caderneta / 通帳のみ所持</option>
+                    <option value="Nunca abri" data-translate="yucho_never">Nunca abri / 口座なし</option>
                 </select>
             </div>
-        </div>
 
-        <div class="grid-2">
-            <div class="form-group">
-                <label>Altura <span>身長 (cm)</span></label>
-                <input type="number" name="Altura" placeholder="Ex: 175">
-            </div>
-            <div class="form-group">
-                <label>Peso <span>体重 (kg)</span></label>
-                <input type="number" name="Peso" placeholder="Ex: 70">
-            </div>
-        </div>
-        <div class="grid-2">
-            <div class="form-group">
-                <label>Tamanho Camisa <span>作業服上</span></label>
-                <input type="text" name="Tamanho_Camisa" placeholder="Ex: S, M, L, LL, 3L">
-            </div>
-            <div class="form-group">
-                <label>Tamanho Calça <span>作業服下 (cm)</span></label>
-                <input type="number" name="Tamanho_Calca" placeholder="Largura da cintura em cm">
-            </div>
-        </div>
-
-        <div class="grid-2">
-            <div class="form-group">
-                <label>Sapato <span>安全靴 (cm)</span></label>
-                <input type="text" name="Tamanho_Sapato" placeholder="Ex: 26.5">
-            </div>
-            <div class="form-group">
-                <label>Visão <span>視力</span></label>
-                <select name="Visao">
-                    <option value="" selected>---- Selecione ----</option>
-                    <option value="Olho nu">Olho nu (裸眼)</option>
-                    <option value="Uso óculos">Uso óculos (眼鏡着用)</option>
-                    <option value="Uso lentes">Uso lentes (コンタクト着用)</option>
+            <div class="form-group sep">
+                <label data-translate="label_ui">Seguro desemprego (雇用保険歴)</label>
+                <select id="seguroDesemprego">
+                    <option value="">----</option>
+                    <option value="Já contribuí" data-translate="ins_paid">Já contribuí / 加入歴あり</option>
+                    <option value="Nunca juntei" data-translate="ins_never">Nunca juntei / 加入歴なし</option>
                 </select>
             </div>
-        </div>
 
-        <div class="grid-2">
-            <div class="form-group">
-                <label>Tabagismo <span>喫煙習慣</span></label>
-                <select name="Tabagismo">
-                    <option value="" selected>---- Selecione ----</option>
-                    <option value="Não Fumar">Não Fumar (吸わない)</option>
-                    <option value="Fumar">Fumar (吸う)</option>
+            <div class="form-group sep">
+                <label data-translate="label_health_ins">Seguro de saúde (健康保険歴)</label>
+                <select id="seguroSaude">
+                    <option value="">----</option>
+                    <option value="Já contribuí Seguro Social (Shakai Hoken)" data-translate="hins_shakai">Já contribuí Seguro Social (Shakai Hoken) / 社会保険</option>
+                    <option value="Já contribuí Seguro Nacional (Kokumin Hoken)" data-translate="hins_kokumin">Já contribuí Seguro Nacional (Kokumin Hoken) / 国民健康保険</option>
+                    <option value="Nunca juntei" data-translate="ins_never">Nunca juntei / 加入歴なし</option>
                 </select>
             </div>
-            <div class="grid-2">
-            <div class="form-group">
-                <label>Bebida alcóolica <span>飲酒習慣</span></label>
-                <select name="Bebida_Alcoolica">
-                    <option value="" selected>---- Selecione ----</option>
-                    <option value="Não Beba">Não Beba (飲まない)</option>
-                    <option value="Bebo">Bebo (飲む)</option>
+
+            <div class="form-group sep">
+                <label data-translate="label_nenkin">Pensão (年金)</label>
+                <select id="contribNenkin">
+                    <option value="">----</option>
+                    <option value="Já contribuí" data-translate="nenkin_paid">Já contribuí / Possuo caderneta / 加入歴あり・年金手帳保持</option>
+                    <option value="Nunca juntei" data-translate="ins_never">Nunca juntei / 加入歴なし</option>
                 </select>
             </div>
-        </div>
 
-        <div class="form-group">
-            <label>Trabalho impossível <span>🚫 従事できない業務</span></label>
-            <div class="options-vertical">
-                <label class="option-card"><input type="radio" name="Trabalho_Impossivel_Opcao" value="Não tem"> Não tem (特になし)</label>
-                <label class="option-card"><input type="radio" name="Trabalho_Impossivel_Opcao" value="Tem"> Tem (あり - 下記に記載)</label>
-            </div>
-            <input type="text" name="Trabalho_Impossivel_Detalhe" style="margin-top: 8px;" placeholder="Descreva qual trabalho não pode fazer">
-        </div>
-
-        <!-- SEÇÃO 6: Disponibilidade e Histórico de Seguros -->
-        <div class="section-title">6. Disponibilidade e Histórico de Seguros (就労可否・保険加入歴)</div>
-        
-        <div class="form-group">
-            <label>Quando participar / Início <span>📅 稼働開始希望日</span></label>
-            <select name="Inicio_Disponibilidade" id="inicio_disponibilidade" onchange="toggleDiasEspera(this.value)">
-                <option value="" selected>---- Selecione / 未選択 ----</option>
-                <option value="Início imediato">Início imediato (即日稼働可)</option>
-                <option value="Precisa tempo">Precisa de tempo (日数がかかる)</option>
-            </select>
-        </div>
-        <div class="form-group" id="dias_espera_container" style="display:none;">
-            <label>Quantos dias você precisa? <span>何日ぐらい必要ですか？</span></label>
-            <input type="number" name="Inicio_Disponibilidade_Dias" id="inicio_disponibilidade_dias" min="1" placeholder="Ex: 7">
-        </div>
-        <div class="form-group">
-            <label>Hora extra <span>⏰ 残業対応</span></label>
-            <select name="Hora_Extra">
-                <option value="" selected>---- Selecione / 未選択 ----</option>
-                <option value="0 - Não posso fazer horas extras">0 - Não posso fazer horas extras (残業対応不可)</option>
-                <option value="Até 1 hora">Até 1 hora (1時間まで可能)</option>
-                <option value="Até 2 horas">Até 2 horas (2時間まで可能)</option>
-                <option value="Até 3 horas">Até 3 horas (3時間まで可能)</option>
-                <option value="Até 4 horas">Até 4 horas (4時間まで可能)</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label>Trabalho férias / Turno <span>🔄 休日出勤・交替勤務</span></label>
-            <div class="options-vertical">
-                <label class="option-card"><input type="checkbox" name="Disponibilidade_Turno" value="Trabalho ferias (Possivel)"> Trabalho em feriados / Férias possível (休日出勤可)</label>
-                <label class="option-card"><input type="checkbox" name="Disponibilidade_Turno" value="Apenas noturno / Turno alternado"> Apenas noturno / Turno alternado可 (夜勤専属・交替勤務可)</label>
+            <!-- Item 34: Penalidades Criminais -->
+            <div class="form-group sep wide">
+                <label data-translate="label_criminal_record">㉞ Penalidades Criminais / 刑事罰</label>
+                <p style="margin: 5px 0;" data-translate="question_criminal">Você tem histórico de ter recebido penalidades criminais (veredicto de culpado) no passado? / 過去に刑事罰（有罪判決）を受けた経歴はありますか？</p>
+                <div style="margin-top: 5px;">
+                    <label><input type="radio" name="criminalRecord" value="no" checked onclick="toggleCriminalDetails(false)"> <span data-translate="crim_no">▢ なし (Não)</span></label> &nbsp;&nbsp;
+                    <label><input type="radio" name="criminalRecord" value="yes" onclick="toggleCriminalDetails(true)"> <span data-translate="crim_yes">▢ あり (Sim)</span></label>
+                </div>
+                <div id="criminalDetailsContainer" class="hidden" style="margin-top: 10px;">
+                    <label data-translate="label_criminal_specify">※「あり」の場合は、具体的な内容をご記入ください。 / Em caso de "Sim", por favor, especifique o conteúdo.</label>
+                    <textarea id="criminalDetails" rows="3" style="width: 95%; margin-top: 5px;"></textarea>
+                </div>
             </div>
         </div>
 
-        <div class="form-group">
-            <label>Conta no Banco do Correio <span>🏦 ゆうちょ銀行口座</span></label>
-            <select name="Conta_Yucho">
-                <option value="" selected>---- Selecione / 未選択 ----</option>
-                <option value="Abri (Tem cartão / Caderneta)">Abri / Possuo conta e cartão (口座あり・通帳/カード保持)</option>
-                <option value="Nunca abri">Nunca abri (口座なし)</option>
-            </select>
-        </div>
-        
-        <div class="form-group">
-            <label>Seguro desemprego <span> (雇用保険歴)</span></label>
-            <select name="Seguro_Desemprego">
-                <option value="" selected>---- Selecione / 未選択 ----</option>
-                <option value="Já contribuí">Já contribuí (加入歴あり)</option>
-                <option value="Nunca juntei">Nunca juntei (加入歴なし)</option>
-            </select>
+        <!-- NOTAS DE RODAPÉ E TERMO DE ACEITE (OBRIGATÓRIO) -->
+        <div style="margin-bottom: 25px; padding: 0 10px;">
+            <p class="hint" data-translate="note_dorm">* ※1 社員寮利用申請書(注意事項確認書)の提出が必要です。 / É necessário preencher um formulário de solicitação para uso do alojamento de funcionários.</p>
+            <p class="hint" data-translate="note_reloc">* ※2 引越し補助依頼申請書(注意事項確認書)の提出が必要です。 / Você precisará enviar um formulário de solicitação de auxílio para mudança.</p>
+            <p class="hint" style="font-weight: bold;" data-translate="note_disclaimer">Atenção: caso seja constatada alguma informação falsa neste currículo, sua oferta de emprego poderá ser rescindida. / 当履歴書の記載事項に虚偽の記載が認められた場合、入社を取り消すことがありますので、あらかじめご了承ください。</p>
+
+            <div class="form-group" style="margin-top: 25px; background-color: var(--card-bg); padding: 15px; border-radius: 6px; border: 1px solid var(--border-color);">
+                <label class="required" style="display: flex; align-items: flex-start; gap: 10px; cursor: pointer;">
+                    <input type="checkbox" id="declarationCheck" required style="margin-top: 4px;">
+                    <span data-translate="declaration_text">Confirmo que as informações acima estão corretas. / 私は上記の記載内容に間違いないことを確認します。</span>
+                </label>
+            </div>
         </div>
 
-        <div class="form-group">
-            <label>Seguro de saúde <span> (健康保険歴)</span></label>
-            <select name="Seguro_Saude">
-                <option value="" selected>---- Selecione / 未選択 ----</option>
-                <option value="Já contribuí Seguro Social (Shakai Hoken)">Já contribuí Seguro Social (社会保険 / Shakai Hoken)</option>
-                <option value="Já contribuí Seguro Nacional (Kokumin Hoken)">Já contribuí Seguro Nacional (国民健康保険 / Kokumin Hoken)</option>
-                <option value="Nunca juntei">Nunca juntei (加入歴なし)</option>
-            </select>
-        </div>
+        <div id="statusEnvio" class="hidden"></div>
 
-        <div class="form-group">
-            <label>Pensão <span>年金 (厚生年金・国民年金歴)</span></label>
-            <select name="Contribuição_Nenkin">
-                <option value="" selected>---- Selecione / 未選択 ----</option>
-                <option value="Já contribuí">Já contribuí / Possuo caderneta (加入歴あり・年金手帳保持)</option>
-                <option value="Nunca juntei">Nunca juntei (加入歴なし)</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label>Como conheceu a GORO? <span>🤝 応募 de きっかけ</span></label>
-            <select name="Como_Conheceu_Goro">
-                <option value="" selected>---- Selecione / 未選択 ----</option>
-                <option value="Internet (Facebook / Empregos)">Internet / Facebook / Sites de Emprego (インターネット・求人サイト)</option>
-                <option value="Jornal etc.">Jornal / Outras Mídias impressas (新聞・他媒体)</option>
-                <option value="Amigo / Indicação">Amigo / Indicação (友人・紹介)</option>
-            </select>
-        </div>
-
-        <!-- Termos e Condições Importantes -->
-        <div class="terms-box">
-            <strong>Observações importantes e Termos (重要事項・規約):</strong>
-            <ul>
-                <li>Se houver falsidade no conteúdo preenchido, há possibilidade de cancelamento do emprego. (申告内容に虚偽があった場合、採用が取り消されることがあります。)</li>
-                <li>Se você se deslocar de carro, precisará apresentar a licença de condução e os seguros ativos. (車通勤の場合、運転免許証および有効な保険証券の提示が必要です。)</li>
-                <li>As configurações de salário final diferem dependendo se o seguro social está inscrito ou não. (社会保険の加入有無により、最終的な給y与手取り額 que difere.)</li>
-                <li style="color: #9B2C2C; font-weight: bold;">No caso de mudança, consulte os termos de taxa de mudança com a empreiteira. (引越しをする場合、引越し費用や条件については派遣会社に確認してください。)</li>
-            </ul>
-            <label class="option-card" style="margin-top: 12px; background-color: #FFF;">
-                <input type="checkbox" name="Termos_Aceite" value="Sim"> Eu entendo o acima e concordo. (上記内容を理解し、同意します。) *
-            </label>
-        </div>
-
-        <!-- Botões Finais do Formulário (Envio e Limpeza) -->
-        <div class="btn-container">
-            <button type="reset" class="btn-clear">🗑️ Apagar Tudo</button>
-           <button type="submit" class="btn-submit">🚀 Enviar Currículo</button>
-        </div>
-        
-        <div id="statusMessage" class="status-msg" style="text-align: center; color: #2B6CB0; font-weight: bold; margin-top: 8px;">
-            Enviando dados para o servidor GORO, por favor aguarde...
+        <!-- BOTÕES DE AÇÃO -->
+        <div style="display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 50px;">
+            <button type="button" class="btn btn-secondary" onclick="window.print()" data-translate="btn_print">Imprimir / 印刷する</button>
+            <button type="submit" class="btn btn-success" data-translate="btn_submit">Enviar Formulário / 提出する</button>
         </div>
 
     </form>
-</div>
+</div> <!-- Fim do Container Principal -->
 
 <script>
-    // --- Barra de progresso (rolagem do formulário) ---
-    function atualizarProgresso() {
-        const scrollTop = window.scrollY || document.documentElement.scrollTop;
-        const alturaTotal = document.documentElement.scrollHeight - window.innerHeight;
-        const progresso = alturaTotal > 0 ? (scrollTop / alturaTotal) * 100 : 0;
-        document.getElementById('progressBarFill').style.width = Math.min(progresso, 100) + '%';
-    }
-    window.addEventListener('scroll', atualizarProgresso);
-    window.addEventListener('resize', atualizarProgresso);
-    window.addEventListener('load', atualizarProgresso);
+/* =========================================================
+   DICIONÁRIO DE TRADUÇÕES (ja / pt / en / tl)
+   ========================================================= */
+const translations = {
+  ja: {
+    main_title: "履歴書およびアンケート", main_subtitle: "アンケート", fill_date: "記入日",
+    part1_title: "①基本情報", label_lastname: "姓", label_firstname: "名", label_birthdate: "生年月日",
+    label_gender: "性別", gender_male: "男", gender_female: "女",
+    label_residence: "在留資格", select_default: "選択してください",
+    res_permanent: "永住者", res_longterm: "定住者", res_spouse: "日本人の配偶者等", res_japanese: "日本人",
+    label_nikkei: "日系", nikkei_japanese: "日本人です", nikkei_1st: "一世", nikkei_2nd: "二世", nikkei_3rd: "三世", nikkei_4th: "四世", nikkei_non: "非日系",
+    label_address: "現住所",
+    label_mobile: "携帯電話", label_email: "メールアドレス", label_sns: "SNS", sns_other: "その他",
+    part2_title: "②学歴・職歴", label_education: "最終学歴", edu_elementary: "小学校", edu_junior: "中学校", edu_high: "高校", edu_university: "大学",
+    label_edu_notes: "備考", label_origin_job: "母国での職業", label_years: "年",
+    question_japan_exp: "日本での職歴はありますか？", opt_no: "なし", opt_yes: "あり",
+    sub_japan_exp: "日本での職歴", btn_add_exp: "職歴を追加",
+    part3_title: "③家族・資格", question_japan_family: "在日親族はいますか？",
+    sub_japan_family: "在日親族", btn_add_family: "親族を追加",
+    label_driving_license: "運転免許", lic_comum: "普通", lic_at: "AT限定", lic_semimedio: "準中型", lic_medio: "中型", lic_grande: "大型", lic_ciclomotor: "原付", lic_moto_medio: "中型二輪", lic_moto_grande: "大型二輪",
+    label_job_qualification: "職能資格", qual_forklift: "フォークリフト", qual_solda: "溶接", qual_tamakake: "玉掛", qual_crane: "クレーン", qual_press: "プレス",
+    qual_other: "その他", qual_other_placeholder: "資格を記入してください",
+    label_commute: "通勤方法", com_moto: "バイク ※", com_ciclo: "原付 ※", com_car: "自動車 ※", com_bike: "自転車 ※", com_sougei: "送迎", com_walk: "徒歩",
+    hint_commute: "※ 運転免許証・車検証・自賠責保険証・任意保険証・自転車保険証などの提出が必須です。",
+    part4_title: "④健康状態・体格", label_chronic_diseases: "慢性疾患および持病",
+    chr_none: "なし", chr_back: "腰痛", chr_diabetes: "糖尿病", chr_pressure: "高血圧", chr_mental: "精神疾患", chr_treatment: "治療中・服薬中",
+    label_allergies: "アレルギー", all_oil: "油", all_solvent: "溶剤", all_food: "食品", all_food_placeholder: "食品アレルギーを記入してください",
+    label_health_status: "現在の健康状態", health_ok: "問題なし", health_treatment: "加療中", abs_required: "要欠勤", abs_not_required: "欠勤不要",
+    label_work_restrictions: "就労(作業)制限", rest_none: "問題なし", rest_heavy: "重筋作業",
+    label_overtime: "残業", ot_none: "制限なし", ot_restricted: "制限あり", ot_until: "", ot_unit: "時/日まで",
+    label_shifts: "勤務シフト", shift_weekend: "休日出勤", opt_possible: "可能", opt_impossible: "不可能", shift_night: "夜勤", shift_alternate: "交代勤務",
+    label_body_size: "体格(服のサイズ)など", body_height: "身長", body_weight: "体重", body_waist: "ウエスト", body_jacket: "上着", body_shoes: "靴",
+    body_hand: "利き手", hand_right: "右", hand_left: "左", body_blood: "血液型", body_vision: "視力 右 左", vis_glasses: "眼鏡", vis_contacts: "コンタクト",
+    part5_title: "⑤日本語能力・生活習慣", lang_comprehension: "理解力", lang_conversation: "会話力",
+    th_skill: "能力", th_all: "全て", th_little: "少し", th_none: "全く",
+    skill_hira_read: "ひらがな 読み", skill_hira_write: "ひらがな 書き", skill_kata_read: "カタカナ 読み", skill_kata_write: "カタカナ 書き", skill_kanji_read: "漢字 読み", skill_kanji_write: "漢字 書き",
+    label_smoking: "喫煙", smoke_no: "しない", smoke_yes: "喫煙", smoke_unit: "本/日",
+    label_drinking: "飲酒", drink_no: "飲まない", drink_yes: "飲酒", drink_unit: "ml/日",
+    part6_title: "⑥就労状況・希望", label_current_job_status: "現在の就労状況", status_employed: "就労中",
+    label_leave_date: "離職予定日", status_unemployed: "離職中", status_ui: "失業給付金受給中", status_welfare: "生活保護",
+    label_start_date: "いつから就労できますか?", start_immediate: "すぐに可能", start_after: "日後", start_days_unit: "日後",
+    label_how_known: "きっかけ", known_flyer: "店舗のチラシ", known_intro: "知人の紹介",
+    label_children: "同居する子供", child_no: "居ない", child_yes: "居る", child_age_unit: "才",
+    veh_label: "所持している書類(お持ちのものにチェック)", veh_shaken: "車検証 (Shakken)", veh_jibai: "自賠責保険 (Jibaiseki hoken)", veh_nini: "任意保険 (Nin'i hoken)",
+    intro_name_ph: "紹介してくれた方のお名前", btn_add_child: "子供を追加", child_title: "お子様 {n}", child_name: "名前", child_age: "年齢",
+    reloc_warn: "⚠ 費用が発生します。派遣会社に引越しの規約(利用条件)をご請求ください。",
+    yucho_card: "カードのみ所持", yucho_book: "通帳のみ所持",
+    label_childcare: "育児", care_self: "自分のみ", care_others: "他にも居る",
+    label_company_lunch: "お弁当", lunch_yes: "はい", lunch_no: "いいえ", lunch_unknown: "わからない",
+    label_dormitory: "社員寮", dorm_yes: "はい ※1", dorm_no: "いいえ",
+    label_relocation_help: "引越しの手伝い", reloc_yes: "はい ※2", reloc_no: "いいえ",
+    label_initial_money: "生活費", money_ok: "はい、有ります", money_anxious: "少し不安です", money_none: "ほとんどない",
+    label_criminal_record: "刑事罰", question_criminal: "過去に刑事罰（有罪判決）を受けた経歴はありますか？", crim_no: "なし", crim_yes: "あり",
+    label_criminal_specify: "具体的な内容をご記入ください。",
+    note_dorm: "※1 社員寮利用申請書(注意事項確認書)の提出が必要です。", note_reloc: "※2 引越し補助依頼申請書(注意事項確認書)の提出が必要です。",
+    note_disclaimer: "当履歴書の記載事項に虚偽の記載が認められた場合、入社を取り消すことがありますので、あらかじめご了承ください。",
+    declaration_text: "私は上記の記載内容に間違いないことを確認します。", btn_print: "印刷する", btn_submit: "提出する",
+    label_marital: "婚姻状況",
+    mar_single: "独身",
+    mar_married: "既婚",
+    mar_divorced: "離婚",
+    label_edu_status: "学歴状況:",
+    edu_completed: "卒業",
+    edu_incomplete: "中退",
+    label_hospitalized: "入院歴",
+    hosp_never: "入院歴なし",
+    hosp_yes: "入院歴あり",
+    label_yucho: "ゆうちょ銀行口座",
+    yucho_have: "口座あり・通帳/カード保持",
+    yucho_never: "口座なし",
+    label_ui: "雇用保険歴",
+    ins_paid: "加入歴あり",
+    ins_never: "加入歴なし",
+    label_health_ins: "健康保険歴",
+    hins_shakai: "社会保険 加入歴あり",
+    hins_kokumin: "国民健康保険 加入歴あり",
+    label_nenkin: "年金（厚生年金・国民年金歴）",
+    nenkin_paid: "加入歴あり・年金手帳保持",
+    exp_title: "{n}社目",
+    exp_in_year: "入社 年",
+    exp_in_month: "入社 月",
+    exp_out_year: "退社 年",
+    exp_out_month: "退社 月",
+    exp_agency: "派遣会社名",
+    exp_factory: "工場名 / 企業名",
+    exp_prefecture: "都道府県",
+    exp_city: "市区町村",
+    exp_category: "業種",
+    exp_role: "職種・作業内容",
+    exp_reason: "退職理由",
+    fam_title: "親族 {n}",
+    fam_name: "氏名",
+    fam_relation: "続柄",
+    fam_age: "年齢",
+    fam_nationality: "国籍",
+    fam_living: "同居していますか？",
+    fam_yes: "はい",
+    fam_no: "いいえ",
+    max_items: "最大5件までです。",
+    msg_sending: "送信中です。しばらくお待ちください…",
+    msg_send_error: "送信に失敗しました。もう一度お試しください。",
+    msg_success: "フォームが正常に記入されました。", msg_error: "必須項目を確認してください。"
+  },
+  pt: {
+    main_title: "Currículo e Questionário", main_subtitle: "Currículo e Questionário", fill_date: "Data de preenchimento",
+    part1_title: "Parte 1: Informações Básicas / 基本情報", label_lastname: "Sobrenome / Nome da família (姓)", label_firstname: "Nome (名)",
+    label_birthdate: "Data de Nascimento (生年月日)", label_gender: "Sexo (性別)", gender_male: "Homem / 男", gender_female: "Mulher / 女",
+    label_residence: "Situação de residência (在留資格)", select_default: "Escolha... / 選択してください",
+    res_permanent: "Residente Permanente / 永住者 (Eijūsha)", res_longterm: "Residente de Longo Termo / 定住者 (Teijūsha)",
+    res_spouse: "Cônjuge de um cidadão japonês, etc. / 日本人の配偶者等 (Nihonjin no haigūsha nado)", res_japanese: "Sou japonês(a) / 日本人 (Nihonjin)",
+    label_nikkei: "Origem Nikkei (日系)", nikkei_japanese: "Sou japonês(a) / 日本人です", nikkei_1st: "1ª Geração (Issei) / 一世", nikkei_2nd: "2ª Geração (Nissei) / 二世",
+    nikkei_3rd: "3ª Geração (Sansei) / 三世", nikkei_4th: "4ª Geração (Yonsei) / 四世", nikkei_non: "Não-japonês / 非日系",
+    label_address: "Endereço atual (現住所)",
+    label_mobile: "Celular (携帯)", label_email: "E-Mail", label_sns: "SNS", sns_other: "Outro / その他",
+    part2_title: "Parte 2: Escolaridade e Histórico Profissional / 学歴・職歴", label_education: "Última instituição de ensino da qual me formei / 最終学歴",
+    edu_elementary: "Primário / 小学校", edu_junior: "Ginásio / 中学校", edu_high: "Colegial / 高校", edu_university: "Universidade / 大学",
+    label_edu_notes: "Observações / 注釈(備考):", label_origin_job: "Profissões no país de origem / 母国での職業", label_years: "Anos / 年",
+    question_japan_exp: "Você tem experiência profissional no Japão? / 日本での職歴はありますか？", opt_no: "Não / なし", opt_yes: "Sim / あり",
+    sub_japan_exp: "Experiência profissional no Japão / 日本での職歴", btn_add_exp: "Adicionar Experiência / 職歴を追加",
+    part3_title: "Parte 3: Família e Qualificações / 家族・資格", question_japan_family: "Você possui parentes que moram no Japão? / 在日親族はいますか？",
+    sub_japan_family: "Parentes que moram no Japão / 在日親族", btn_add_family: "Adicionar Parente / 親族を追加",
+    label_driving_license: "● Carteira de motorista / 運転免許:", lic_comum: "Comum / 普通", lic_at: "AT limitado / AT限定", lic_semimedio: "Semi-médio / 準中型",
+    lic_medio: "Médio / 中型", lic_grande: "Grande / 大型", lic_ciclomotor: "Ciclomotor / 原付", lic_moto_medio: "Motocicleta de Médio Porte / 中型二輪", lic_moto_grande: "Motocicleta de Grande Porte / 大型二輪",
+    label_job_qualification: "● Qualificação profissional / 職能資格:", qual_forklift: "Empilhadeira / フォークリフト", qual_solda: "Solda / 溶接", qual_tamakake: "Tamakake / 玉掛",
+    qual_crane: "Guindaste / クレーン", qual_press: "Prensa / プレス", qual_other: "Outros / その他", qual_other_placeholder: "Especifique o(s) certificado(s) / 資格を記入してください",
+    label_commute: "⑬ Métodos de deslocamento / 通勤方法", com_moto: "de Moto / バイク ※", com_ciclo: "de Ciclomotor / 原付 ※", com_car: "de Carro / 自動車 ※",
+    com_bike: "de Bicicleta / 自転車 ※", com_sougei: "Transporte da empresa (Sougei) / 送迎", com_walk: "Caminhada / 徒歩",
+    hint_commute: "※ Você deverá apresentar documentos como sua carteira de habilitação, certificado de registro do veículo, certificado de seguro obrigatório de responsabilidade civil para automóveis, certificado de seguro opcional para automóveis e certificado de seguro para bicicletas.",
+    part4_title: "Parte 4: Condições de Saúde e Físicas / 健康状態・体格", label_chronic_diseases: "⑭ Doenças crônicas e enfermidades crônicas (慢性疾患および持病)",
+    chr_none: "Não tem / なし", chr_back: "Dor lombar / 腰痛", chr_diabetes: "Diabetes / 糖尿病", chr_pressure: "Pressão alta / 高血圧", chr_mental: "Doença mental / 精神疾患",
+    chr_treatment: "Em tratamento, tomo medicação / 治療中・服薬中",
+    label_allergies: "Alergia / アレルギー", all_oil: "Óleo / 油", all_solvent: "Solvente / 溶剤", all_food: "Alimentos / 食品", all_food_placeholder: "Especifique a alergia alimentar / 食品アレルギーを記入してください",
+    label_health_status: "⑮ Estado de saúde atual (現在の健康状態)", health_ok: "Sem problemas / 問題なし", health_treatment: "Em tratamento / 加療中",
+    abs_required: "Ausência necessária / 要欠勤", abs_not_required: "Sem necessidade de ausência / 欠勤不要",
+    label_work_restrictions: "⑯ Restrições de trabalho (就労(作業)制限)", rest_none: "Sem problemas / 問題なし", rest_heavy: "Trabalho muscular pesado / 重筋作業",
+    label_overtime: "⑰ Horas extras (残業)", ot_none: "Sem restrições / 制限なし", ot_restricted: "Aplicam-se restrições / 制限あり", ot_until: "Até", ot_unit: "H/dia (時/日まで)",
+    label_shifts: "Disponibilidade de Turnos", shift_weekend: "⑱ Finais de semana/Feriados (休日出勤):", opt_possible: "Possível / 可能", opt_impossible: "Impossível / 不可能",
+    shift_night: "⑲ Turno da noite (夜勤):", shift_alternate: "⑳ Turno alternado (交代勤務):",
+    label_body_size: "㉑ Tipo físico (tamanho da roupa), etc. / 体格(服のサイズ)など", body_height: "Altura", body_weight: "Peso", body_waist: "Cintura",
+    body_jacket: "Camisa", body_shoes: "Sapato", body_hand: "Mão Dominante / 利き手:", hand_right: "Destro / 右", hand_left: "Canhoto / 左",
+    body_blood: "Tipo Sanguíneo / 血液型:", body_vision: "Visão R L:", vis_glasses: "Usa Óculos / 眼鏡", vis_contacts: "Usa Lentes / コンタクト",
+    part5_title: "Parte 5: Idioma e Hábitos / 日本語能力・生活習慣", lang_comprehension: "㉒ Compreensão / 理解力", lang_conversation: "Conversação / 会話力",
+    th_skill: "Habilidade", th_all: "Todo / 全て", th_little: "Pouco / 少し", th_none: "Nada / 全く",
+    skill_hira_read: "Hiragana - Leitura / ひらがな 読み", skill_hira_write: "Hiragana - Escrita / ひらがな 書き", skill_kata_read: "Katakana - Leitura / カタカナ 読み",
+    skill_kata_write: "Katakana - Escrita / カタカナ 書き", skill_kanji_read: "Kanji - Leitura / 漢字 読み", skill_kanji_write: "Kanji - Escrita / 漢字 書き",
+    label_smoking: "㉓ Tabagismo / 喫煙", smoke_no: "Não fumo / しない", smoke_yes: "Fumo / 喫煙", smoke_unit: "Cigarros/dia (本/日)",
+    label_drinking: "㉔ Álcool / 飲酒", drink_no: "Não bebo / 飲まない", drink_yes: "Bebo / 飲酒", drink_unit: "ml/dia (ml/日)",
+    part6_title: "Parte 6: Situação Atual e Preferências / 就労状況・希望", label_current_job_status: "㉕ Situação profissional atual (現在の就労状況)",
+    status_employed: "Atualmente empregado / 就労中", label_leave_date: "Data de saída prevista / 離職予定日:", status_unemployed: "Estou fora do trabalho / 離職中",
+    status_ui: "Recebendo auxílio-desemprego / 失業給付金受給中", status_welfare: "Seikatsu Hogo / 生活保護",
+    label_start_date: "㉖ Data de início (いつから就労できますか?)", start_immediate: "Imediatamente / すぐに可能", start_after: "Após", start_days_unit: "dias (日後)",
+    label_how_known: "㉗ Como conheceu a nossa empresa? (きっかけ)", known_flyer: "Folheto da loja / 店舗のチラシ", known_intro: "Indicação de conhecido / 知人の紹介",
+    label_children: "㉘ Filhos que moram junto? (同居する子供)", child_no: "Não tem / 居ない", child_yes: "Tem / 居る", child_age_unit: "anos (才)",
+    veh_label: "Documentos que você possui / 所持している書類 (marque)", veh_shaken: "Shakken (inspeção veicular) / 車検証", veh_jibai: "Jibaiseki hoken (seguro obrigatório) / 自賠責保険", veh_nini: "Nin'i hoken (seguro voluntário) / 任意保険",
+    intro_name_ph: "Nome de quem indicou / 紹介者の名前", btn_add_child: "Adicionar filho / 子供を追加", child_title: "Filho(a) {n}", child_name: "Nome", child_age: "Idade",
+    reloc_warn: "⚠ Haverá taxas. Solicite à sua empreiteira os termos de mudança. / 費用が発生します。派遣会社に引越しの規約をご請求ください。",
+    yucho_card: "Possuo apenas o cartão / カードのみ所持", yucho_book: "Possuo apenas a caderneta / 通帳のみ所持",
+    label_childcare: "㉙ Quem cuidará do filho? (育児)", care_self: "Só eu / 自分のみ", care_others: "Existem outros / 他にも居る",
+    label_company_lunch: "㉚ Almoço da empresa (お弁当)", lunch_yes: "Pedir marmita / Sim はい", lunch_no: "Eu mesmo levarei / いいえ", lunch_unknown: "Não sei ainda / わからない",
+    label_dormitory: "㉛ Deseja usar o dormitório? (社員寮)", dorm_yes: "Sim / はい ※1", dorm_no: "Não, vou de casa / いいえ",
+    label_relocation_help: "㉜ Precisa de ajuda com a mudança? (引越しの手伝い)", reloc_yes: "Sim / はい ※2", reloc_no: "Não, faço sozinho / いいえ",
+    label_initial_money: "㉝ Dinheiro para subsistência inicial? (生活費)", money_ok: "Sim, possuo / はい、有ります", money_anxious: "Um pouco preocupado / 少し不安です", money_none: "Quase nada / ほとんどない",
+    label_criminal_record: "㉞ Penalidades Criminais / 刑事罰", question_criminal: "Você tem histórico de ter recebido penalidades criminais (veredicto de culpado) no passado? / 過去に刑事罰（有罪判決）を受けた経歴はありますか？",
+    crim_no: "▢ なし (Não)", crim_yes: "▢ あり (Sim)", label_criminal_specify: "※「あり」の場合は、具体的な内容をご記入ください。 / Em caso de \"Sim\", por favor, especifique o conteúdo.",
+    note_dorm: "* ※1 社員寮利用申請書(注意事項確認書)の提出が必要です。 / É necessário preencher um formulário de solicitação para uso do alojamento de funcionários.",
+    note_reloc: "* ※2 引越し補助依頼申請書(注意事項確認書)の提出が必要です。 / Você precisará enviar um formulário de solicitação de auxílio para mudança.",
+    note_disclaimer: "Atenção: caso seja constatada alguma informação falsa neste currículo, sua oferta de emprego poderá ser rescindida. / 当履歴書の記載事項に虚偽の記載が認められた場合、入社を取り消すことがありますので、あらかじめご了承ください。",
+    declaration_text: "Confirmo que as informações acima estão corretas. / 私は上記の記載内容に間違いないことを確認します。", btn_print: "Imprimir / 印刷する", btn_submit: "Enviar Formulário / 提出する",
+    label_marital: "Estado Civil (婚姻状況)",
+    mar_single: "Solteiro(a) / 独身",
+    mar_married: "Casado(a) / 既婚",
+    mar_divorced: "Divorciado(a) / 離婚",
+    label_edu_status: "Status da educação (学歴状況):",
+    edu_completed: "Completo / 卒業",
+    edu_incomplete: "Incompleto / 中退",
+    label_hospitalized: "Histórico de hospitalização (入院歴)",
+    hosp_never: "Nunca foi hospitalizado / 入院歴なし",
+    hosp_yes: "Tem histórico de hospitalização / 入院歴あり",
+    label_yucho: "Conta no Banco do Correio (ゆうちょ銀行口座)",
+    yucho_have: "Abri / Possuo conta e cartão / 口座あり",
+    yucho_never: "Nunca abri / 口座なし",
+    label_ui: "Seguro desemprego (雇用保険歴)",
+    ins_paid: "Já contribuí / 加入歴あり",
+    ins_never: "Nunca juntei / 加入歴なし",
+    label_health_ins: "Seguro de saúde (健康保険歴)",
+    hins_shakai: "Já contribuí Seguro Social (Shakai Hoken) / 社会保険",
+    hins_kokumin: "Já contribuí Seguro Nacional (Kokumin Hoken) / 国民健康保険",
+    label_nenkin: "Pensão (年金)",
+    nenkin_paid: "Já contribuí / Possuo caderneta / 加入歴あり・年金手帳保持",
+    exp_title: "{n}ª Empresa",
+    exp_in_year: "Entrada – Ano (年)",
+    exp_in_month: "Entrada – Mês (月)",
+    exp_out_year: "Saída – Ano (年)",
+    exp_out_month: "Saída – Mês (月)",
+    exp_agency: "Empreiteira (派遣会社名)",
+    exp_factory: "Fábrica (工場名 / 企業名)",
+    exp_prefecture: "Província (都道府県)",
+    exp_city: "Cidade (市区町村)",
+    exp_category: "Ramo / Categoria (業種)",
+    exp_role: "Função (職種・作業内容)",
+    exp_reason: "Motivo da saída (退職理由)",
+    fam_title: "Parente {n}",
+    fam_name: "Nome (氏名)",
+    fam_relation: "Relação (続柄)",
+    fam_age: "Idade (年齢)",
+    fam_nationality: "Nacionalidade (国籍)",
+    fam_living: "Moram juntos? (同居)",
+    fam_yes: "Sim / はい",
+    fam_no: "Não / いいえ",
+    max_items: "Máximo de 5 itens. / 最大5件までです。",
+    msg_sending: "Enviando os dados, por favor aguarde... / 送信中…",
+    msg_send_error: "Erro ao enviar os dados. Tente novamente. / 送信に失敗しました。",
+    msg_success: "Formulário enviado com sucesso!", msg_error: "Verifique os campos obrigatórios."
+  },
+  en: {
+    main_title: "Resume and Questionnaire", main_subtitle: "Resume and Questionnaire", fill_date: "Date of filling",
+    part1_title: "Part 1: Basic Information", label_lastname: "Last name / Family name", label_firstname: "First name",
+    label_birthdate: "Date of Birth", label_gender: "Gender", gender_male: "Male", gender_female: "Female",
+    label_residence: "Residence status", select_default: "Please choose...",
+    res_permanent: "Permanent Resident (Eijūsha)", res_longterm: "Long-term Resident (Teijūsha)",
+    res_spouse: "Spouse of a Japanese national, etc. (Nihonjin no haigūsha nado)", res_japanese: "I am Japanese (Nihonjin)",
+    label_nikkei: "Nikkei background", nikkei_japanese: "I am Japanese", nikkei_1st: "1st Generation (Issei)", nikkei_2nd: "2nd Generation (Nissei)",
+    nikkei_3rd: "3rd Generation (Sansei)", nikkei_4th: "4th Generation (Yonsei)", nikkei_non: "Non-Japanese descent",
+    label_address: "Current address",
+    label_mobile: "Mobile phone", label_email: "E-mail", label_sns: "SNS", sns_other: "Other",
+    part2_title: "Part 2: Education and Work History", label_education: "Last school you graduated from",
+    edu_elementary: "Elementary school", edu_junior: "Junior high school", edu_high: "High school", edu_university: "University",
+    label_edu_notes: "Notes:", label_origin_job: "Occupation in your home country", label_years: "Years",
+    question_japan_exp: "Do you have work experience in Japan?", opt_no: "No", opt_yes: "Yes",
+    sub_japan_exp: "Work experience in Japan", btn_add_exp: "Add work experience",
+    part3_title: "Part 3: Family and Qualifications", question_japan_family: "Do you have relatives living in Japan?",
+    sub_japan_family: "Relatives living in Japan", btn_add_family: "Add relative",
+    label_driving_license: "● Driver's license:", lic_comum: "Regular", lic_at: "AT limited", lic_semimedio: "Semi-medium",
+    lic_medio: "Medium", lic_grande: "Large", lic_ciclomotor: "Moped", lic_moto_medio: "Medium motorcycle", lic_moto_grande: "Large motorcycle",
+    label_job_qualification: "● Professional qualification:", qual_forklift: "Forklift", qual_solda: "Welding", qual_tamakake: "Slinging (Tamakake)",
+    qual_crane: "Crane", qual_press: "Press machine", qual_other: "Other", qual_other_placeholder: "Specify the certificate(s) you have",
+    label_commute: "⑬ Commute method", com_moto: "By motorcycle ※", com_ciclo: "By moped ※", com_car: "By car ※",
+    com_bike: "By bicycle ※", com_sougei: "Company transport (Sougei)", com_walk: "Walking",
+    hint_commute: "※ You will need to submit documents such as your driver's license, vehicle registration certificate, compulsory and optional car insurance certificates, and bicycle insurance certificate.",
+    part4_title: "Part 4: Health and Physical Condition", label_chronic_diseases: "⑭ Chronic diseases and conditions",
+    chr_none: "None", chr_back: "Lower back pain", chr_diabetes: "Diabetes", chr_pressure: "High blood pressure", chr_mental: "Mental illness",
+    chr_treatment: "Currently under treatment / taking medication",
+    label_allergies: "Allergies", all_oil: "Oil", all_solvent: "Solvent", all_food: "Food", all_food_placeholder: "Specify the food allergy",
+    label_health_status: "⑮ Current health condition", health_ok: "No problems", health_treatment: "Under treatment",
+    abs_required: "Leave of absence required", abs_not_required: "No leave required",
+    label_work_restrictions: "⑯ Work restrictions", rest_none: "No problems", rest_heavy: "Heavy physical labor",
+    label_overtime: "⑰ Overtime", ot_none: "No restrictions", ot_restricted: "Restrictions apply", ot_until: "Up to", ot_unit: "hours/day",
+    label_shifts: "Shift availability", shift_weekend: "⑱ Weekends/Holidays:", opt_possible: "Possible", opt_impossible: "Not possible",
+    shift_night: "⑲ Night shift:", shift_alternate: "⑳ Rotating shift:",
+    label_body_size: "㉑ Body size (clothing size), etc.", body_height: "Height", body_weight: "Weight", body_waist: "Waist",
+    body_jacket: "Shirt", body_shoes: "Shoes", body_hand: "Dominant hand:", hand_right: "Right-handed", hand_left: "Left-handed",
+    body_blood: "Blood type:", body_vision: "Vision R L:", vis_glasses: "Wears glasses", vis_contacts: "Wears contact lenses",
+    part5_title: "Part 5: Language and Habits", lang_comprehension: "㉒ Listening comprehension", lang_conversation: "Conversation",
+    th_skill: "Skill", th_all: "Fully", th_little: "A little", th_none: "Not at all",
+    skill_hira_read: "Hiragana - Reading", skill_hira_write: "Hiragana - Writing", skill_kata_read: "Katakana - Reading",
+    skill_kata_write: "Katakana - Writing", skill_kanji_read: "Kanji - Reading", skill_kanji_write: "Kanji - Writing",
+    label_smoking: "㉓ Smoking", smoke_no: "I don't smoke", smoke_yes: "I smoke", smoke_unit: "cigarettes/day",
+    label_drinking: "㉔ Alcohol", drink_no: "I don't drink", drink_yes: "I drink", drink_unit: "ml/day",
+    part6_title: "Part 6: Current Situation and Preferences", label_current_job_status: "㉕ Current employment status",
+    status_employed: "Currently employed", label_leave_date: "Expected leave date:", status_unemployed: "Currently unemployed",
+    status_ui: "Receiving unemployment benefits", status_welfare: "Seikatsu Hogo (Welfare)",
+    label_start_date: "㉖ Start date (when can you start working?)", start_immediate: "Immediately", start_after: "After", start_days_unit: "days",
+    label_how_known: "㉗ How did you learn about our company?", known_flyer: "Store flyer", known_intro: "Referral from an acquaintance",
+    label_children: "㉘ Children living with you?", child_no: "None", child_yes: "Yes", child_age_unit: "years old",
+    veh_label: "Documents you have (check all that apply)", veh_shaken: "Shakken (vehicle inspection)", veh_jibai: "Jibaiseki hoken (compulsory insurance)", veh_nini: "Nin'i hoken (voluntary insurance)",
+    intro_name_ph: "Name of the person who referred you", btn_add_child: "Add child", child_title: "Child {n}", child_name: "Name", child_age: "Age",
+    reloc_warn: "⚠ Fees will apply. Please ask your staffing agency for the relocation terms.",
+    yucho_card: "I only have the card", yucho_book: "I only have the passbook",
+    label_childcare: "㉙ Who will take care of the child?", care_self: "Only me", care_others: "There are others",
+    label_company_lunch: "㉚ Company lunch", lunch_yes: "Order a boxed lunch", lunch_no: "I will bring my own", lunch_unknown: "Not sure yet",
+    label_dormitory: "㉛ Would you like to use the company dormitory?", dorm_yes: "Yes ※1", dorm_no: "No, I will commute from home",
+    label_relocation_help: "㉜ Do you need help with relocation?", reloc_yes: "Yes ※2", reloc_no: "No, I will do it myself",
+    label_initial_money: "㉝ Money for initial living expenses?", money_ok: "Yes, I have it", money_anxious: "A little worried", money_none: "Almost none",
+    label_criminal_record: "㉞ Criminal record", question_criminal: "Have you ever received a criminal penalty (guilty verdict) in the past?",
+    crim_no: "▢ No", crim_yes: "▢ Yes", label_criminal_specify: "If \"Yes\", please specify the details.",
+    note_dorm: "* ※1 You will need to submit a dormitory use application form (terms and conditions confirmation).",
+    note_reloc: "* ※2 You will need to submit a relocation assistance application form (terms and conditions confirmation).",
+    note_disclaimer: "Notice: if any false information is found in this resume, your job offer may be withdrawn.",
+    declaration_text: "I confirm that the information above is correct.", btn_print: "Print", btn_submit: "Submit Form",
+    label_marital: "Marital status",
+    mar_single: "Single",
+    mar_married: "Married",
+    mar_divorced: "Divorced",
+    label_edu_status: "Education status:",
+    edu_completed: "Graduated",
+    edu_incomplete: "Did not finish",
+    label_hospitalized: "Hospitalization history",
+    hosp_never: "Never hospitalized",
+    hosp_yes: "Has been hospitalized",
+    label_yucho: "Japan Post Bank (Yucho) account",
+    yucho_have: "I have an account and card/passbook",
+    yucho_never: "Never opened one",
+    label_ui: "Employment insurance history",
+    ins_paid: "Have contributed",
+    ins_never: "Never contributed",
+    label_health_ins: "Health insurance history",
+    hins_shakai: "Contributed to Social Insurance (Shakai Hoken)",
+    hins_kokumin: "Contributed to National Health Insurance (Kokumin Hoken)",
+    label_nenkin: "Pension (Nenkin)",
+    nenkin_paid: "Have contributed / have pension book",
+    exp_title: "Company #{n}",
+    exp_in_year: "Start – Year",
+    exp_in_month: "Start – Month",
+    exp_out_year: "End – Year",
+    exp_out_month: "End – Month",
+    exp_agency: "Staffing agency",
+    exp_factory: "Factory / company",
+    exp_prefecture: "Prefecture",
+    exp_city: "City",
+    exp_category: "Industry",
+    exp_role: "Job / duties",
+    exp_reason: "Reason for leaving",
+    fam_title: "Relative {n}",
+    fam_name: "Name",
+    fam_relation: "Relationship",
+    fam_age: "Age",
+    fam_nationality: "Nationality",
+    fam_living: "Living together?",
+    fam_yes: "Yes",
+    fam_no: "No",
+    max_items: "Maximum of 5 entries.",
+    msg_sending: "Sending, please wait...",
+    msg_send_error: "Failed to send the data. Please try again.",
+    msg_success: "Form submitted successfully!", msg_error: "Please check the required fields."
+  },
+  tl: {
+    main_title: "Resume at Talatanungan", main_subtitle: "Resume at Talatanungan", fill_date: "Petsa ng pagsagot",
+    part1_title: "Bahagi 1: Pangunahing Impormasyon", label_lastname: "Apelyido", label_firstname: "Pangalan",
+    label_birthdate: "Petsa ng Kapanganakan", label_gender: "Kasarian", gender_male: "Lalaki", gender_female: "Babae",
+    label_residence: "Katayuan sa paninirahan", select_default: "Pumili po...",
+    res_permanent: "Permanenteng Residente (Eijūsha)", res_longterm: "Pangmatagalang Residente (Teijūsha)",
+    res_spouse: "Asawa ng mamamayang Hapon, atbp. (Nihonjin no haigūsha nado)", res_japanese: "Hapon ako (Nihonjin)",
+    label_nikkei: "Pinagmulang Nikkei", nikkei_japanese: "Hapon ako", nikkei_1st: "1st Henerasyon (Issei)", nikkei_2nd: "2nd Henerasyon (Nissei)",
+    nikkei_3rd: "3rd Henerasyon (Sansei)", nikkei_4th: "4th Henerasyon (Yonsei)", nikkei_non: "Hindi-Hapon",
+    label_address: "Kasalukuyang tirahan",
+    label_mobile: "Cellphone", label_email: "E-mail", label_sns: "SNS", sns_other: "Iba pa",
+    part2_title: "Bahagi 2: Edukasyon at Karanasan sa Trabaho", label_education: "Huling paaralang natapos",
+    edu_elementary: "Elementarya", edu_junior: "Junior High School", edu_high: "Senior High School", edu_university: "Unibersidad",
+    label_edu_notes: "Mga Tala:", label_origin_job: "Trabaho sa bansang pinagmulan", label_years: "Taon",
+    question_japan_exp: "May karanasan ka ba sa trabaho sa Japan?", opt_no: "Wala", opt_yes: "Mayroon",
+    sub_japan_exp: "Karanasan sa trabaho sa Japan", btn_add_exp: "Magdagdag ng Karanasan",
+    part3_title: "Bahagi 3: Pamilya at Kwalipikasyon", question_japan_family: "May mga kamag-anak ka ba na nakatira sa Japan?",
+    sub_japan_family: "Mga kamag-anak na nakatira sa Japan", btn_add_family: "Magdagdag ng Kamag-anak",
+    label_driving_license: "● Lisensya sa pagmamaneho:", lic_comum: "Regular", lic_at: "AT limitado", lic_semimedio: "Semi-medium",
+    lic_medio: "Medium", lic_grande: "Malaki", lic_ciclomotor: "Moped", lic_moto_medio: "Medium na motorsiklo", lic_moto_grande: "Malaking motorsiklo",
+    label_job_qualification: "● Propesyonal na kwalipikasyon:", qual_forklift: "Forklift", qual_solda: "Welding", qual_tamakake: "Tamakake (Pag-slinging)",
+    qual_crane: "Crane", qual_press: "Press machine", qual_other: "Iba pa", qual_other_placeholder: "Ilagay ang sertipiko(ng) mayroon ka",
+    label_commute: "⑬ Paraan ng pagpunta sa trabaho", com_moto: "Sakay ng motorsiklo ※", com_ciclo: "Sakay ng moped ※", com_car: "Sakay ng kotse ※",
+    com_bike: "Sakay ng bisikleta ※", com_sougei: "Sasakyan ng kompanya (Sougei)", com_walk: "Naglalakad",
+    hint_commute: "※ Kailangan mong isumite ang mga dokumento tulad ng lisensya sa pagmamaneho, rehistro ng sasakyan, sapilitan at opsyonal na insurance ng sasakyan, at insurance ng bisikleta.",
+    part4_title: "Bahagi 4: Kalusugan at Pisikal na Kondisyon", label_chronic_diseases: "⑭ Malalang sakit at kondisyon",
+    chr_none: "Wala", chr_back: "Sakit sa likod", chr_diabetes: "Diabetes", chr_pressure: "Mataas na presyon ng dugo", chr_mental: "Sakit sa pag-iisip",
+    chr_treatment: "Kasalukuyang nagpapagamot / umiinom ng gamot",
+    label_allergies: "Allergy", all_oil: "Langis", all_solvent: "Solvent", all_food: "Pagkain", all_food_placeholder: "Ilagay ang allergy sa pagkain",
+    label_health_status: "⑮ Kasalukuyang kalagayan ng kalusugan", health_ok: "Walang problema", health_treatment: "Kasalukuyang ginagamot",
+    abs_required: "Kailangan ng pahinga", abs_not_required: "Hindi kailangan ng pahinga",
+    label_work_restrictions: "⑯ Mga hadlang sa trabaho", rest_none: "Walang problema", rest_heavy: "Mabigat na gawaing pisikal",
+    label_overtime: "⑰ Overtime", ot_none: "Walang hadlang", ot_restricted: "May hadlang", ot_until: "Hanggang", ot_unit: "oras/araw",
+    label_shifts: "Availability sa shift", shift_weekend: "⑱ Weekend/Holiday:", opt_possible: "Pwede", opt_impossible: "Hindi pwede",
+    shift_night: "⑲ Night shift:", shift_alternate: "⑳ Umiikot na shift:",
+    label_body_size: "㉑ Sukat ng katawan (damit), atbp.", body_height: "Taas", body_weight: "Timbang", body_waist: "Baywang",
+    body_jacket: "Damit", body_shoes: "Sapatos", body_hand: "Nangungunang kamay:", hand_right: "Kanang-kamay", hand_left: "Kaliwete",
+    body_blood: "Uri ng dugo:", body_vision: "Paningin K K:", vis_glasses: "Gumagamit ng salamin", vis_contacts: "Gumagamit ng contact lens",
+    part5_title: "Bahagi 5: Wika at Gawi", lang_comprehension: "㉒ Pag-unawa", lang_conversation: "Pakikipag-usap",
+    th_skill: "Kasanayan", th_all: "Lubos", th_little: "Kaunti", th_none: "Wala",
+    skill_hira_read: "Hiragana - Pagbasa", skill_hira_write: "Hiragana - Pagsulat", skill_kata_read: "Katakana - Pagbasa",
+    skill_kata_write: "Katakana - Pagsulat", skill_kanji_read: "Kanji - Pagbasa", skill_kanji_write: "Kanji - Pagsulat",
+    label_smoking: "㉓ Paninigarilyo", smoke_no: "Hindi ako naninigarilyo", smoke_yes: "Naninigarilyo ako", smoke_unit: "sigarilyo/araw",
+    label_drinking: "㉔ Alak", drink_no: "Hindi ako umiinom", drink_yes: "Umiinom ako", drink_unit: "ml/araw",
+    part6_title: "Bahagi 6: Kasalukuyang Kalagayan at Kagustuhan", label_current_job_status: "㉕ Kasalukuyang katayuan sa trabaho",
+    status_employed: "Kasalukuyang may trabaho", label_leave_date: "Inaasahang petsa ng pag-alis:", status_unemployed: "Kasalukuyang walang trabaho",
+    status_ui: "Tumatanggap ng unemployment benefits", status_welfare: "Seikatsu Hogo (Welfare)",
+    label_start_date: "㉖ Petsa ng pagsisimula (kailan ka pwedeng magsimula?)", start_immediate: "Agad-agad", start_after: "Pagkatapos ng", start_days_unit: "araw",
+    label_how_known: "㉗ Paano mo nalaman ang kompanya namin?", known_flyer: "Flyer ng tindahan", known_intro: "Rekomendasyon ng kakilala",
+    label_children: "㉘ May mga anak na kasama sa bahay?", child_no: "Wala", child_yes: "Mayroon", child_age_unit: "taong gulang",
+    veh_label: "Mga dokumentong mayroon ka (lagyan ng tsek)", veh_shaken: "Shakken (inspeksyon ng sasakyan)", veh_jibai: "Jibaiseki hoken (sapilitang insurance)", veh_nini: "Nin'i hoken (boluntaryong insurance)",
+    intro_name_ph: "Pangalan ng nag-refer sa iyo", btn_add_child: "Magdagdag ng anak", child_title: "Anak {n}", child_name: "Pangalan", child_age: "Edad",
+    reloc_warn: "⚠ May babayaran na bayarin. Hingin sa iyong staffing agency ang mga tuntunin sa paglipat.",
+    yucho_card: "Card lang ang mayroon ako", yucho_book: "Passbook lang ang mayroon ako",
+    label_childcare: "㉙ Sino ang mag-aalaga sa anak?", care_self: "Ako lang", care_others: "May iba pa",
+    label_company_lunch: "㉚ Tanghalian sa kompanya", lunch_yes: "Mag-oorder ng baon", lunch_no: "Magdadala ako ng sarili kong baon", lunch_unknown: "Hindi pa alam",
+    label_dormitory: "㉛ Nais mo bang gamitin ang dormitoryo?", dorm_yes: "Oo ※1", dorm_no: "Hindi, galing ako sa bahay",
+    label_relocation_help: "㉜ Kailangan mo ba ng tulong sa paglipat?", reloc_yes: "Oo ※2", reloc_no: "Hindi, gagawin ko mag-isa",
+    label_initial_money: "㉝ Pera para sa panimulang gastusin sa pamumuhay?", money_ok: "Oo, mayroon ako", money_anxious: "Medyo nag-aalala", money_none: "Halos wala",
+    label_criminal_record: "㉞ Kasaysayang Kriminal", question_criminal: "Nagkaroon ka na ba ng kriminal na parusa (nahatulang nagkasala) noong nakaraan?",
+    crim_no: "▢ Wala", crim_yes: "▢ Mayroon", label_criminal_specify: "Kung \"Mayroon\", mangyaring tukuyin ang detalye.",
+    note_dorm: "* ※1 Kailangan mong magsumite ng application form para sa paggamit ng dormitoryo.",
+    note_reloc: "* ※2 Kailangan mong magsumite ng application form para sa tulong sa paglipat.",
+    note_disclaimer: "Paalala: kung may matuklasang maling impormasyon sa resume na ito, maaaring kanselahin ang alok ng trabaho.",
+    declaration_text: "Kinukumpirma ko na tama ang impormasyong nasa itaas.", btn_print: "I-print", btn_submit: "Isumite ang Form",
+    label_marital: "Katayuang sibil",
+    mar_single: "Walang asawa",
+    mar_married: "May asawa",
+    mar_divorced: "Hiwalay",
+    label_edu_status: "Katayuan ng edukasyon:",
+    edu_completed: "Nagtapos",
+    edu_incomplete: "Hindi natapos",
+    label_hospitalized: "Kasaysayan ng pagpapaospital",
+    hosp_never: "Hindi pa naospital",
+    hosp_yes: "Naospital na dati",
+    label_yucho: "Account sa Japan Post Bank (Yucho)",
+    yucho_have: "May account at card/passbook ako",
+    yucho_never: "Hindi pa nagbukas",
+    label_ui: "Kasaysayan ng employment insurance",
+    ins_paid: "Nakapag-ambag na",
+    ins_never: "Hindi pa nakapag-ambag",
+    label_health_ins: "Kasaysayan ng health insurance",
+    hins_shakai: "Nag-ambag sa Social Insurance (Shakai Hoken)",
+    hins_kokumin: "Nag-ambag sa National Health Insurance (Kokumin Hoken)",
+    label_nenkin: "Pensiyon (Nenkin)",
+    nenkin_paid: "Nakapag-ambag / may pension book",
+    exp_title: "Kompanya #{n}",
+    exp_in_year: "Simula – Taon",
+    exp_in_month: "Simula – Buwan",
+    exp_out_year: "Katapusan – Taon",
+    exp_out_month: "Katapusan – Buwan",
+    exp_agency: "Staffing agency",
+    exp_factory: "Pabrika / kompanya",
+    exp_prefecture: "Prefecture",
+    exp_city: "Lungsod",
+    exp_category: "Uri ng industriya",
+    exp_role: "Trabaho / gawain",
+    exp_reason: "Dahilan ng pag-alis",
+    fam_title: "Kamag-anak {n}",
+    fam_name: "Pangalan",
+    fam_relation: "Relasyon",
+    fam_age: "Edad",
+    fam_nationality: "Nasyonalidad",
+    fam_living: "Magkasama ba sa bahay?",
+    fam_yes: "Oo",
+    fam_no: "Hindi",
+    max_items: "Hanggang 5 lamang.",
+    msg_sending: "Ipinapadala, mangyaring maghintay...",
+    msg_send_error: "Nabigo ang pagpapadala. Pakisubukang muli.",
+    msg_success: "Matagumpay na naisumite ang form!", msg_error: "Pakitingnan ang mga kinakailangang field."
+  }
+};
 
-    // --- Controle para evitar envio duplicado (clique duplo / duplo toque) ---
-    let enviandoFormulario = false;
-
-    function toggleDiasEspera(valor) {
-        const container = document.getElementById('dias_espera_container');
-        const input = document.getElementById('inicio_disponibilidade_dias');
-        if (valor === 'Precisa tempo') {
-            container.style.display = 'block';
-        } else {
-            container.style.display = 'none';
-            input.value = '';
-        }
-    }
-
-    function enviarFormulario(event) {
-        event.preventDefault();
-
-        if (enviandoFormulario) return;
-       function scrollSuaveManual(elemento, duracao = 500) {
-    const inicioY = window.pageYOffset;
-    const rect = elemento.getBoundingClientRect();
-    const alvoY = inicioY + rect.top - (window.innerHeight / 2) + (rect.height / 2);
-    const distancia = alvoY - inicioY;
-    let inicioTempo = null;
-
-    function passo(tempoAtual) {
-        if (!inicioTempo) inicioTempo = tempoAtual;
-        const decorrido = tempoAtual - inicioTempo;
-        const progresso = Math.min(decorrido / duracao, 1);
-        const facilitado = progresso < 0.5
-            ? 2 * progresso * progresso
-            : 1 - Math.pow(-2 * progresso + 2, 2) / 2; // easeInOutQuad
-
-        window.scrollTo(0, inicioY + distancia * facilitado);
-
-        if (decorrido < duracao) {
-            requestAnimationFrame(passo);
-        }
-    }
-    requestAnimationFrame(passo);
+/* =========================================================
+   IDIOMA / TEMA / LAYOUT
+   ========================================================= */
+function t(key) {
+    const lang = document.getElementById('langSelector').value;
+    return (translations[lang] && translations[lang][key]) || (translations.pt && translations.pt[key]) || key;
 }
 
-function validarEIrPara(condicao, mensagem, elemento) {
-    if (!condicao) {
-        alert(mensagem);
-        if (elemento) {
-            setTimeout(() => {
-                scrollSuaveManual(elemento, 500);
-                if (typeof elemento.focus === 'function') elemento.focus({ preventScroll: true });
-            }, 300);
+function applyTranslations(lang) {
+    const dict = translations[lang] || translations.pt;
+    document.documentElement.lang = (lang === 'pt') ? 'pt-BR' : lang;
+    document.querySelectorAll('[data-translate]').forEach(el => {
+        const key = el.getAttribute('data-translate');
+        if (dict[key] !== undefined) {
+            // {n} = número do item nos blocos dinâmicos (1ª empresa, 2º parente...)
+            el.textContent = dict[key].replace('{n}', el.getAttribute('data-n') || '');
         }
-        return false;
-    }
-    return true;
+    });
+    document.querySelectorAll('[data-translate-placeholder]').forEach(el => {
+        const key = el.getAttribute('data-translate-placeholder');
+        if (dict[key] !== undefined) el.placeholder = dict[key];
+    });
 }
-        
-        const statusMsg = document.getElementById('statusMessage');
-        const btnSubmit = document.querySelector('.btn-submit');
-        
-        const nomeField = document.getElementById('nome');
-        const dataNascField = document.getElementById('data_nasc');
-        const contatosField = document.getElementById('contatos');
-        
-        const nome = nomeField ? nomeField.value.trim() : '';
-        const dataNasc = dataNascField ? dataNascField.value : '';
-        const contatos = contatosField ? contatosField.value.trim() : '';
-        
-        const generoRadio = document.querySelector('input[name="Genero"]:checked');
-        const generoValor = generoRadio ? generoRadio.value : "";
-        
-        const moradiaRadio = document.querySelector('input[name="Moradia_Apos_Contratacao"]:checked');
-        const moradiaValor = moradiaRadio ? moradiaRadio.value : "";
-        
-        const nihongoRadio = document.querySelector('input[name="Nivel_Japones_Falado"]:checked');
-        const nihongoValor = nihongoRadio ? nihongoRadio.value : "";
-        
-        const termos = document.querySelector('input[name="Termos_Aceite"]') ? document.querySelector('input[name="Termos_Aceite"]').checked : false;
-        
-if (!validarEIrPara(nome, 'Por favor, preencha o Nome.\n氏名を入力してください。', nomeField)) return;
-if (!validarEIrPara(dataNasc, 'Por favor, preencha a Data de Nascimento.\n生年月日を入力してください。', dataNascField)) return;
-if (!validarEIrPara(generoValor, 'Por favor, selecione o Gênero.\n性別を選択してください。', document.getElementById('genero_container'))) return;
-if (!validarEIrPara(contatos, 'Por favor, preencha o campo de Contatos.\n連絡先を入力してください。', contatosField)) return;
-if (!validarEIrPara(moradiaValor, 'Por favor, selecione uma opção de Moradia.\n採用後の入居希望を選択してください。', document.getElementById('moradia_container'))) return;
-if (!validarEIrPara(nihongoValor, 'Por favor, selecione seu Nível de Japonês.\n日本語会話力を選択してください。', document.getElementById('nihongo_container'))) return;
-if (!termos) { alert('Por favor, aceite os termos para enviar.\n規約に同意してください。'); return; }
 
-        enviandoFormulario = true;
-        statusMsg.style.display = 'block';
-        statusMsg.style.color = '#2B6CB0';
-        btnSubmit.disabled = true;
-        
-        const form = document.getElementById('goroForm');
-        const formData = new FormData(form);
-        const urlParams = new URLSearchParams();
-        
-        for (const [key, value] of formData.entries()) {
-            if (urlParams.has(key)) {
-                urlParams.set(key, urlParams.get(key) + ", " + value);
-            } else {
-                urlParams.set(key, value);
-            }
-        }
-        
-        const agora = new Date();
-        urlParams.set('Carimbo_Data_Hora', agora.toLocaleDateString('pt-BR') + ' ' + agora.toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'}));
-        urlParams.set('Sobrenome_Nome', nome);
-        urlParams.set('Data_Nascimento', dataNasc);
-        urlParams.set('Genero', generoValor);
-        urlParams.set('Contatos', contatos);
-        urlParams.set('Moradia_Apos_Contratacao', moradiaValor);
-        urlParams.set('Nivel_Japones_Falado', nihongoValor);
-        urlParams.set('Termos_Aceite', termos ? "Sim" : "Não");
+function changeLanguage(lang) {
+    applyTranslations(lang);
+}
 
-        const urlWebhook = "https://script.google.com/macros/s/AKfycbzApfxWE-jf-gvt6iSxRqBCT9f8lqZJFpuarYsXd4f9qGwuoeVC3fWFZTTXoIt4_Yv-/exec";
-        
- // Envio otimizado contra bloqueios de CORS do Google
-        fetch(urlWebhook, {
-            method: 'POST',
-            mode: 'no-cors',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: urlParams.toString()
-        })
-        .then(() => {
-            statusMsg.innerText = '✓ Dados enviados com sucesso! Suas informações foram mantidas na tela para sua conferência.';
-            statusMsg.style.color = '#2F855A';
-            alert('✓ Currículo gravado com sucesso na planilha da GORO! Os seus dados foram mantidos na tela para conferência.');
-            btnSubmit.disabled = false;
-            enviandoFormulario = false;
-        })
-        .catch(error => {
-            console.error('Erro:', error);
-            statusMsg.innerText = 'Erro ao enviar dados. Tente novamente.';
-            statusMsg.style.color = '#C53030';
-            btnSubmit.disabled = false;
-            enviandoFormulario = false;
+function changeView(view) {
+    document.body.classList.remove('view-pc', 'view-mobile', 'view-auto');
+    document.body.classList.add('view-' + view);
+}
+
+function changeTheme(theme) {
+    document.body.setAttribute('data-theme', theme);
+}
+
+/* =========================================================
+   BLOCOS DINÂMICOS: EXPERIÊNCIA NO JAPÃO e PARENTES (máx. 5 cada)
+   ========================================================= */
+const MAX_ITEMS = 5;
+let expCount = 0;
+let famCount = 0;
+
+function renumerar(listId) {
+    document.querySelectorAll('#' + listId + ' .dyn-title').forEach((el, i) => el.setAttribute('data-n', i + 1));
+    applyTranslations(document.getElementById('langSelector').value);
+}
+
+function campo(cls, key, tipo, extra) {
+    return '<div class="dyn-field"><label data-translate="' + key + '"></label>' +
+           '<input type="' + tipo + '" class="' + cls + '" ' + (extra || '') + '></div>';
+}
+
+function toggleJapanExperience(show) {
+    document.getElementById('japanExperienceContainer').classList.toggle('hidden', !show);
+    if (show && expCount === 0) addExperienceField();
+}
+
+function addExperienceField() {
+    if (expCount >= MAX_ITEMS) { alert(t('max_items')); return; }
+    expCount++;
+    const div = document.createElement('div');
+    div.className = 'dynamic-item exp-item';
+    div.innerHTML =
+        '<button type="button" class="btn btn-remove-item" onclick="removeDynamicField(this, \'experience\')">&times;</button>' +
+        '<strong class="dyn-title" data-translate="exp_title"></strong>' +
+        '<div class="dyn-grid dyn-grid-short">' +
+            campo('e-in-year',   'exp_in_year',   'number', 'min="1950" max="2100" placeholder="2024"') +
+            campo('e-in-month',  'exp_in_month',  'number', 'min="1" max="12" placeholder="04"') +
+            campo('e-out-year',  'exp_out_year',  'number', 'min="1950" max="2100" placeholder="2026"') +
+            campo('e-out-month', 'exp_out_month', 'number', 'min="1" max="12" placeholder="08"') +
+        '</div>' +
+        '<div class="dyn-grid">' +
+            campo('e-agency',   'exp_agency',     'text') +
+            campo('e-factory',  'exp_factory',    'text') +
+            campo('e-pref',     'exp_prefecture', 'text', 'placeholder="Aichi-ken"') +
+            campo('e-city',     'exp_city',       'text', 'placeholder="Ichinomiya-shi"') +
+            campo('e-category', 'exp_category',   'text') +
+            campo('e-role',     'exp_role',       'text') +
+            campo('e-reason',   'exp_reason',     'text') +
+        '</div>';
+    document.getElementById('experienceList').appendChild(div);
+    document.getElementById('btnAddExperience').disabled = (expCount >= MAX_ITEMS);
+    renumerar('experienceList');
+}
+
+function toggleJapanFamily(show) {
+    document.getElementById('japanFamilyContainer').classList.toggle('hidden', !show);
+    if (show && famCount === 0) addFamilyField();
+}
+
+function addFamilyField() {
+    if (famCount >= MAX_ITEMS) { alert(t('max_items')); return; }
+    famCount++;
+    const div = document.createElement('div');
+    div.className = 'dynamic-item fam-item';
+    div.innerHTML =
+        '<button type="button" class="btn btn-remove-item" onclick="removeDynamicField(this, \'family\')">&times;</button>' +
+        '<strong class="dyn-title" data-translate="fam_title"></strong>' +
+        '<div class="dyn-grid">' +
+            campo('f-name',        'fam_name',        'text') +
+            campo('f-relation',    'fam_relation',    'text') +
+            campo('f-age',         'fam_age',         'number', 'min="0"') +
+            campo('f-nationality', 'fam_nationality', 'text') +
+            '<div class="dyn-field"><label data-translate="fam_living"></label>' +
+            '<select class="f-living"><option value="">----</option>' +
+            '<option value="Sim" data-translate="fam_yes"></option>' +
+            '<option value="Não" data-translate="fam_no"></option></select></div>' +
+        '</div>';
+    document.getElementById('familyList').appendChild(div);
+    document.getElementById('btnAddFamily').disabled = (famCount >= MAX_ITEMS);
+    renumerar('familyList');
+}
+
+let childCount = 0;
+function toggleChildren(show) {
+    document.getElementById('childrenContainer').classList.toggle('hidden', !show);
+    if (show && childCount === 0) addChildField();
+}
+function addChildField() {
+    if (childCount >= MAX_ITEMS) { alert(t('max_items')); return; }
+    childCount++;
+    const div = document.createElement('div');
+    div.className = 'dynamic-item child-item';
+    div.innerHTML =
+        '<button type="button" class="btn btn-remove-item" onclick="removeDynamicField(this, \'child\')">&times;</button>' +
+        '<strong class="dyn-title" data-translate="child_title"></strong>' +
+        '<div class="dyn-grid">' +
+            campo('c-name', 'child_name', 'text') +
+            campo('c-age',  'child_age',  'number', 'min="0"') +
+        '</div>';
+    document.getElementById('childList').appendChild(div);
+    document.getElementById('btnAddChild').disabled = (childCount >= MAX_ITEMS);
+    renumerar('childList');
+}
+function toggleRelocWarn(show) {
+    document.getElementById('relocWarn').classList.toggle('hidden', !show);
+}
+
+function removeDynamicField(btn, type) {
+    btn.closest('.dynamic-item').remove();
+    if (type === 'child') {
+        childCount--;
+        document.getElementById('btnAddChild').disabled = false;
+        renumerar('childList');
+        return;
+    }
+    if (type === 'experience') {
+        expCount--;
+        document.getElementById('btnAddExperience').disabled = false;
+        renumerar('experienceList');
+    } else {
+        famCount--;
+        document.getElementById('btnAddFamily').disabled = false;
+        renumerar('familyList');
+    }
+}
+
+/* =========================================================
+   CONDICIONAIS SIMPLES
+   ========================================================= */
+function toggleCriminalDetails(show) {
+    document.getElementById('criminalDetailsContainer').classList.toggle('hidden', !show);
+}
+function toggleAllergyFood(el) {
+    document.getElementById('allergyFoodDetail').classList.toggle('hidden', !el.checked);
+}
+function toggleQualOther(el) {
+    document.getElementById('qualOtherDetail').classList.toggle('hidden', !el.checked);
+}
+
+/* =========================================================
+   LEITURA DOS CAMPOS
+   ========================================================= */
+function val(id) {
+    const el = document.getElementById(id);
+    return el ? (el.value || "").toString().trim() : "";
+}
+function radioValue(name) {
+    const el = document.querySelector('input[name="' + name + '"]:checked');
+    return el ? el.value : "";
+}
+
+/* Tradução "código do campo" -> texto gravado na planilha (sempre PT/JP, qualquer que seja
+   o idioma escolhido na tela). Os textos de "Genero", "Estado_Civil", "Geracao_Nikkei",
+   "Educacao_Final", etc. seguem o formato já usado pela planilha antiga. */
+const M = {
+    gender:   { male: 'Masculino', female: 'Feminino' },
+    marital:  { single: 'Solteiro', married: 'Casado', divorced: 'Divórcio' },
+    residence:{ permanent_resident: 'Residente Permanente (永住者)', long_term: 'Residente de Longo Termo (定住者)',
+                spouse_japanese: 'Cônjuge de japonês (日本人の配偶者等)', japanese: 'Japonês(a) (日本人)' },
+    nikkei:   { japanese: 'Japonês(a) (日本人)', '1st': '1sei (Issei)', '2nd': '2sei (Nissei)', '3rd': '3sei (Sansei)',
+                '4th': '4sei (Yonsei)', non_nikkei: 'Não é japonês' },
+    education:{ elementary: 'Primário', junior_high: 'Ginásio', high_school: 'Colegial', university: 'Universidade' },
+    eduStatus:{ completed: 'Completo', incomplete: 'Incompleto' },
+    sns:      { Other: 'Outro' },
+    license:  { 'Comum': 'Comum (普通)', 'AT': 'AT limitado (AT限定)', 'Semi-medio': 'Semi-médio (準中型)', 'Medio': 'Médio (中型)',
+                'Grande': 'Grande (大型)', 'Ciclomotor': 'Ciclomotor (原付)', 'Moto-Medio': 'Moto médio porte (中型二輪)',
+                'Moto-Grande': 'Moto grande porte (大型二輪)' },
+    commute:  { Moto: 'Moto (バイク)', Ciclomotor: 'Ciclomotor (原付)', Carro: 'Carro (自動車)', Bicicleta: 'Bicicleta (自転車)',
+                Sougei: 'Souguei / Transporte da empresa (送迎)', Caminhada: 'Caminhada (徒歩)' },
+    chronic:  { Nenhum: 'Não tem', Lombar: 'Dor lombar', Diabetes: 'Diabetes', Pressao: 'Pressão alta', Mental: 'Doença mental',
+                Tratamento: 'Em tratamento, tomo medicação' },
+    allergy:  { Oleo: 'Óleo', Solvente: 'Solvente', Alimentos: 'Alimentos' },
+    absence:  { yes: 'Ausência necessária', no: 'Sem necessidade de ausência' },
+    hand:     { right: 'Destro', left: 'Canhoto' },
+    level:    { A: '(A) 80%~', B: '(B) 40~80%', C: '(C) 10~40%', D: '(D) 0~10%' },
+    skill:    { all: 'Todo (全部)', little: 'Pouco (少し)', none: 'Nada (全くない)' },
+    jobStatus:{ employed: 'Atualmente empregado (就労中)', unemployed: 'Fora do trabalho (離職中)',
+                ui_benefits: 'Recebendo auxílio-desemprego (失業給付金受給中)', seikatsu_hogo: 'Seikatsu Hogo (生活保護)' },
+    vehDocs:  { Shakken: 'Shakken (車検証)', Jibaiseki: 'Jibaiseki hoken (自賠責保険)', Nini: "Nin'i hoken (任意保険)" },
+    howKnown: { Flyer: 'Folheto da loja (店舗のチラシ)', Introduction: 'Indicação de conhecido (知人の紹介)' },
+    childcare:{ self: 'Não tem (só eu)', others: 'Sim (parente ou creche)' },
+    lunch:    { yes: 'Pedir marmita (はい)', no: 'Eu mesmo levarei (いいえ)', unknown: 'Não sei ainda (わからない)' },
+    reloc:    { yes: 'Sim (はい)', no: 'Não (いいえ)' },
+    money:    { ok: 'Sim, possuo (はい、有ります)', anxious: 'Um pouco preocupado (少し不安です)', none: 'Quase nada (ほとんどない)' },
+    criminal: { no: 'Não (なし)', yes: 'Sim (あり)' },
+    can:      { yes: 'Possível', no: 'Impossível' }
+};
+function lbl(grupo, cod) { return cod ? ((M[grupo] && M[grupo][cod]) || cod) : ''; }
+function radioLbl(grupo, nome) { return lbl(grupo, radioValue(nome)); }
+function checkedLbls(grupo, nome, ignorar) {
+    return Array.from(document.querySelectorAll('input[name="' + nome + '"]:checked'))
+        .filter(el => el.value !== ignorar)
+        .map(el => lbl(grupo, el.value)).join(', ');
+}
+
+// Data e hora no formato da planilha antiga (dd/MM/aaaa HH:mm), no horário do Japão
+function carimboDataHora() {
+    const p = new Intl.DateTimeFormat('en-GB', {
+        timeZone: 'Asia/Tokyo', year: 'numeric', month: '2-digit', day: '2-digit',
+        hour: '2-digit', minute: '2-digit', hourCycle: 'h23'
+    }).formatToParts(new Date()).reduce((o, x) => { o[x.type] = x.value; return o; }, {});
+    return p.day + '/' + p.month + '/' + p.year + ' ' + p.hour + ':' + p.minute;
+}
+
+/* =========================================================
+   MONTAGEM DOS DADOS (chaves = cabeçalhos da planilha)
+   ========================================================= */
+function montarDados() {
+    const dados = {};
+    const set = (k, v) => { if (v !== undefined && v !== null && String(v).trim() !== '') dados[k] = String(v).trim(); };
+
+    set('Carimbo_Data_Hora', carimboDataHora());
+
+    // --- Parte 1
+    const sobrenome = val('lastname'), nome = val('firstname');
+    set('Sobrenome_Nome', (sobrenome + ' ' + nome).trim());
+    set('Sobrenome', sobrenome);
+    set('Nome', nome);
+    set('Data_Nascimento', val('birthdate'));
+    set('Genero', radioLbl('gender', 'gender'));
+    set('Estado_Civil', radioLbl('marital', 'maritalStatus'));
+    set('Status_Residencia', lbl('residence', val('residenceStatus')));
+    set('Geracao_Nikkei', lbl('nikkei', val('nikkeiOrigin')));
+    const sns = checkedLbls('sns', 'sns');
+    set('Celular', val('mobile'));
+    set('Email', val('email'));
+    set('SNS', sns);
+    set('Contatos', [val('mobile') && 'Tel: ' + val('mobile'), val('email') && 'E-mail: ' + val('email'), sns && 'SNS: ' + sns]
+        .filter(Boolean).join(' | '));
+    set('Endereco_Atual', val('currentAddress'));
+    set('Moradia_Apos_Contratacao', { yes: 'Precisa Alojamento', no: 'Pendulares' }[radioValue('useDormitory')]);
+
+    // --- Parte 2
+    set('Educacao_Final', radioLbl('education', 'education'));
+    set('Status_Educacao', radioLbl('eduStatus', 'eduStatus'));
+    set('Escolaridade_Obs', val('educationNotes'));
+    set('Profissao_Patria', val('originJob'));
+    set('Profissao_Patria_Anos', val('originJobYears'));
+
+    if (radioValue('hasJapanExp') === 'yes') {
+        const campos = { Entrada_Ano: '.e-in-year', Entrada_Mes: '.e-in-month', Saida_Ano: '.e-out-year', Saida_Mes: '.e-out-month',
+                         Empreiteira: '.e-agency', Fabrica: '.e-factory', Provincia: '.e-pref', Cidade: '.e-city',
+                         Categoria: '.e-category', Descricao: '.e-role', Motivo_Saida: '.e-reason' };
+        document.querySelectorAll('#experienceList .exp-item').forEach((item, i) => {
+            Object.keys(campos).forEach(k => set('Empresa' + (i + 1) + '_' + k, item.querySelector(campos[k]).value));
         });
     }
+
+    // --- Parte 3
+    if (radioValue('hasJapanFamily') === 'yes') {
+        const lista = Array.from(document.querySelectorAll('#familyList .fam-item')).map(item => {
+            const g = s => item.querySelector(s).value.trim();
+            const idade = g('.f-age');
+            const basico = [g('.f-name'), idade && (idade + ' anos'), g('.f-relation'), g('.f-nationality')].filter(Boolean);
+            if (basico.length === 0) return '';
+            return basico.concat(g('.f-living') ? ['Mora junto: ' + g('.f-living')] : []).join(', ');
+        }).filter(Boolean);
+        set('Parentes_No_Japao', lista.join(' | '));
+    }
+
+    const licencas = checkedLbls('license', 'license');
+    set('Habilitacao', licencas ? 'Sim' : 'Não');
+    set('Habilitacao_Tipo', licencas);
+    set('Qualificacao', checkedLbls('qualification', 'qualification', 'Outro'));
+    if (document.querySelector('input[name="qualification"][value="Outro"]:checked')) set('Qualificacao_Outras', val('qualOtherDetail'));
+    set('Transporte', radioLbl('commute', 'commute'));
+    set('Docs_Veiculo', checkedLbls('vehDocs', 'vehDocs'));
+
+    // --- Parte 4
+    set('Doenca_Cronica', checkedLbls('chronic', 'chronic'));
+    set('Alergia', checkedLbls('allergy', 'allergy'));
+    if (document.querySelector('input[name="allergy"][value="Alimentos"]:checked')) set('Alergia_Alimentos_Detalhe', val('allergyFoodDetail'));
+    const saude = radioValue('healthStatus');
+    if (saude === 'ok')        { set('Estado_Saude', 'Sem problemas');          set('Status_Medico', 'Não precisa tratamento'); }
+    if (saude === 'treatment') { set('Estado_Saude', 'Tenho lesão ou doença');  set('Status_Medico', 'Sob tratamento'); }
+    set('Ausencia_Necessaria', checkedLbls('absence', 'absenceNeed'));
+    set('Hospitalizado', val('hospitalized'));
+
+    const restr = radioValue('workRestrictions');
+    if (restr === 'none')  set('Trabalho_Impossivel_Opcao', 'Não tem');
+    if (restr === 'heavy') { set('Trabalho_Impossivel_Opcao', 'Tem'); set('Trabalho_Impossivel_Detalhe', 'Trabalho muscular pesado (重筋作業)'); }
+
+    const ot = radioValue('overtime'), horas = val('overtimeHours');
+    if (ot === 'none') set('Hora_Extra', 'Sem restrições (制限なし)');
+    if (ot === 'restricted') {
+        set('Hora_Extra', horas === '' ? 'Com restrições (制限あり)'
+            : (Number(horas) === 0 ? '0 - Não posso fazer horas extras' : 'Até ' + horas + ' hora(s)'));
+    }
+
+    const tFds = radioLbl('can', 'shiftWeekend'), tNoite = radioLbl('can', 'shiftNight'), tAlt = radioLbl('can', 'shiftAlternate');
+    set('Turno_Fim_de_Semana', tFds);
+    set('Turno_Noite', tNoite);
+    set('Turno_Alternado', tAlt);
+    set('Disponibilidade_Turno', [tFds && 'Fim de semana/feriado: ' + tFds, tNoite && 'Noturno: ' + tNoite, tAlt && 'Alternado: ' + tAlt]
+        .filter(Boolean).join(' | '));
+
+    set('Altura', val('bodyHeight'));
+    set('Peso', val('bodyWeight'));
+    set('Tamanho_Calca', val('bodyWaist'));
+    set('Tamanho_Camisa', val('bodyJacket'));
+    set('Tamanho_Sapato', val('bodyShoes'));
+    set('Lateralidade', radioLbl('hand', 'dominantHand'));
+    set('Tipo_Sanguineo', val('bloodType'));
+    const oculos = !!document.querySelector('input[name="visionAid"][value="glasses"]:checked');
+    const lentes = !!document.querySelector('input[name="visionAid"][value="contacts"]:checked');
+    set('Visao', oculos && lentes ? 'Uso óculos e lentes' : (oculos ? 'Uso óculos (眼鏡着用)' : (lentes ? 'Uso lentes (コンタクト着用)' : '')));
+    set('Visao_R', val('visaoR'));
+    set('Visao_L', val('visaoL'));
+
+    // --- Parte 5
+    set('Compreensao_Japones', lbl('level', val('langComprehension')));
+    set('Nivel_Japones_Falado', lbl('level', val('langConversation')));
+    set('Hiragana_Leitura', radioLbl('skill', 'hiraRead'));  set('Hiragana_Escrita', radioLbl('skill', 'hiraWrite'));
+    set('Katakana_Leitura', radioLbl('skill', 'kataRead'));  set('Katakana_Escrita', radioLbl('skill', 'kataWrite'));
+    set('Kanji_Leitura', radioLbl('skill', 'kanjiRead'));    set('Kanji_Escrita', radioLbl('skill', 'kanjiWrite'));
+
+    const fumo = radioValue('smoking');
+    if (fumo === 'no')  set('Tabagismo', 'Não Fumar (吸わない)');
+    if (fumo === 'yes') set('Tabagismo', 'Fumar (吸う)' + (val('smokeAmount') ? ' - ' + val('smokeAmount') + ' cigarros/dia' : ''));
+    const bebe = radioValue('drinking');
+    if (bebe === 'no')  set('Bebida_Alcoolica', 'Não Beba (飲まない)');
+    if (bebe === 'yes') set('Bebida_Alcoolica', 'Bebo (飲む)' + (val('drinkAmount') ? ' - ' + val('drinkAmount') + ' ml/dia' : ''));
+
+    // --- Parte 6
+    set('Situacao_Profissional', radioLbl('jobStatus', 'currentJobStatus'));
+    if (radioValue('currentJobStatus') === 'employed') set('Data_Saida_Prevista', val('leaveDate'));
+    const inicio = radioValue('startAvailability');
+    if (inicio === 'immediate')  set('Inicio_Disponibilidade', 'Início imediato');
+    if (inicio === 'after_days') { set('Inicio_Disponibilidade', 'Precisa tempo'); set('Inicio_Disponibilidade_Dias', val('startDaysAfter')); }
+    {
+        let como = checkedLbls('howKnown', 'howKnown');
+        if (como && document.querySelector('input[name="howKnown"][value="Introduction"]:checked') && val('introName'))
+            como = como.replace(M.howKnown.Introduction, M.howKnown.Introduction + ': ' + val('introName'));
+        set('Como_Conheceu_Goro', como);
+    }
+    const filhos = radioValue('hasChildren');
+    if (filhos === 'no')  set('Filhos_Moram_Junto', 'Não tem (居ない)');
+    if (filhos === 'yes') {
+        const kids = Array.from(document.querySelectorAll('#childList .child-item')).map(it => {
+            const n = it.querySelector('.c-name').value.trim(), a = it.querySelector('.c-age').value.trim();
+            return (n || '') + (a ? (n ? ' (' : '') + a + ' anos' + (n ? ')' : '') : '');
+        }).filter(Boolean);
+        set('Filhos_Moram_Junto', 'Tem (居る)' + (kids.length ? ' - ' + kids.join('; ') : ''));
+    }
+    set('Cuidado_Filhos', radioLbl('childcare', 'childcare'));
+    set('Almoco_Empresa', radioLbl('lunch', 'companyLunch'));
+    set('Ajuda_Mudanca', radioLbl('reloc', 'relocationHelp'));
+    set('Dinheiro_Inicial', radioLbl('money', 'initialMoney'));
+    set('Conta_Yucho', val('contaYucho'));
+    set('Seguro_Desemprego', val('seguroDesemprego'));
+    set('Seguro_Saude', val('seguroSaude'));
+    set('Contribuição_Nenkin', val('contribNenkin'));
+    set('Antecedentes_Criminais', radioLbl('criminal', 'criminalRecord'));
+    if (radioValue('criminalRecord') === 'yes') set('Antecedentes_Criminais_Detalhe', val('criminalDetails'));
+    set('Termos_Aceite', document.getElementById('declarationCheck').checked ? 'Sim' : '');
+
+    return dados;
+}
+
+/* =========================================================
+   ENVIO DO FORMULÁRIO (mesmo método do formulário antigo)
+   ========================================================= */
+const URL_WEBHOOK = "https://script.google.com/macros/s/AKfycbzApfxWE-jf-gvt6iSxRqBCT9f8lqZJFpuarYsXd4f9qGwuoeVC3fWFZTTXoIt4_Yv-/exec";
+let enviandoFormulario = false;
+
+function handleFormSubmit(event) {
+    event.preventDefault();
+    if (enviandoFormulario) return;
+
+    const statusDiv = document.getElementById('statusEnvio');
+    const btnSubmit = document.querySelector('button[type="submit"]');
+    function mostrarStatus(tipo, mensagem) {
+        statusDiv.className = 'status-msg ' + (tipo === 'ok' ? 'status-success' : (tipo === 'erro' ? 'status-error' : ''));
+        statusDiv.textContent = mensagem;
+        statusDiv.classList.remove('hidden');
+    }
+
+    const dados = montarDados();
+    const urlParams = new URLSearchParams();
+    Object.keys(dados).forEach(k => urlParams.set(k, dados[k]));
+
+    enviandoFormulario = true;
+    btnSubmit.disabled = true;
+    mostrarStatus('info', t('msg_sending'));
+
+    // no-cors + x-www-form-urlencoded: evita o bloqueio de CORS do Google Apps Script
+    fetch(URL_WEBHOOK, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: urlParams.toString()
+    })
+    .then(() => {
+        mostrarStatus('ok', t('msg_success'));
+        alert(t('msg_success'));
+        btnSubmit.disabled = false;
+        enviandoFormulario = false;
+    })
+    .catch(erro => {
+        console.error('Erro:', erro);
+        mostrarStatus('erro', t('msg_send_error'));
+        btnSubmit.disabled = false;
+        enviandoFormulario = false;
+    });
+}
+
+/* =========================================================
+   INICIALIZAÇÃO
+   ========================================================= */
+document.addEventListener('DOMContentLoaded', function () {
+    applyTranslations(document.getElementById('langSelector').value);
+    changeTheme(document.getElementById('themeSelector').value);
+    changeView(document.getElementById('viewSelector').value);
+});
+
 </script>
+</body>
+</html>
