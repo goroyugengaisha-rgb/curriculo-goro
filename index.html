@@ -1869,7 +1869,6 @@ function enviarParaPlanilha() {
     return fetch(URL_WEBHOOK, {
         method: 'POST',
         mode: 'no-cors',
-        keepalive: true,
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: urlParams.toString()
     }).then(() => { ultimoEnvio = assinatura; return true; })
