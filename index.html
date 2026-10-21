@@ -192,12 +192,137 @@
         .status-success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
         .status-error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
 
+
+        /* =====================================================
+           VISUAL v2 — somente tela (a impressão tem regras próprias)
+           ===================================================== */
+        @media screen {
+        :root {
+            --bg-color: #EEF1F5; --text-color: #1B2430; --card-bg: #FFFFFF; --border-color: #D6DDE7;
+            --accent-color: #1E3A5F; --required-color: #C1272D;
+            --muted: #5B6676; --primary: #1E3A5F; --primary-soft: #E6EDF7; --ok: #1F9D6B;
+            --field-bg: #F8FAFC; --shadow: 0 1px 2px rgba(20,33,61,.06), 0 8px 24px rgba(20,33,61,.06);
+        }
+        [data-theme="dark"] {
+            --bg-color: #0E131B; --text-color: #E6EAF0; --card-bg: #161D28; --border-color: #2A3445;
+            --accent-color: #7FA6D9; --required-color: #FF7B83;
+            --muted: #98A3B5; --primary: #7FA6D9; --primary-soft: #1F2C42; --ok: #4CC38A;
+            --field-bg: #0F1520; --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.35);
+        }
+        body { font-family: "Hiragino Sans","Noto Sans JP","Yu Gothic UI","Segoe UI",system-ui,-apple-system,Roboto,"Helvetica Neue",Arial,sans-serif;
+               font-size: 16px; line-height: 1.55; padding: 0 0 40px; background: var(--bg-color); color: var(--text-color); }
+        .container { padding: 0 16px; }
+
+        /* Barra superior fixa com progresso por parte */
+        .topbar { position: sticky; top: 0; z-index: 50; background: color-mix(in srgb, var(--card-bg) 92%, transparent);
+                  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid var(--border-color); }
+        .topbar-in { max-width: 1280px; margin: 0 auto; padding: 10px 16px 12px; }
+        .topbar-row { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
+        .brand { font-weight: 800; letter-spacing: .14em; color: var(--primary); font-size: .95rem; }
+        .step-now { flex: 1; min-width: 0; text-align: center; font-size: .85rem; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .pct { font-variant-numeric: tabular-nums; font-weight: 700; color: var(--primary); font-size: .95rem; min-width: 3.2em; text-align: right; }
+        .segs { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; }
+        .seg { position: relative; height: 8px; border-radius: 99px; background: var(--border-color); overflow: hidden; border: 0; padding: 0; cursor: pointer; }
+        .seg > i { position: absolute; inset: 0; background: var(--primary); transform-origin: left; transform: scaleX(0); transition: transform .15s linear; }
+        .seg.done > i { background: var(--ok); }
+        .seg:focus-visible { outline: 3px solid var(--primary); outline-offset: 2px; }
+
+        /* Capa */
+        .hero { max-width: 1280px; margin: 20px auto 22px; padding: 28px 26px 22px; border-radius: 20px;
+                background: var(--primary); color: #fff; box-shadow: var(--shadow); }
+        [data-theme="dark"] .hero { background: #1B2A44; color: #E6EAF0; }
+        .hero h1 { margin: 0 0 6px; font-size: clamp(1.5rem, 4.6vw, 2.3rem); line-height: 1.2; font-weight: 800; letter-spacing: .01em; }
+        .hero p { margin: 0; opacity: .85; font-size: 1.02rem; }
+        .hero .global-controls { background: transparent; border: 0; padding: 0; margin: 18px 0 0; gap: 10px 18px; justify-content: flex-start; }
+        .hero .control-group { gap: 8px; }
+        .hero .global-controls label { color: #fff; font-weight: 600; font-size: .88rem; opacity: .92; }
+        .hero .global-controls select { background: rgba(255,255,255,.14); color: #fff; border: 1px solid rgba(255,255,255,.35); border-radius: 10px; min-height: 40px; }
+        .hero .global-controls select option { color: #111; background: #fff; }
+
+        /* Cartões de seção */
+        .section-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 18px; box-shadow: var(--shadow);
+                        padding: 22px 20px; margin-bottom: 20px; scroll-margin-top: 84px; }
+        .section-title { font-size: 1.15rem; font-weight: 800; color: var(--text-color); border: 0; margin: 0 0 14px; padding: 2px 0 2px 14px;
+                         border-left: 5px solid var(--primary); line-height: 1.3; }
+        .form-group label { font-weight: 600; font-size: .95rem; }
+        .form-group > label:first-child { color: var(--text-color); }
+        .sep { border-top: 1px solid var(--border-color); }
+        .required::after { color: var(--required-color); }
+
+        /* Campos */
+        select, input[type="text"], input[type="tel"], input[type="email"], input[type="number"], input[type="date"], textarea {
+            font: inherit; font-size: 16px; min-height: 44px; padding: 9px 12px; border-radius: 10px; box-sizing: border-box;
+            border: 1.5px solid var(--border-color); background: var(--field-bg); color: var(--text-color);
+            transition: border-color .15s, box-shadow .15s; }
+        select:hover, input:hover { border-color: color-mix(in srgb, var(--primary) 45%, var(--border-color)); }
+        select:focus, input:focus, textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 4px color-mix(in srgb, var(--primary) 22%, transparent); }
+        input[type="radio"], input[type="checkbox"] { accent-color: var(--primary); width: 18px; height: 18px; flex: none; margin: 0; }
+        input[type="date"] { min-width: 170px; }
+
+        /* Opções de marcar viram botões selecionáveis */
+        body .section-card .form-group label:has(> input[type="radio"]),
+        body .section-card .form-group label:has(> input[type="checkbox"]):not(:has(.big-check)) {
+            display: inline-flex !important; align-items: center; gap: 9px; margin: 0 8px 8px 0 !important; padding: 9px 14px;
+            border: 1.5px solid var(--border-color); border-radius: 12px; background: var(--field-bg);
+            font-weight: 500; cursor: pointer; transition: background .12s, border-color .12s; vertical-align: top; }
+        body .section-card .form-group label:has(> input:checked) { background: var(--primary-soft); border-color: var(--primary); color: var(--text-color); }
+        body .section-card .form-group label:has(> input:focus-visible) { outline: 3px solid color-mix(in srgb, var(--primary) 40%, transparent); outline-offset: 1px; }
+        body .section-card .form-group div[style*="grid-template-columns"] > label { margin: 0 !important; }
+
+        /* Termo de aceite */
+        .big-check { width: 28px !important; height: 28px !important; }
+        #declarationCheck { accent-color: var(--ok); }
+        .consent-box { border: 2px solid var(--border-color) !important; border-radius: 16px !important; background: var(--card-bg) !important; box-shadow: var(--shadow); }
+        .consent-box:has(:checked) { border-color: var(--ok) !important; }
+
+        /* Blocos dinâmicos */
+        .dynamic-item { border: 1px solid var(--border-color); border-left: 5px solid var(--primary); border-radius: 14px; background: var(--field-bg);
+                        padding: 14px 16px 6px; margin-bottom: 14px; }
+        .dyn-title { color: var(--primary); font-weight: 800; }
+        .dyn-field label { color: var(--muted); font-weight: 600; font-size: .82rem; }
+        .skill-table th { color: var(--muted); font-size: .85rem; font-weight: 700; }
+        .skill-table tr { border-color: var(--border-color) !important; }
+
+        /* Botões */
+        .btn { border-radius: 12px; padding: 12px 22px; font-size: 1rem; font-weight: 700; min-height: 46px; transition: transform .1s, filter .15s; }
+        .btn:hover:not(:disabled) { filter: brightness(1.07); }
+        .btn:active:not(:disabled) { transform: translateY(1px); }
+        .btn:focus-visible { outline: 3px solid color-mix(in srgb, var(--primary) 45%, transparent); outline-offset: 2px; }
+        .btn-primary { background: var(--primary); color: #fff; }
+        [data-theme="dark"] .btn-primary { color: #0E131B; }
+        .btn-success { background: var(--ok); color: #fff; }
+        [data-theme="dark"] .btn-success { color: #08130E; }
+        .btn-secondary { background: transparent; color: var(--primary); border: 1.5px solid var(--primary); }
+        .btn-remove-item { min-height: 0; padding: 4px 10px; background: transparent; color: var(--required-color); border: 1px solid var(--required-color); }
+
+        .hint { color: var(--muted); }
+        [data-theme="dark"] .hint { color: var(--muted); }
+        #relocWarn { border-radius: 10px; }
+
+        /* Barra de ações fixa */
+        .actions-bar { position: sticky; bottom: 0; z-index: 40; display: flex; gap: 12px; flex-wrap: wrap; justify-content: flex-end;
+                       margin: 8px -16px 0; padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+                       background: color-mix(in srgb, var(--card-bg) 94%, transparent); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+                       border-top: 1px solid var(--border-color); }
+        .actions-bar .btn-success { flex: 1 1 220px; max-width: 360px; }
+        .actions-bar .btn-secondary { flex: 0 1 auto; }
+
+        @media (max-width: 600px) {
+            .hero { margin: 12px -4px 16px; padding: 22px 18px 18px; border-radius: 16px; }
+            .section-card { padding: 18px 14px; border-radius: 16px; }
+            .step-now { display: none; }
+            .topbar-row { margin-bottom: 6px; }
+            .actions-bar .btn { flex: 1 1 100%; max-width: none; }
+        }
+        @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+        }
+
         @media print {
             @page { size: A4; margin: 6mm; }
             :root, [data-theme="dark"], body { --bg-color:#fff; --text-color:#000; --card-bg:#fff; --border-color:#999; --accent-color:#1f4e79; }
             html, body { background:#fff !important; color:#000 !important; font-size: 7.4pt; line-height: 1.1; }
             body { padding: 0 !important; }
-            .global-controls, .btn, .hint, #statusMsg, .status-msg, .btn-remove-item, form > button, .form-actions { display: none !important; }
+            .global-controls, .topbar, .actions-bar, .btn, .hint, #statusMsg, .status-msg, .btn-remove-item, form > button, .form-actions { display: none !important; }
             .container, body .container { max-width: 100% !important; padding: 0 !important; margin: 0 !important; }
             h1 { font-size: 13pt; margin: 0 0 4px; }
             .section-card, body .section-card {
@@ -233,10 +358,24 @@
 </head>
 <body data-theme="light" class="view-auto">
 
+<header class="topbar" id="topbar">
+    <div class="topbar-in">
+        <div class="topbar-row">
+            <span class="brand">GORO</span>
+            <span class="step-now" id="stepNow"></span>
+            <span class="pct" id="pctNow">0%</span>
+        </div>
+        <div class="segs" id="segs" role="navigation" aria-label="Progress"></div>
+    </div>
+</header>
+
 <div class="container">
 
-    <!-- CONTROLES GLOBAIS -->
-    <div class="global-controls">
+    <!-- CAPA -->
+    <div class="hero">
+        <h1 data-translate="main_title">履歴書およびアンケート</h1>
+        <p data-translate="main_subtitle">Currículo e Questionário</p>
+        <div class="global-controls">
         <!-- Idiomas -->
         <div class="control-group">
             <label for="langSelector">🌐 Idioma / 言語:</label>
@@ -267,11 +406,6 @@
             </select>
         </div>
     </div>
-
-    <!-- CABEÇALHO DO FORMULÁRIO -->
-    <div style="text-align: center; margin-bottom: 25px;">
-        <h1 data-translate="main_title">履歴書およびアンケート</h1>
-        <p data-translate="main_subtitle">Currículo e Questionário</p>
     </div>
 
     <!-- O FORMULÁRIO COMEÇA AQUI -->
@@ -858,7 +992,7 @@
             <p class="hint" data-translate="note_reloc">* ※2 引越し補助依頼申請書(注意事項確認書)の提出が必要です。 / Você precisará enviar um formulário de solicitação de auxílio para mudança.</p>
             <p class="hint" style="font-weight: bold;" data-translate="note_disclaimer">Atenção: caso seja constatada alguma informação falsa neste currículo, sua oferta de emprego poderá ser rescindida. / 当履歴書の記載事項に虚偽の記載が認められた場合、入社を取り消すことがありますので、あらかじめご了承ください。</p>
 
-            <div class="form-group" style="margin-top: 25px; background-color: var(--card-bg); padding: 15px; border-radius: 6px; border: 1px solid var(--border-color);">
+            <div class="form-group consent-box" style="margin-top: 25px; padding: 16px;">
                 <label class="required" style="display: flex; align-items: flex-start; gap: 10px; cursor: pointer;">
                     <input type="checkbox" id="declarationCheck" class="big-check" required>
                     <span data-translate="declaration_text">Confirmo que as informações acima estão corretas. / 私は上記の記載内容に間違いないことを確認します。</span>
@@ -869,7 +1003,7 @@
         <div id="statusEnvio" class="hidden"></div>
 
         <!-- BOTÕES DE AÇÃO -->
-        <div style="display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 50px;">
+        <div class="actions-bar">
             <button type="button" class="btn btn-secondary" onclick="imprimirEEnviar()" data-translate="btn_print">Compartilhar / Imprimir / 共有・印刷</button>
             <button type="submit" class="btn btn-success" data-translate="btn_submit">Enviar Formulário / 提出する</button>
         </div>
@@ -883,7 +1017,7 @@
    ========================================================= */
 const translations = {
   ja: {
-    main_title: "履歴書およびアンケート", main_subtitle: "アンケート", fill_date: "記入日",
+    main_title: "履歴書およびアンケート", main_subtitle: "Currículo e Questionário / Resume and Questionnaire", fill_date: "記入日",
     part1_title: "①基本情報", label_lastname: "姓", label_firstname: "名", label_birthdate: "生年月日",
     label_gender: "性別", gender_male: "男", gender_female: "女",
     label_residence: "在留資格", select_default: "選択してください",
@@ -982,7 +1116,7 @@ const translations = {
     msg_success: "フォームが正常に記入されました。", msg_error: "必須項目を確認してください。"
   },
   pt: {
-    main_title: "Currículo e Questionário", main_subtitle: "Currículo e Questionário", fill_date: "Data de preenchimento",
+    main_title: "Currículo e Questionário", main_subtitle: "履歴書およびアンケート", fill_date: "Data de preenchimento",
     part1_title: "Parte 1: Informações Básicas / 基本情報", label_lastname: "Sobrenome / Nome da família (姓)", label_firstname: "Nome (名)",
     label_birthdate: "Data de Nascimento (生年月日)", label_gender: "Sexo (性別)", gender_male: "Homem / 男", gender_female: "Mulher / 女",
     label_residence: "Situação de residência (在留資格)", select_default: "Escolha... / 選択してください",
@@ -1093,7 +1227,7 @@ const translations = {
     msg_success: "Formulário enviado com sucesso!", msg_error: "Verifique os campos obrigatórios."
   },
   en: {
-    main_title: "Resume and Questionnaire", main_subtitle: "Resume and Questionnaire", fill_date: "Date of filling",
+    main_title: "Resume and Questionnaire", main_subtitle: "履歴書およびアンケート", fill_date: "Date of filling",
     part1_title: "Part 1: Basic Information", label_lastname: "Last name / Family name", label_firstname: "First name",
     label_birthdate: "Date of Birth", label_gender: "Gender", gender_male: "Male", gender_female: "Female",
     label_residence: "Residence status", select_default: "Please choose...",
@@ -1204,7 +1338,7 @@ const translations = {
     msg_success: "Form submitted successfully!", msg_error: "Please check the required fields."
   },
   tl: {
-    main_title: "Resume at Talatanungan", main_subtitle: "Resume at Talatanungan", fill_date: "Petsa ng pagsagot",
+    main_title: "Resume at Talatanungan", main_subtitle: "履歴書およびアンケート", fill_date: "Petsa ng pagsagot",
     part1_title: "Bahagi 1: Pangunahing Impormasyon", label_lastname: "Apelyido", label_firstname: "Pangalan",
     label_birthdate: "Petsa ng Kapanganakan", label_gender: "Kasarian", gender_male: "Lalaki", gender_female: "Babae",
     label_residence: "Katayuan sa paninirahan", select_default: "Pumili po...",
@@ -1781,6 +1915,49 @@ document.addEventListener('DOMContentLoaded', function () {
     changeView(document.getElementById('viewSelector').value);
 });
 
+
+/* =========================================================
+   BARRA DE PROGRESSO (uma faixa por parte do formulário)
+   ========================================================= */
+(function () {
+    const cards = Array.from(document.querySelectorAll('.section-card'));
+    const segsEl = document.getElementById('segs');
+    const segs = cards.map((card, i) => {
+        const b = document.createElement('button');
+        b.type = 'button'; b.className = 'seg'; b.setAttribute('aria-label', String(i + 1));
+        b.innerHTML = '<i></i>';
+        b.onclick = () => card.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
+        segsEl.appendChild(b);
+        return b;
+    });
+    segsEl.style.gridTemplateColumns = 'repeat(' + cards.length + ', 1fr)';
+    let tick = false;
+    function atualizar() {
+        tick = false;
+        const ref = window.innerHeight * 0.55;
+        let soma = 0, total = 0, atual = 0;
+        const fim = (window.innerHeight + window.scrollY) >= document.documentElement.scrollHeight - 4;
+        cards.forEach((card, i) => {
+            const r = card.getBoundingClientRect();
+            let f = Math.min(1, Math.max(0, (ref - r.top) / r.height));
+            if (fim) f = 1;
+            segs[i].firstChild.style.transform = 'scaleX(' + f + ')';
+            segs[i].classList.toggle('done', f >= 1);
+            soma += f * r.height; total += r.height;
+            if (r.top <= ref) atual = i;
+        });
+        document.getElementById('pctNow').textContent = Math.round(total ? (soma / total) * 100 : 0) + '%';
+        const h = cards[atual] && cards[atual].querySelector('.section-title');
+        document.getElementById('stepNow').textContent = h ? h.textContent : '';
+    }
+    function pedir() { if (!tick) { tick = true; requestAnimationFrame(atualizar); } }
+    window.addEventListener('scroll', pedir, { passive: true });
+    window.addEventListener('resize', pedir);
+    document.addEventListener('DOMContentLoaded', pedir);
+    window.addEventListener('load', pedir);
+    document.getElementById('langSelector').addEventListener('change', () => setTimeout(pedir, 0));
+    new MutationObserver(pedir).observe(document.getElementById('multiLangForm'), { subtree: true, childList: true, attributes: true, attributeFilter: ['class'] });
+})();
 </script>
 </body>
 </html>
