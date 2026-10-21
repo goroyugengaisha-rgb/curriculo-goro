@@ -1956,4 +1956,11 @@ document.addEventListener('DOMContentLoaded', function () {
     function pedir() { if (!tick) { tick = true; requestAnimationFrame(atualizar); } }
     window.addEventListener('scroll', pedir, { passive: true });
     window.addEventListener('resize', pedir);
-    document.addEventListener('DOMCon
+    document.addEventListener('DOMContentLoaded', pedir);
+    window.addEventListener('load', pedir);
+    document.getElementById('langSelector').addEventListener('change', () => setTimeout(pedir, 0));
+    new MutationObserver(pedir).observe(document.getElementById('multiLangForm'), { subtree: true, childList: true, attributes: true, attributeFilter: ['class'] });
+})();
+</script>
+</body>
+</html>
