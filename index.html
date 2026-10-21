@@ -275,6 +275,7 @@
         .big-check { width: 28px !important; height: 28px !important; }
         #declarationCheck { accent-color: var(--ok); }
         .consent-box { border: 2px solid var(--border-color) !important; border-radius: 16px !important; background: var(--card-bg) !important; box-shadow: var(--shadow); }
+        .consent-box.consent-error { border-color: var(--required-color) !important; box-shadow: 0 0 0 4px color-mix(in srgb, var(--required-color) 25%, transparent); }
         .consent-box:has(:checked) { border-color: var(--ok) !important; }
 
         /* Blocos dinâmicos */
@@ -996,7 +997,7 @@
 
             <div class="form-group consent-box" style="margin-top: 25px; padding: 16px;">
                 <label class="required" style="display: flex; align-items: flex-start; gap: 10px; cursor: pointer;">
-                    <input type="checkbox" id="declarationCheck" class="big-check" required>
+                    <input type="checkbox" id="declarationCheck" class="big-check">
                     <span data-translate="declaration_text">Confirmo que as informações acima estão corretas. / 私は上記の記載内容に間違いないことを確認します。</span>
                 </label>
             </div>
@@ -1057,6 +1058,7 @@ const translations = {
     label_start_date: "いつから就労できますか?", start_immediate: "すぐに可能", start_after: "日後", start_days_unit: "日後",
     label_how_known: "きっかけ", known_flyer: "店舗のチラシ", known_intro: "知人の紹介",
     label_children: "同居する子供", child_no: "居ない", child_yes: "居る", child_age_unit: "才",
+    consent_required: "⚠ 内容に間違いがないことを確認し、チェックを入れてください。",
     veh_label: "所持している書類(お持ちのものにチェック)", veh_shaken: "車検証 (Shakken)", veh_jibai: "自賠責保険 (Jibaiseki hoken)", veh_nini: "任意保険 (Nin'i hoken)",
     intro_name_ph: "紹介してくれた方のお名前", btn_add_child: "子供を追加", child_title: "お子様 {n}", child_name: "名前", child_age: "年齢",
     reloc_warn: "⚠ 費用が発生します。派遣会社に引越しの規約(利用条件)をご請求ください。",
@@ -1167,6 +1169,7 @@ const translations = {
     label_start_date: "㉖ Data de início (いつから就労できますか?)", start_immediate: "Imediatamente / すぐに可能", start_after: "Após", start_days_unit: "dias (日後)",
     label_how_known: "㉗ Como conheceu a nossa empresa? (きっかけ)", known_flyer: "Folheto da loja / 店舗のチラシ", known_intro: "Indicação de conhecido / 知人の紹介",
     label_children: "㉘ Filhos que moram junto? (同居する子供)", child_no: "Não tem / 居ない", child_yes: "Tem / 居る", child_age_unit: "anos (才)",
+    consent_required: "⚠ Marque a caixa para confirmar que as informações estão corretas. / 内容に間違いがないことを確認し、チェックを入れてください。",
     veh_label: "Documentos que você possui / 所持している書類 (marque)", veh_shaken: "Shakken (inspeção veicular) / 車検証", veh_jibai: "Jibaiseki hoken (seguro obrigatório) / 自賠責保険", veh_nini: "Nin'i hoken (seguro voluntário) / 任意保険",
     intro_name_ph: "Nome de quem indicou / 紹介者の名前", btn_add_child: "Adicionar filho / 子供を追加", child_title: "Filho(a) {n}", child_name: "Nome", child_age: "Idade",
     reloc_warn: "⚠ Haverá taxas. Solicite à sua empreiteira os termos de mudança. / 費用が発生します。派遣会社に引越しの規約をご請求ください。",
@@ -1278,6 +1281,7 @@ const translations = {
     label_start_date: "㉖ Start date (when can you start working?)", start_immediate: "Immediately", start_after: "After", start_days_unit: "days",
     label_how_known: "㉗ How did you learn about our company?", known_flyer: "Store flyer", known_intro: "Referral from an acquaintance",
     label_children: "㉘ Children living with you?", child_no: "None", child_yes: "Yes", child_age_unit: "years old",
+    consent_required: "⚠ Please tick the box to confirm that the information is correct.",
     veh_label: "Documents you have (check all that apply)", veh_shaken: "Shakken (vehicle inspection)", veh_jibai: "Jibaiseki hoken (compulsory insurance)", veh_nini: "Nin'i hoken (voluntary insurance)",
     intro_name_ph: "Name of the person who referred you", btn_add_child: "Add child", child_title: "Child {n}", child_name: "Name", child_age: "Age",
     reloc_warn: "⚠ Fees will apply. Please ask your staffing agency for the relocation terms.",
@@ -1389,6 +1393,7 @@ const translations = {
     label_start_date: "㉖ Petsa ng pagsisimula (kailan ka pwedeng magsimula?)", start_immediate: "Agad-agad", start_after: "Pagkatapos ng", start_days_unit: "araw",
     label_how_known: "㉗ Paano mo nalaman ang kompanya namin?", known_flyer: "Flyer ng tindahan", known_intro: "Rekomendasyon ng kakilala",
     label_children: "㉘ May mga anak na kasama sa bahay?", child_no: "Wala", child_yes: "Mayroon", child_age_unit: "taong gulang",
+    consent_required: "⚠ Lagyan ng tsek ang kahon para kumpirmahin na tama ang impormasyon.",
     veh_label: "Mga dokumentong mayroon ka (lagyan ng tsek)", veh_shaken: "Shakken (inspeksyon ng sasakyan)", veh_jibai: "Jibaiseki hoken (sapilitang insurance)", veh_nini: "Nin'i hoken (boluntaryong insurance)",
     intro_name_ph: "Pangalan ng nag-refer sa iyo", btn_add_child: "Magdagdag ng anak", child_title: "Anak {n}", child_name: "Pangalan", child_age: "Edad",
     reloc_warn: "⚠ May babayaran na bayarin. Hingin sa iyong staffing agency ang mga tuntunin sa paglipat.",
@@ -1849,7 +1854,8 @@ function montarDados() {
    ========================================================= */
 const URL_WEBHOOK = "https://script.google.com/macros/s/AKfycbz8bboPBk880yfL3zTjgBh0gZrEC0gSpQqnIoyBgme0XAODLcBXo971i8N-DntqcwxP/exec";
 let enviandoFormulario = false;
-let ultimoEnvio = '';   // evita gravar a mesma ficha duas vezes (ex.: imprimir e depois enviar)
+let ultimoEnvio = '';
+let ultimoEnvioEm = 0;   // evita gravar a mesma ficha duas vezes (ex.: imprimir e depois enviar)
 
 function mostrarStatusEnvio(tipo, mensagem) {
     const statusDiv = document.getElementById('statusEnvio');
@@ -1859,12 +1865,13 @@ function mostrarStatusEnvio(tipo, mensagem) {
 }
 
 // Envia os dados para a planilha. Retorna uma Promise (true = enviado, false = erro).
-function enviarParaPlanilha() {
+// janelaMs: tempo em que um envio idêntico é ignorado (evita linha duplicada por toque duplo)
+function enviarParaPlanilha(janelaMs) {
     const dados = montarDados();
     const urlParams = new URLSearchParams();
     Object.keys(dados).forEach(k => { if (k !== 'Carimbo_Data_Hora') urlParams.set(k, dados[k]); });
     const assinatura = urlParams.toString();
-    if (assinatura === ultimoEnvio) return Promise.resolve(true);   // já enviado igual
+    if (assinatura === ultimoEnvio && (Date.now() - ultimoEnvioEm) < janelaMs) return Promise.resolve(true);   // já enviado igual
     urlParams.set('Carimbo_Data_Hora', dados['Carimbo_Data_Hora'] || carimboDataHora());
 
     // no-cors + x-www-form-urlencoded: evita o bloqueio de CORS do Google Apps Script
@@ -1873,18 +1880,38 @@ function enviarParaPlanilha() {
         mode: 'no-cors',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: urlParams.toString()
-    }).then(() => { ultimoEnvio = assinatura; return true; })
+    }).then(() => { ultimoEnvio = assinatura; ultimoEnvioEm = Date.now(); return true; })
       .catch(erro => { console.error('Erro:', erro); return false; });
 }
 
+// O termo de aceite é validado aqui (e não pelo navegador) para o aviso sempre aparecer, inclusive no celular
+function validarAceite() {
+    const chk = document.getElementById('declarationCheck');
+    const box = chk.closest('.consent-box');
+    if (chk.checked) { box.classList.remove('consent-error'); return true; }
+    box.classList.add('consent-error');
+    mostrarStatusEnvio('erro', t('consent_required'));
+    box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    chk.focus({ preventScroll: true });
+    return false;
+}
+document.addEventListener('change', e => {
+    if (e.target && e.target.id === 'declarationCheck' && e.target.checked) {
+        e.target.closest('.consent-box').classList.remove('consent-error');
+        const st = document.getElementById('statusEnvio');
+        if (st.classList.contains('status-error')) st.classList.add('hidden');
+    }
+});
+
 function handleFormSubmit(event) {
     event.preventDefault();
+    if (!validarAceite()) return;
     if (enviandoFormulario) return;
     const btnSubmit = document.querySelector('button[type="submit"]');
     enviandoFormulario = true;
     btnSubmit.disabled = true;
     mostrarStatusEnvio('info', t('msg_sending'));
-    enviarParaPlanilha().then(ok => {
+    enviarParaPlanilha(30000).then(ok => {
         if (ok) { mostrarStatusEnvio('ok', t('msg_success')); alert(t('msg_success')); }
         else    { mostrarStatusEnvio('erro', t('msg_send_error')); }
         btnSubmit.disabled = false;
@@ -1897,11 +1924,12 @@ function handleFormSubmit(event) {
 function imprimirEEnviar() {
     const form = document.getElementById('multiLangForm');
     if (!form.reportValidity()) return;     // mostra o que falta preencher
+    if (!validarAceite()) return;
     if (enviandoFormulario) return;
     enviandoFormulario = true;
     mostrarStatusEnvio('info', t('msg_sending'));
     const limite = new Promise(r => setTimeout(() => r('tempo'), 6000));   // não trava se a rede demorar
-    Promise.race([enviarParaPlanilha(), limite]).then(res => {
+    Promise.race([enviarParaPlanilha(Infinity), limite]).then(res => {
         if (res === true)       mostrarStatusEnvio('ok', t('msg_success'));
         else if (res === false) mostrarStatusEnvio('erro', t('msg_send_error'));
         enviandoFormulario = false;
