@@ -254,6 +254,8 @@
             font: inherit; font-size: 16px; min-height: 44px; padding: 9px 12px; border-radius: 10px; box-sizing: border-box;
             border: 1.5px solid var(--border-color); background: var(--field-bg); color: var(--text-color);
             transition: border-color .15s, box-shadow .15s; }
+        /* campo inválido não pode ficar escondido atrás das barras fixas */
+        input, select, textarea { scroll-margin-top: 110px; scroll-margin-bottom: 130px; }
         select:hover, input:hover { border-color: color-mix(in srgb, var(--primary) 45%, var(--border-color)); }
         select:focus, input:focus, textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 4px color-mix(in srgb, var(--primary) 22%, transparent); }
         input[type="radio"], input[type="checkbox"] { accent-color: var(--primary); width: 18px; height: 18px; flex: none; margin: 0; }
@@ -1890,19 +1892,21 @@ function handleFormSubmit(event) {
     });
 }
 
-// Botão Imprimir: valida o formulário, grava na planilha e abre a impressão
+// Botão Compartilhar/Imprimir: valida, grava na planilha, e só depois abre a impressão
+// (a janela de impressão congela a página; por isso o envio precisa terminar antes)
 function imprimirEEnviar() {
     const form = document.getElementById('multiLangForm');
     if (!form.reportValidity()) return;     // mostra o que falta preencher
     if (enviandoFormulario) return;
     enviandoFormulario = true;
     mostrarStatusEnvio('info', t('msg_sending'));
-    const envio = enviarParaPlanilha();
-    envio.then(ok => {
-        mostrarStatusEnvio(ok ? 'ok' : 'erro', ok ? t('msg_success') : t('msg_send_error'));
+    const limite = new Promise(r => setTimeout(() => r('tempo'), 6000));   // não trava se a rede demorar
+    Promise.race([enviarParaPlanilha(), limite]).then(res => {
+        if (res === true)       mostrarStatusEnvio('ok', t('msg_success'));
+        else if (res === false) mostrarStatusEnvio('erro', t('msg_send_error'));
         enviandoFormulario = false;
+        window.print();
     });
-    window.print();   // chamado direto no clique (celulares bloqueiam impressão fora do toque)
 }
 
 /* =========================================================
@@ -1952,11 +1956,4 @@ document.addEventListener('DOMContentLoaded', function () {
     function pedir() { if (!tick) { tick = true; requestAnimationFrame(atualizar); } }
     window.addEventListener('scroll', pedir, { passive: true });
     window.addEventListener('resize', pedir);
-    document.addEventListener('DOMContentLoaded', pedir);
-    window.addEventListener('load', pedir);
-    document.getElementById('langSelector').addEventListener('change', () => setTimeout(pedir, 0));
-    new MutationObserver(pedir).observe(document.getElementById('multiLangForm'), { subtree: true, childList: true, attributes: true, attributeFilter: ['class'] });
-})();
-</script>
-</body>
-</html>
+    document.addEventListener('DOMCon
