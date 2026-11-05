@@ -302,12 +302,29 @@
         [data-theme="dark"] .hint { color: var(--muted); }
         #relocWarn { border-radius: 10px; }
 
+        /* Aviso de envio */
+        .modal { position: fixed; inset: 0; z-index: 100; display: flex; align-items: center; justify-content: center; padding: 20px;
+                 background: rgba(10,18,30,.55); }
+        .modal-box { width: 100%; max-width: 440px; background: var(--card-bg); color: var(--text-color); border-radius: 20px; padding: 28px 24px 22px;
+                     text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,.35); }
+        .modal-icon { width: 68px; height: 68px; margin: 0 auto 14px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+                      font-size: 34px; font-weight: 800; color: #fff; background: var(--ok); }
+        .modal-icon.erro { background: var(--required-color); }
+        .modal-icon.incerto { background: #E08A00; }
+        .modal-icon.espera { background: transparent; border: 6px solid var(--border-color); border-top-color: var(--primary); animation: girar .9s linear infinite; font-size: 0; }
+        @keyframes girar { to { transform: rotate(360deg); } }
+        .modal-box h2 { margin: 0 0 8px; font-size: 1.35rem; }
+        .modal-box p { margin: 0 0 14px; color: var(--muted); }
+        .modal-proto { margin: 0 0 16px; padding: 10px 12px; border-radius: 12px; background: var(--primary-soft); font-weight: 700; font-variant-numeric: tabular-nums; }
+        .modal-actions { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+        .modal-actions .btn { flex: 1 1 140px; }
+
         /* Barra de ações fixa */
         .actions-bar { position: sticky; bottom: 0; z-index: 40; display: flex; gap: 12px; flex-wrap: wrap; justify-content: flex-end;
                        margin: 8px -16px 0; padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
                        background: color-mix(in srgb, var(--card-bg) 94%, transparent); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
                        border-top: 1px solid var(--border-color); }
-        .actions-bar .btn-success { flex: 1 1 220px; max-width: 360px; }
+        .actions-bar .btn-success { flex: 1 1 260px; max-width: 420px; min-height: 52px; font-size: 1.05rem; }
         .actions-bar .btn-secondary { flex: 0 1 auto; }
 
         @media (max-width: 600px) {
@@ -325,7 +342,7 @@
             :root, [data-theme="dark"], body { --bg-color:#fff; --text-color:#000; --card-bg:#fff; --border-color:#999; --accent-color:#1f4e79; }
             html, body { background:#fff !important; color:#000 !important; font-size: 7.4pt; line-height: 1.1; }
             body { padding: 0 !important; }
-            .global-controls, .topbar, .actions-bar, .btn, .hint, #statusMsg, .status-msg, .btn-remove-item, form > button, .form-actions { display: none !important; }
+            .global-controls, .topbar, .actions-bar, .modal, .btn, .hint, #statusMsg, .status-msg, .btn-remove-item, form > button, .form-actions { display: none !important; }
             .container, body .container { max-width: 100% !important; padding: 0 !important; margin: 0 !important; }
             h1 { font-size: 13pt; margin: 0 0 4px; }
             .section-card, body .section-card {
@@ -334,18 +351,24 @@
                 padding: 3px 0 0 !important; margin: 0 0 4px !important; background:#fff !important;
             }
             .section-card > .section-title, .section-card > .wide { grid-column: 1 / -1 !important; }
-            .section-title { font-size: 9.5pt; margin: 0 0 2px; padding: 0 0 2px; border-bottom: 1px solid #1f4e79; }
+            .section-title { font-size: 9.5pt; margin: 0 0 2px; padding: 0 0 2px; border-bottom: 1px solid #1f4e79; break-after: avoid; page-break-after: avoid; }
             .section-card > .form-group, body .section-card > .form-group { margin: 0 0 2px !important; }
             .section-card .sep { border-top: none !important; padding-top: 0 !important; }
             .form-group label { margin-bottom: 1px; }
             .form-group label:has(> input[type="radio"], > input[type="checkbox"]) { display: inline-block !important; margin-right: 8px; }
             h4 { margin: 2px 0; font-size: 9pt; }
             select, input[type="text"], input[type="tel"], input[type="email"], input[type="number"], input[type="date"], textarea {
-                padding: 0 3px !important; font-size: 7.4pt; background:#fff !important; color:#000 !important;
+                padding: 0 3px !important; font-size: 7.4pt; background:#fff !important; color:#0B3D91 !important; font-weight: 600;
                 border: none !important; border-bottom: 1px solid #777 !important; border-radius: 0 !important;
                 -webkit-appearance: none; appearance: none;
             }
             input[type="radio"], input[type="checkbox"] { width: 9px; height: 9px; margin: 0 2px 0 0; vertical-align: middle; }
+            /* respostas do candidato em azul escuro, com cor garantida no PDF */
+            * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            input[type="radio"], input[type="checkbox"] { accent-color: #0B3D91; }
+            .form-group label:has(> input:checked) { color: #0B3D91 !important; font-weight: 800 !important; }
+            .skill-table input:checked { accent-color: #0B3D91; }
+            select { color: #0B3D91 !important; }
             .big-check { width: 11px !important; height: 11px !important; min-width: 0 !important; }
             .dynamic-item { margin-bottom: 3px; padding: 2px 0 0 6px; background: none; break-inside: avoid; }
             .dyn-title { margin-bottom: 2px; }
@@ -1007,12 +1030,25 @@
 
         <!-- BOTÕES DE AÇÃO -->
         <div class="actions-bar">
-            <button type="button" class="btn btn-secondary" onclick="imprimirEEnviar()" data-translate="btn_print">Compartilhar / Imprimir / 共有・印刷</button>
-            <button type="submit" class="btn btn-success" data-translate="btn_submit">Enviar Formulário / 提出する</button>
+            <button type="button" class="btn btn-success" id="btnEnviar" onclick="imprimirEEnviar()" data-translate="btn_print">Compartilhar / Enviar / 共有・送信</button>
         </div>
 
     </form>
 </div> <!-- Fim do Container Principal -->
+
+<div id="envioModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="envioTitulo">
+    <div class="modal-box">
+        <div id="envioIcone" class="modal-icon"></div>
+        <h2 id="envioTitulo"></h2>
+        <p id="envioTexto"></p>
+        <div id="envioProtocolo" class="modal-proto hidden"></div>
+        <div class="modal-actions">
+            <button type="button" class="btn btn-secondary hidden" id="envioBtnRetry" onclick="reenviar()" data-translate="btn_retry">Tentar novamente</button>
+            <button type="button" class="btn btn-secondary hidden" id="envioBtnPrint" onclick="window.print()" data-translate="btn_print_again">Imprimir</button>
+            <button type="button" class="btn btn-success" id="envioBtnClose" onclick="fecharEnvio()" data-translate="btn_close">Fechar</button>
+        </div>
+    </div>
+</div>
 
 <script>
 /* =========================================================
@@ -1072,7 +1108,7 @@ const translations = {
     label_criminal_specify: "具体的な内容をご記入ください。",
     note_dorm: "※1 社員寮利用申請書(注意事項確認書)の提出が必要です。", note_reloc: "※2 引越し補助依頼申請書(注意事項確認書)の提出が必要です。",
     note_disclaimer: "当履歴書の記載事項に虚偽の記載が認められた場合、入社を取り消すことがありますので、あらかじめご了承ください。",
-    declaration_text: "私は上記の記載内容に間違いないことを確認します。", btn_print: "共有 / 印刷する", btn_submit: "提出する",
+    declaration_text: "私は上記の記載内容に間違いないことを確認します。", btn_print: "共有 / 送信する", btn_submit: "提出する",
     label_marital: "婚姻状況",
     mar_single: "独身",
     mar_married: "既婚",
@@ -1115,6 +1151,10 @@ const translations = {
     fam_yes: "はい",
     fam_no: "いいえ",
     max_items: "最大5件までです。",
+    send_title_ok: "送信が完了しました", send_text_ok: "ご入力ありがとうございました。内容を受け付けました。",
+    send_title_unsure: "送信しました", send_text_unsure: "送信しましたが、受信を自動で確認できませんでした。念のためGOROにご確認ください。",
+    send_title_err: "送信できませんでした", send_text_err: "通信状況を確認して、もう一度お試しください。入力内容はそのまま残っています。",
+    btn_close: "閉じる", btn_retry: "再送信", btn_print_again: "印刷・PDF", send_protocol: "受付日時",
     msg_sending: "送信中です。しばらくお待ちください…",
     msg_send_error: "送信に失敗しました。もう一度お試しください。",
     msg_success: "フォームが正常に記入されました。", msg_error: "必須項目を確認してください。"
@@ -1184,7 +1224,7 @@ const translations = {
     note_dorm: "* ※1 社員寮利用申請書(注意事項確認書)の提出が必要です。 / É necessário preencher um formulário de solicitação para uso do alojamento de funcionários.",
     note_reloc: "* ※2 引越し補助依頼申請書(注意事項確認書)の提出が必要です。 / Você precisará enviar um formulário de solicitação de auxílio para mudança.",
     note_disclaimer: "Atenção: caso seja constatada alguma informação falsa neste currículo, sua oferta de emprego poderá ser rescindida. / 当履歴書の記載事項に虚偽の記載が認められた場合、入社を取り消すことがありますので、あらかじめご了承ください。",
-    declaration_text: "Confirmo que as informações acima estão corretas. / 私は上記の記載内容に間違いないことを確認します。", btn_print: "Compartilhar / Imprimir / 共有・印刷", btn_submit: "Enviar Formulário / 提出する",
+    declaration_text: "Confirmo que as informações acima estão corretas. / 私は上記の記載内容に間違いないことを確認します。", btn_print: "Compartilhar / Enviar / 共有・送信", btn_submit: "Enviar Formulário / 提出する",
     label_marital: "Estado Civil (婚姻状況)",
     mar_single: "Solteiro(a) / 独身",
     mar_married: "Casado(a) / 既婚",
@@ -1227,6 +1267,10 @@ const translations = {
     fam_yes: "Sim / はい",
     fam_no: "Não / いいえ",
     max_items: "Máximo de 5 itens. / 最大5件までです。",
+    send_title_ok: "Currículo enviado!", send_text_ok: "Recebemos as suas informações. Obrigado! / ご入力ありがとうございました。",
+    send_title_unsure: "Dados enviados", send_text_unsure: "Seus dados foram enviados, mas não foi possível confirmar o recebimento automaticamente. Fale com a GORO para confirmar. / 受信を自動で確認できませんでした。GOROにご確認ください。",
+    send_title_err: "Não foi possível enviar", send_text_err: "Verifique a conexão e tente novamente. Seus dados continuam preenchidos. / 通信を確認して、もう一度お試しください。",
+    btn_close: "Fechar", btn_retry: "Tentar novamente", btn_print_again: "Imprimir / PDF", send_protocol: "Comprovante / 受付日時",
     msg_sending: "Enviando os dados, por favor aguarde... / 送信中…",
     msg_send_error: "Erro ao enviar os dados. Tente novamente. / 送信に失敗しました。",
     msg_success: "Formulário enviado com sucesso!", msg_error: "Verifique os campos obrigatórios."
@@ -1296,7 +1340,7 @@ const translations = {
     note_dorm: "* ※1 You will need to submit a dormitory use application form (terms and conditions confirmation).",
     note_reloc: "* ※2 You will need to submit a relocation assistance application form (terms and conditions confirmation).",
     note_disclaimer: "Notice: if any false information is found in this resume, your job offer may be withdrawn.",
-    declaration_text: "I confirm that the information above is correct.", btn_print: "Share / Print", btn_submit: "Submit Form",
+    declaration_text: "I confirm that the information above is correct.", btn_print: "Share / Submit", btn_submit: "Submit Form",
     label_marital: "Marital status",
     mar_single: "Single",
     mar_married: "Married",
@@ -1339,6 +1383,10 @@ const translations = {
     fam_yes: "Yes",
     fam_no: "No",
     max_items: "Maximum of 5 entries.",
+    send_title_ok: "Application sent!", send_text_ok: "We received your information. Thank you!",
+    send_title_unsure: "Data sent", send_text_unsure: "Your data was sent, but we could not confirm receipt automatically. Please contact GORO to confirm.",
+    send_title_err: "Could not send", send_text_err: "Check your connection and try again. Your answers are still filled in.",
+    btn_close: "Close", btn_retry: "Try again", btn_print_again: "Print / Save PDF", send_protocol: "Receipt",
     msg_sending: "Sending, please wait...",
     msg_send_error: "Failed to send the data. Please try again.",
     msg_success: "Form submitted successfully!", msg_error: "Please check the required fields."
@@ -1408,7 +1456,7 @@ const translations = {
     note_dorm: "* ※1 Kailangan mong magsumite ng application form para sa paggamit ng dormitoryo.",
     note_reloc: "* ※2 Kailangan mong magsumite ng application form para sa tulong sa paglipat.",
     note_disclaimer: "Paalala: kung may matuklasang maling impormasyon sa resume na ito, maaaring kanselahin ang alok ng trabaho.",
-    declaration_text: "Kinukumpirma ko na tama ang impormasyong nasa itaas.", btn_print: "I-share / I-print", btn_submit: "Isumite ang Form",
+    declaration_text: "Kinukumpirma ko na tama ang impormasyong nasa itaas.", btn_print: "I-share / Isumite", btn_submit: "Isumite ang Form",
     label_marital: "Katayuang sibil",
     mar_single: "Walang asawa",
     mar_married: "May asawa",
@@ -1451,6 +1499,10 @@ const translations = {
     fam_yes: "Oo",
     fam_no: "Hindi",
     max_items: "Hanggang 5 lamang.",
+    send_title_ok: "Naipadala na!", send_text_ok: "Natanggap namin ang iyong impormasyon. Salamat!",
+    send_title_unsure: "Naipadala ang data", send_text_unsure: "Naipadala ang iyong data, pero hindi namin awtomatikong makumpirma ang pagtanggap. Makipag-ugnayan sa GORO para makumpirma.",
+    send_title_err: "Hindi naipadala", send_text_err: "Tingnan ang koneksyon at subukang muli. Nakapuno pa rin ang iyong mga sagot.",
+    btn_close: "Isara", btn_retry: "Subukang muli", btn_print_again: "I-print / I-save bilang PDF", send_protocol: "Resibo",
     msg_sending: "Ipinapadala, mangyaring maghintay...",
     msg_send_error: "Nabigo ang pagpapadala. Pakisubukang muli.",
     msg_success: "Matagumpay na naisumite ang form!", msg_error: "Pakitingnan ang mga kinakailangang field."
@@ -1855,7 +1907,6 @@ function montarDados() {
 const URL_WEBHOOK = "https://script.google.com/macros/s/AKfycbz8bboPBk880yfL3zTjgBh0gZrEC0gSpQqnIoyBgme0XAODLcBXo971i8N-DntqcwxP/exec";
 let enviandoFormulario = false;
 let ultimoEnvio = '';
-let ultimoEnvioEm = 0;   // evita gravar a mesma ficha duas vezes (ex.: imprimir e depois enviar)
 
 function mostrarStatusEnvio(tipo, mensagem) {
     const statusDiv = document.getElementById('statusEnvio');
@@ -1864,25 +1915,71 @@ function mostrarStatusEnvio(tipo, mensagem) {
     statusDiv.classList.remove('hidden');
 }
 
-// Envia os dados para a planilha. Retorna uma Promise (true = enviado, false = erro).
-// janelaMs: tempo em que um envio idêntico é ignorado (evita linha duplicada por toque duplo)
-function enviarParaPlanilha(janelaMs) {
+let carimboEnvio = '';       // mesmo carimbo em novas tentativas da mesma ficha (o script ignora linha repetida)
+let assinaturaEnvio = '';
+let resultadoEnvio = null;   // { estado, quando }
+
+// Envia os dados e LÊ a resposta do script. Retorna 'ok' | 'incerto' | 'erro'.
+// 'incerto' = o envio saiu, mas o navegador não deixou ler a resposta (bloqueio de CORS).
+function enviarParaPlanilha(forcar) {
     const dados = montarDados();
     const urlParams = new URLSearchParams();
     Object.keys(dados).forEach(k => { if (k !== 'Carimbo_Data_Hora') urlParams.set(k, dados[k]); });
     const assinatura = urlParams.toString();
-    if (assinatura === ultimoEnvio && (Date.now() - ultimoEnvioEm) < janelaMs) return Promise.resolve(true);   // já enviado igual
-    urlParams.set('Carimbo_Data_Hora', dados['Carimbo_Data_Hora'] || carimboDataHora());
+    if (!forcar && resultadoEnvio && resultadoEnvio.estado !== 'erro' && assinatura === ultimoEnvio) {
+        return Promise.resolve(resultadoEnvio.estado);   // mesma ficha já enviada
+    }
+    if (assinatura !== assinaturaEnvio || !carimboEnvio) { assinaturaEnvio = assinatura; carimboEnvio = dados['Carimbo_Data_Hora'] || carimboDataHora(); }
+    urlParams.set('Carimbo_Data_Hora', carimboEnvio);
 
-    // no-cors + x-www-form-urlencoded: evita o bloqueio de CORS do Google Apps Script
+    const controle = new AbortController();
+    const limite = setTimeout(() => controle.abort(), 25000);
     return fetch(URL_WEBHOOK, {
         method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: urlParams.toString()
-    }).then(() => { ultimoEnvio = assinatura; ultimoEnvioEm = Date.now(); return true; })
-      .catch(erro => { console.error('Erro:', erro); return false; });
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },   // requisição simples: sem preflight
+        body: urlParams.toString(),
+        signal: controle.signal
+    }).then(r => r.text().then(txt => ({ ok: r.ok, txt: txt })))
+      .then(r => {
+          if (/^\s*Sucesso/i.test(r.txt)) return 'ok';
+          if (/^\s*Erro/i.test(r.txt) || !r.ok) { console.error('Resposta do script:', r.txt); return 'erro'; }
+          return 'incerto';
+      })
+      .catch(erro => {
+          console.error('Envio:', erro);
+          return (navigator.onLine === false || (erro && erro.name === 'AbortError')) ? 'erro' : 'incerto';
+      })
+      .then(estado => {
+          clearTimeout(limite);
+          if (estado !== 'erro') ultimoEnvio = assinatura;
+          resultadoEnvio = { estado: estado, quando: carimboEnvio };
+          return estado;
+      });
 }
+
+/* ---------- aviso de envio (janela) ---------- */
+function mostrarEnvio(estado) {
+    const m = document.getElementById('envioModal');
+    const icone = document.getElementById('envioIcone');
+    const titulo = document.getElementById('envioTitulo'), texto = document.getElementById('envioTexto');
+    const proto = document.getElementById('envioProtocolo');
+    const btnR = document.getElementById('envioBtnRetry'), btnP = document.getElementById('envioBtnPrint'), btnC = document.getElementById('envioBtnClose');
+    m.classList.remove('hidden');
+    icone.className = 'modal-icon ' + (estado === 'ok' ? '' : estado === 'espera' ? 'espera' : estado);
+    icone.textContent = estado === 'ok' ? '✓' : estado === 'erro' ? '!' : estado === 'incerto' ? '✓' : '';
+    const chaves = { ok: ['send_title_ok', 'send_text_ok'], incerto: ['send_title_unsure', 'send_text_unsure'], erro: ['send_title_err', 'send_text_err'], espera: ['msg_sending', null] };
+    titulo.textContent = t(chaves[estado][0]);
+    texto.textContent = chaves[estado][1] ? t(chaves[estado][1]) : '';
+    texto.classList.toggle('hidden', !chaves[estado][1]);
+    const comprovante = estado === 'ok' || estado === 'incerto';
+    proto.classList.toggle('hidden', !comprovante);
+    if (comprovante) proto.textContent = t('send_protocol') + ': ' + carimboEnvio + ' · ' + ((document.getElementById('lastname').value + ' ' + document.getElementById('firstname').value).trim());
+    btnR.classList.toggle('hidden', !(estado === 'erro' || estado === 'incerto'));
+    btnP.classList.toggle('hidden', !comprovante);
+    btnC.classList.toggle('hidden', estado === 'espera');
+    if (estado !== 'espera') btnC.focus();
+}
+function fecharEnvio() { document.getElementById('envioModal').classList.add('hidden'); }
 
 // O termo de aceite é validado aqui (e não pelo navegador) para o aviso sempre aparecer, inclusive no celular
 function validarAceite() {
@@ -1903,39 +2000,29 @@ document.addEventListener('change', e => {
     }
 });
 
-function handleFormSubmit(event) {
-    event.preventDefault();
-    if (!validarAceite()) return;
+function executarEnvio(forcar) {
     if (enviandoFormulario) return;
-    const btnSubmit = document.querySelector('button[type="submit"]');
     enviandoFormulario = true;
-    btnSubmit.disabled = true;
-    mostrarStatusEnvio('info', t('msg_sending'));
-    enviarParaPlanilha(30000).then(ok => {
-        if (ok) { mostrarStatusEnvio('ok', t('msg_success')); alert(t('msg_success')); }
-        else    { mostrarStatusEnvio('erro', t('msg_send_error')); }
-        btnSubmit.disabled = false;
+    document.getElementById('btnEnviar').disabled = true;
+    mostrarEnvio('espera');
+    enviarParaPlanilha(forcar).then(estado => {
         enviandoFormulario = false;
+        document.getElementById('btnEnviar').disabled = false;
+        mostrarEnvio(estado);
+        // abre a impressão/PDF depois que a janela de confirmação aparece
+        if (estado !== 'erro' && !forcar) setTimeout(() => window.print(), 400);
     });
 }
+function reenviar() { executarEnvio(true); }
 
-// Botão Compartilhar/Imprimir: valida, grava na planilha, e só depois abre a impressão
-// (a janela de impressão congela a página; por isso o envio precisa terminar antes)
+// Botão único: confere os campos, envia para a planilha, mostra a confirmação e abre a impressão (PDF)
 function imprimirEEnviar() {
     const form = document.getElementById('multiLangForm');
     if (!form.reportValidity()) return;     // mostra o que falta preencher
     if (!validarAceite()) return;
-    if (enviandoFormulario) return;
-    enviandoFormulario = true;
-    mostrarStatusEnvio('info', t('msg_sending'));
-    const limite = new Promise(r => setTimeout(() => r('tempo'), 6000));   // não trava se a rede demorar
-    Promise.race([enviarParaPlanilha(Infinity), limite]).then(res => {
-        if (res === true)       mostrarStatusEnvio('ok', t('msg_success'));
-        else if (res === false) mostrarStatusEnvio('erro', t('msg_send_error'));
-        enviandoFormulario = false;
-        window.print();
-    });
+    executarEnvio(false);
 }
+function handleFormSubmit(event) { event.preventDefault(); imprimirEEnviar(); }
 
 /* =========================================================
    INICIALIZAÇÃO
