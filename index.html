@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -255,7 +255,7 @@
             border: 1.5px solid var(--border-color); background: var(--field-bg); color: var(--text-color);
             transition: border-color .15s, box-shadow .15s; }
         /* campo inválido não pode ficar escondido atrás das barras fixas */
-        input, select, textarea { scroll-margin-top: 110px; scroll-margin-bottom: 130px; }
+        input, select, textarea { scroll-margin-top: 110px; scroll-margin-bottom: 40px; }
         select:hover, input:hover { border-color: color-mix(in srgb, var(--primary) 45%, var(--border-color)); }
         select:focus, input:focus, textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 4px color-mix(in srgb, var(--primary) 22%, transparent); }
         input[type="radio"], input[type="checkbox"] { accent-color: var(--primary); width: 18px; height: 18px; flex: none; margin: 0; }
@@ -319,11 +319,9 @@
         .modal-actions { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
         .modal-actions .btn { flex: 1 1 140px; }
 
-        /* Barra de ações fixa */
-        .actions-bar { position: sticky; bottom: 0; z-index: 40; display: flex; gap: 12px; flex-wrap: wrap; justify-content: flex-end;
-                       margin: 8px -16px 0; padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
-                       background: color-mix(in srgb, var(--card-bg) 94%, transparent); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-                       border-top: 1px solid var(--border-color); }
+        /* Botão de enviar: fica só no final do formulário (não acompanha a rolagem) */
+        .actions-bar { display: flex; gap: 12px; flex-wrap: wrap; justify-content: flex-end;
+                       margin: 16px 0 0; padding: 0 0 calc(24px + env(safe-area-inset-bottom)); }
         .actions-bar .btn-success { flex: 1 1 260px; max-width: 420px; min-height: 52px; font-size: 1.05rem; }
         .actions-bar .btn-secondary { flex: 0 1 auto; }
 
@@ -380,7 +378,12 @@
             td, th { padding: 1px 3px !important; }
             .form-group, .dynamic-item { break-inside: avoid; }
         }
-    </style>
+    .hp-x{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}
+@media print{.hp-x{display:none!important}}
+.age-row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px; }
+.age-box { display: inline-flex; align-items: center; gap: 8px; font-weight: normal; margin: 0; }
+.age-box input { width: 64px; text-align: center; font-weight: bold; background: transparent; }
+</style>
 </head>
 <body data-theme="light" class="view-auto">
 
@@ -405,11 +408,12 @@
         <!-- Idiomas -->
         <div class="control-group">
             <label for="langSelector">🌐 Idioma / 言語:</label>
-            <select id="langSelector" onchange="changeLanguage(this.value)">
+            <select id="langSelector" onchange="changeLanguage(this.value)" autocomplete="off">
+                <option value="pt" selected>Português (Portuguese)</option>
                 <option value="ja">日本語 (Japanese)</option>
-                <option value="pt">Português (Portuguese)</option>
                 <option value="en">English</option>
                 <option value="tl">Filipino (Tagalog)</option>
+                <option value="es">Español (Spanish)</option>
             </select>
         </div>
 
@@ -436,6 +440,8 @@
 
     <!-- O FORMULÁRIO COMEÇA AQUI -->
     <form id="multiLangForm" onsubmit="handleFormSubmit(event)">
+        <!-- campo-armadilha contra robôs: pessoas não veem nem preenchem (não apague) -->
+        <div class="hp-x" aria-hidden="true"><label for="campo_extra_hp">Deixe em branco</label><input type="text" id="campo_extra_hp" tabindex="-1" autocomplete="off"></div>
 
         <!-- ==========================================
              PARTE 1: INFORMAÇÕES BÁSICAS (OBRIGATÓRIO)
@@ -455,7 +461,12 @@
 
             <div class="form-group">
                 <label class="required" data-translate="label_birthdate">Data de Nascimento (生年月日)</label>
-                <input type="date" id="birthdate" required>
+                <div class="age-row">
+                    <input type="date" id="birthdate" required oninput="calcularIdade()" onchange="calcularIdade()">
+                    <label class="age-box"><span data-translate="label_age">Idade (年齢)</span>
+                        <input type="text" id="ageField" readonly tabindex="-1" aria-readonly="true" placeholder="--">
+                        <span data-translate="age_unit">anos (歳)</span></label>
+                </div>
             </div>
 
             <div class="form-group">
@@ -686,11 +697,17 @@
 
             <div class="form-group sep">
                 <label data-translate="label_hospitalized">Histórico de hospitalização (入院歴)</label>
-                <select id="hospitalized">
+                <select id="hospitalized" onchange="toggleHospitalizacao()">
                     <option value="">----</option>
                     <option value="Nunca foi hospitalizado" data-translate="hosp_never">Nunca foi hospitalizado / 入院歴なし</option>
                     <option value="Tem histórico" data-translate="hosp_yes">Tem histórico de hospitalização / 入院歴あり</option>
                 </select>
+                <div id="hospDetails" class="hidden" style="margin-top: 10px;">
+                    <label class="required" for="hospReason" data-translate="hosp_reason">Motivo da hospitalização (入院の理由)</label>
+                    <input type="text" id="hospReason" maxlength="300" data-translate-placeholder="hosp_reason_ph" placeholder="Ex.: cirurgia de apendicite / 例：虫垂炎の手術" style="width: 95%; margin-bottom: 8px;">
+                    <label class="required" for="hospDuration" data-translate="hosp_duration">Tempo de hospitalização (入院期間)</label>
+                    <input type="text" id="hospDuration" maxlength="150" data-translate-placeholder="hosp_duration_ph" placeholder="Ex.: 2 semanas, em 2019 / 例：2019年に2週間" style="width: 95%;">
+                </div>
             </div>
 
             <div class="form-group sep">
@@ -1124,6 +1141,12 @@ const translations = {
     label_hospitalized: "入院歴",
     hosp_never: "入院歴なし",
     hosp_yes: "入院歴あり",
+    label_age: "年齢",
+    age_unit: "歳",
+    hosp_reason: "入院の理由",
+    hosp_duration: "入院期間",
+    hosp_reason_ph: "例：虫垂炎の手術",
+    hosp_duration_ph: "例：2019年に2週間",
     label_yucho: "ゆうちょ銀行口座",
     yucho_have: "口座あり・通帳/カード保持",
     yucho_never: "口座なし",
@@ -1240,6 +1263,12 @@ const translations = {
     label_hospitalized: "Histórico de hospitalização (入院歴)",
     hosp_never: "Nunca foi hospitalizado / 入院歴なし",
     hosp_yes: "Tem histórico de hospitalização / 入院歴あり",
+    label_age: "Idade (年齢)",
+    age_unit: "anos (歳)",
+    hosp_reason: "Motivo da hospitalização (入院の理由)",
+    hosp_duration: "Tempo de hospitalização (入院期間)",
+    hosp_reason_ph: "Ex.: cirurgia de apendicite / 例：虫垂炎の手術",
+    hosp_duration_ph: "Ex.: 2 semanas, em 2019 / 例：2019年に2週間",
     label_yucho: "Conta no Banco do Correio (ゆうちょ銀行口座)",
     yucho_have: "Abri / Possuo conta e cartão / 口座あり",
     yucho_never: "Nunca abri / 口座なし",
@@ -1356,6 +1385,12 @@ const translations = {
     label_hospitalized: "Hospitalization history",
     hosp_never: "Never hospitalized",
     hosp_yes: "Has been hospitalized",
+    label_age: "Age",
+    age_unit: "years old",
+    hosp_reason: "Reason for hospitalization",
+    hosp_duration: "Length of hospitalization",
+    hosp_reason_ph: "e.g. appendicitis surgery",
+    hosp_duration_ph: "e.g. 2 weeks, in 2019",
     label_yucho: "Japan Post Bank (Yucho) account",
     yucho_have: "I have an account and card/passbook",
     yucho_never: "Never opened one",
@@ -1472,6 +1507,12 @@ const translations = {
     label_hospitalized: "Kasaysayan ng pagpapaospital",
     hosp_never: "Hindi pa naospital",
     hosp_yes: "Naospital na dati",
+    label_age: "Edad",
+    age_unit: "taong gulang",
+    hosp_reason: "Dahilan ng pagpapaospital",
+    hosp_duration: "Tagal ng pagpapaospital",
+    hosp_reason_ph: "hal. operasyon sa apendisitis",
+    hosp_duration_ph: "hal. 2 linggo, noong 2019",
     label_yucho: "Account sa Japan Post Bank (Yucho)",
     yucho_have: "May account at card/passbook ako",
     yucho_never: "Hindi pa nagbukas",
@@ -1511,6 +1552,267 @@ const translations = {
     msg_sending: "Ipinapadala, mangyaring maghintay...",
     msg_send_error: "Nabigo ang pagpapadala. Pakisubukang muli.",
     msg_success: "Matagumpay na naisumite ang form!", msg_error: "Pakitingnan ang mga kinakailangang field."
+  },
+  es: {
+    main_title: "Currículum y Cuestionario",
+    main_subtitle: "履歴書およびアンケート",
+    fill_date: "Fecha de llenado",
+    part1_title: "Parte 1: Información básica",
+    label_lastname: "Apellido / Apellido de familia",
+    label_firstname: "Nombre",
+    label_nationality: "Nacionalidad",
+    label_birthdate: "Fecha de nacimiento",
+    label_gender: "Sexo",
+    gender_male: "Hombre",
+    gender_female: "Mujer",
+    label_residence: "Situación de residencia",
+    select_default: "Por favor, elija...",
+    res_permanent: "Residente permanente (Eijūsha)",
+    res_longterm: "Residente de larga duración (Teijūsha)",
+    res_spouse: "Cónyuge de japonés, etc. (Nihonjin no haigūsha nado)",
+    res_japanese: "Soy japonés(a) (Nihonjin)",
+    label_nikkei: "Origen nikkei",
+    nikkei_japanese: "Soy japonés(a)",
+    nikkei_1st: "1.ª generación (Issei)",
+    nikkei_2nd: "2.ª generación (Nissei)",
+    nikkei_3rd: "3.ª generación (Sansei)",
+    nikkei_4th: "4.ª generación (Yonsei)",
+    nikkei_non: "No tengo ascendencia japonesa",
+    label_address: "Dirección actual",
+    label_mobile: "Teléfono celular",
+    label_email: "Correo electrónico",
+    label_sns: "Redes de mensajería (SNS)",
+    sns_other: "Otro",
+    part2_title: "Parte 2: Educación y experiencia laboral",
+    label_education: "Último centro de estudios en el que se graduó",
+    edu_elementary: "Primaria",
+    edu_junior: "Secundaria básica (Chūgakkō)",
+    edu_high: "Bachillerato / Secundaria superior (Kōkō)",
+    edu_university: "Universidad",
+    label_edu_notes: "Observaciones:",
+    label_origin_job: "Ocupación en su país de origen",
+    label_years: "Años",
+    question_japan_exp: "¿Tiene experiencia laboral en Japón?",
+    opt_no: "No",
+    opt_yes: "Sí",
+    sub_japan_exp: "Experiencia laboral en Japón",
+    btn_add_exp: "Agregar experiencia laboral",
+    part3_title: "Parte 3: Familia y calificaciones",
+    question_japan_family: "¿Tiene familiares que viven en Japón?",
+    sub_japan_family: "Familiares que viven en Japón",
+    btn_add_family: "Agregar familiar",
+    label_driving_license: "● Licencia de conducir:",
+    lic_comum: "Común",
+    lic_at: "AT limitada",
+    lic_semimedio: "Semimediana",
+    lic_medio: "Mediana",
+    lic_grande: "Grande",
+    lic_ciclomotor: "Ciclomotor",
+    lic_moto_medio: "Motocicleta mediana",
+    lic_moto_grande: "Motocicleta grande",
+    label_job_qualification: "● Calificación profesional:",
+    qual_forklift: "Montacargas",
+    qual_solda: "Soldadura",
+    qual_tamakake: "Eslingado (Tamakake)",
+    qual_crane: "Grúa",
+    qual_press: "Prensa",
+    qual_other: "Otros",
+    qual_other_placeholder: "Indique el/los certificado(s) que posee",
+    label_commute: "⑬ Medio de transporte al trabajo",
+    com_moto: "En motocicleta ※",
+    com_ciclo: "En ciclomotor ※",
+    com_car: "En automóvil ※",
+    com_bike: "En bicicleta ※",
+    com_sougei: "Transporte de la empresa (Sougei)",
+    com_walk: "A pie",
+    hint_commute: "※ Deberá entregar documentos como la licencia de conducir, el certificado de inspección del vehículo, los seguros obligatorio y voluntario del vehículo y el seguro de bicicleta.",
+    part4_title: "Parte 4: Salud y condición física",
+    label_chronic_diseases: "⑭ Enfermedades y afecciones crónicas",
+    chr_none: "Ninguna",
+    chr_back: "Dolor lumbar",
+    chr_diabetes: "Diabetes",
+    chr_pressure: "Presión alta",
+    chr_mental: "Enfermedad mental",
+    chr_treatment: "En tratamiento / tomando medicación",
+    label_allergies: "Alergias",
+    all_oil: "Aceite",
+    all_solvent: "Solvente",
+    all_food: "Alimentos",
+    all_food_placeholder: "Indique la alergia alimentaria",
+    label_health_status: "⑮ Estado de salud actual",
+    health_ok: "Sin problemas",
+    health_treatment: "En tratamiento",
+    abs_required: "Necesita ausentarse",
+    abs_not_required: "No necesita ausentarse",
+    label_work_restrictions: "⑯ Restricciones de trabajo",
+    rest_none: "Sin problemas",
+    rest_heavy: "Trabajo físico pesado",
+    label_overtime: "⑰ Horas extras",
+    ot_none: "Sin restricciones",
+    ot_restricted: "Con restricciones",
+    ot_until: "Hasta",
+    ot_unit: "horas/día",
+    label_shifts: "Disponibilidad de turnos",
+    shift_weekend: "⑱ Fines de semana/Feriados:",
+    opt_possible: "Posible",
+    opt_impossible: "No es posible",
+    shift_night: "⑲ Turno de noche:",
+    shift_alternate: "⑳ Turno rotativo:",
+    label_body_size: "㉑ Complexión (talla de ropa), etc.",
+    body_height: "Estatura",
+    body_weight: "Peso",
+    body_waist: "Cintura",
+    body_jacket: "Camisa",
+    body_shoes: "Calzado",
+    body_hand: "Mano dominante:",
+    hand_right: "Diestro(a)",
+    hand_left: "Zurdo(a)",
+    body_blood: "Grupo sanguíneo:",
+    body_vision: "Visión D I:",
+    vis_glasses: "Usa anteojos",
+    vis_contacts: "Usa lentes de contacto",
+    part5_title: "Parte 5: Idioma y hábitos",
+    lang_comprehension: "㉒ Comprensión auditiva",
+    lang_conversation: "Conversación",
+    th_skill: "Habilidad",
+    th_all: "Todo",
+    th_little: "Un poco",
+    th_none: "Nada",
+    skill_hira_read: "Hiragana - Lectura",
+    skill_hira_write: "Hiragana - Escritura",
+    skill_kata_read: "Katakana - Lectura",
+    skill_kata_write: "Katakana - Escritura",
+    skill_kanji_read: "Kanji - Lectura",
+    skill_kanji_write: "Kanji - Escritura",
+    label_smoking: "㉓ Tabaquismo",
+    smoke_no: "No fumo",
+    smoke_yes: "Fumo",
+    smoke_unit: "cigarrillos/día",
+    label_drinking: "㉔ Alcohol",
+    drink_no: "No bebo",
+    drink_yes: "Bebo",
+    drink_unit: "ml/día",
+    part6_title: "Parte 6: Situación actual y preferencias",
+    label_current_job_status: "㉕ Situación laboral actual",
+    status_employed: "Actualmente empleado(a)",
+    label_leave_date: "Fecha prevista de salida:",
+    status_unemployed: "Actualmente sin trabajo",
+    status_ui: "Recibiendo seguro de desempleo",
+    status_welfare: "Seikatsu Hogo (asistencia social)",
+    label_start_date: "㉖ Fecha de inicio (¿cuándo puede empezar a trabajar?)",
+    start_immediate: "Inmediatamente",
+    start_after: "Después de",
+    start_days_unit: "días",
+    label_how_known: "㉗ ¿Cómo conoció nuestra empresa?",
+    known_flyer: "Volante de la tienda",
+    known_intro: "Recomendación de un conocido",
+    label_children: "㉘ ¿Hijos que vivan con usted?",
+    child_no: "No tengo",
+    child_yes: "Sí tengo",
+    child_age_unit: "años",
+    consent_required: "⚠ Marque la casilla para confirmar que la información es correcta.",
+    veh_label: "Documentos que posee (marque todos los que correspondan)",
+    veh_shaken: "Shakken (inspección del vehículo)",
+    veh_jibai: "Jibaiseki hoken (seguro obligatorio)",
+    veh_nini: "Nin'i hoken (seguro voluntario)",
+    intro_name_ph: "Nombre de la persona que lo recomendó",
+    btn_add_child: "Agregar hijo(a)",
+    child_title: "Hijo(a) {n}",
+    child_name: "Nombre",
+    child_age: "Edad",
+    reloc_warn: "⚠ Se aplicarán costos. Consulte las condiciones de la mudanza con su empresa de contratación.",
+    yucho_card: "Solo tengo la tarjeta",
+    yucho_book: "Solo tengo la libreta",
+    label_childcare: "㉙ ¿Quién cuidará al hijo(a)?",
+    care_self: "Solo yo",
+    care_others: "Hay otras personas",
+    label_company_lunch: "㉚ Almuerzo de la empresa",
+    lunch_yes: "Pedir caja de almuerzo (bentō)",
+    lunch_no: "Llevaré el mío",
+    lunch_unknown: "Aún no lo sé",
+    label_dormitory: "㉛ ¿Desea usar el dormitorio de la empresa?",
+    dorm_yes: "Sí ※1",
+    dorm_no: "No, iré desde mi casa",
+    label_relocation_help: "㉜ ¿Necesita ayuda con la mudanza?",
+    reloc_yes: "Sí ※2",
+    reloc_no: "No, lo haré yo mismo(a)",
+    label_initial_money: "㉝ ¿Dinero para los gastos de vida iniciales?",
+    money_ok: "Sí, tengo",
+    money_anxious: "Estoy un poco preocupado(a)",
+    money_none: "Casi nada",
+    label_criminal_record: "㉞ Antecedentes penales",
+    question_criminal: "¿Ha recibido alguna vez una sanción penal (sentencia de culpabilidad) en el pasado?",
+    crim_no: "▢ No",
+    crim_yes: "▢ Sí",
+    label_criminal_specify: "Si responde «Sí», indique los detalles.",
+    note_dorm: "* ※1 Deberá entregar el formulario de solicitud de uso del dormitorio (confirmación de condiciones).",
+    note_reloc: "* ※2 Deberá entregar el formulario de solicitud de ayuda para la mudanza (confirmación de condiciones).",
+    note_disclaimer: "Aviso: si se detecta información falsa en este currículum, la oferta de empleo podrá ser cancelada.",
+    declaration_text: "Confirmo que la información anterior es correcta.",
+    btn_print: "Compartir / Enviar",
+    btn_submit: "Enviar formulario",
+    label_marital: "Estado civil",
+    mar_single: "Soltero(a)",
+    mar_married: "Casado(a)",
+    mar_divorced: "Divorciado(a)",
+    label_edu_status: "Situación de los estudios:",
+    edu_completed: "Completos",
+    edu_incomplete: "Incompletos",
+    label_hospitalized: "Historial de hospitalización",
+    hosp_never: "Nunca ha sido hospitalizado(a)",
+    hosp_yes: "Ha sido hospitalizado(a)",
+    label_yucho: "Cuenta del Japan Post Bank (Yucho)",
+    yucho_have: "Tengo cuenta y tarjeta/libreta",
+    yucho_never: "Nunca he abierto una",
+    label_ui: "Historial del seguro de empleo",
+    ins_paid: "He aportado",
+    ins_never: "Nunca he aportado",
+    label_health_ins: "Historial del seguro de salud",
+    hins_shakai: "Aporté al Seguro Social (Shakai Hoken)",
+    hins_kokumin: "Aporté al Seguro Nacional de Salud (Kokumin Hoken)",
+    label_nenkin: "Pensión (Nenkin)",
+    nenkin_paid: "He aportado / tengo libreta de pensión",
+    exp_title: "Empresa n.º {n}",
+    exp_in_year: "Ingreso – Año",
+    exp_in_month: "Ingreso – Mes",
+    exp_out_year: "Salida – Año",
+    exp_out_month: "Salida – Mes",
+    exp_agency: "Empresa de contratación (haken)",
+    exp_factory: "Fábrica / empresa",
+    exp_prefecture: "Prefectura",
+    exp_city: "Ciudad",
+    exp_category: "Rubro",
+    exp_role: "Puesto / tareas",
+    exp_reason: "Motivo de salida",
+    fam_title: "Familiar {n}",
+    fam_name: "Nombre",
+    fam_relation: "Parentesco",
+    fam_age: "Edad",
+    fam_nationality: "Nacionalidad",
+    fam_living: "¿Vive con usted?",
+    fam_yes: "Sí",
+    fam_no: "No",
+    max_items: "Máximo de 5 registros.",
+    send_title_ok: "¡Solicitud enviada!",
+    send_text_ok: "Recibimos su información. ¡Gracias!",
+    send_title_unsure: "Datos enviados",
+    send_text_unsure: "Sus datos fueron enviados, pero no pudimos confirmar la recepción automáticamente. Comuníquese con GORO para confirmar.",
+    send_title_err: "No se pudo enviar",
+    send_text_err: "Verifique su conexión e inténtelo de nuevo. Sus respuestas siguen escritas.",
+    btn_close: "Cerrar",
+    btn_retry: "Intentar de nuevo",
+    btn_print_again: "Imprimir / Guardar PDF",
+    send_protocol: "Comprobante",
+    msg_sending: "Enviando, por favor espere...",
+    msg_send_error: "Error al enviar los datos. Inténtelo de nuevo.",
+    msg_success: "¡Formulario enviado con éxito!",
+    msg_error: "Revise los campos obligatorios.",
+    label_age: "Edad",
+    age_unit: "años",
+    hosp_reason: "Motivo de la hospitalización",
+    hosp_duration: "Duración de la hospitalización",
+    hosp_reason_ph: "Ej.: cirugía de apendicitis",
+    hosp_duration_ph: "Ej.: 2 semanas, en 2019"
   }
 };
 
@@ -1679,6 +1981,21 @@ function removeDynamicField(btn, type) {
 function toggleCriminalDetails(show) {
     document.getElementById('criminalDetailsContainer').classList.toggle('hidden', !show);
 }
+function calcularIdade() {
+    const f = document.getElementById('ageField'), v = document.getElementById('birthdate').value;
+    const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(v || '');
+    if (!m) { f.value = ''; return; }
+    const hoje = new Date(), ano = +m[1], mes = +m[2], dia = +m[3];
+    let idade = hoje.getFullYear() - ano;
+    if ((hoje.getMonth() + 1) < mes || ((hoje.getMonth() + 1) === mes && hoje.getDate() < dia)) idade--;
+    f.value = (idade >= 0 && idade <= 120) ? String(idade) : '';
+}
+function toggleHospitalizacao() {
+    const sim = document.getElementById('hospitalized').value === 'Tem histórico';
+    document.getElementById('hospDetails').classList.toggle('hidden', !sim);
+    document.getElementById('hospReason').required = sim;
+    document.getElementById('hospDuration').required = sim;
+}
 function toggleAllergyFood(el) {
     document.getElementById('allergyFoodDetail').classList.toggle('hidden', !el.checked);
 }
@@ -1766,6 +2083,7 @@ function montarDados() {
     set('Sobrenome', sobrenome);
     set('Nome', nome);
     set('Data_Nascimento', val('birthdate'));
+    set('Idade', val('ageField'));
     set('Genero', radioLbl('gender', 'gender'));
     set('Estado_Civil', radioLbl('marital', 'maritalStatus'));
     set('Status_Residencia', lbl('residence', val('residenceStatus')));
@@ -1825,6 +2143,7 @@ function montarDados() {
     if (saude === 'treatment') { set('Estado_Saude', 'Tenho lesão ou doença');  set('Status_Medico', 'Sob tratamento'); }
     set('Ausencia_Necessaria', checkedLbls('absence', 'absenceNeed'));
     set('Hospitalizado', val('hospitalized'));
+    if (val('hospitalized') === 'Tem histórico') { set('Hospitalizado_Motivo', val('hospReason')); set('Hospitalizado_Tempo', val('hospDuration')); }
 
     const restr = radioValue('workRestrictions');
     if (restr === 'none')  set('Trabalho_Impossivel_Opcao', 'Não tem');
@@ -1910,6 +2229,8 @@ function montarDados() {
 /* =========================================================
    ENVIO DO FORMULÁRIO (mesmo método do formulário antigo)
    ========================================================= */
+// Senha do formulário (precisa ser igual à propriedade FORM_TOKEN do Apps Script). Deixe '' para não enviar.
+const TOKEN_FORM = '-eujqD0ORyJKE8V9h9J3gIBIxhdOWcsF';
 const URL_WEBHOOK = "https://script.google.com/macros/s/AKfycbz8bboPBk880yfL3zTjgBh0gZrEC0gSpQqnIoyBgme0XAODLcBXo971i8N-DntqcwxP/exec";
 let enviandoFormulario = false;
 let ultimoEnvio = '';
@@ -1937,6 +2258,10 @@ function enviarParaPlanilha(forcar) {
     }
     if (assinatura !== assinaturaEnvio || !carimboEnvio) { assinaturaEnvio = assinatura; carimboEnvio = dados['Carimbo_Data_Hora'] || carimboDataHora(); }
     urlParams.set('Carimbo_Data_Hora', carimboEnvio);
+    // proteção contra robôs (adicionados depois da assinatura, não afetam a detecção de ficha repetida)
+    const hp = document.getElementById('campo_extra_hp');
+    urlParams.set('website', hp ? hp.value : '');
+    if (TOKEN_FORM) urlParams.set('_t', TOKEN_FORM);
 
     const controle = new AbortController();
     const limite = setTimeout(() => controle.abort(), 25000);
