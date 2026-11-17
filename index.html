@@ -383,6 +383,12 @@
 .age-row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px; }
 .age-box { display: inline-flex; align-items: center; gap: 8px; font-weight: normal; margin: 0; }
 .age-box input { width: 64px; text-align: center; font-weight: bold; background: transparent; }
+.privacy-box { margin-top: 25px; border: 1px solid var(--border-color); border-radius: 12px; padding: 12px 14px; background: var(--card-bg); font-size: .92em; }
+.privacy-box summary { cursor: pointer; }
+.privacy-box .priv-sum { color: var(--muted); font-size: .92em; }
+.privacy-box ul { margin: 10px 0 0; padding-left: 18px; }
+.privacy-box li { margin-bottom: 6px; line-height: 1.4; }
+@media print { .privacy-box, #privacyCheck, .consent-box:has(#privacyCheck) { display: none !important; } }
 </style>
 </head>
 <body data-theme="light" class="view-auto">
@@ -1040,6 +1046,23 @@
             <p class="hint" data-translate="note_reloc">* ※2 引越し補助依頼申請書(注意事項確認書)の提出が必要です。 / Você precisará enviar um formulário de solicitação de auxílio para mudança.</p>
             <p class="hint" style="font-weight: bold;" data-translate="note_disclaimer">Atenção: caso seja constatada alguma informação falsa neste currículo, sua oferta de emprego poderá ser rescindida. / 当履歴書の記載事項に虚偽の記載が認められた場合、入社を取り消すことがありますので、あらかじめご了承ください。</p>
 
+            <div class="privacy-box">
+                <details>
+                    <summary><b data-translate="priv_title">Aviso de privacidade (個人情報の取扱い)</b><br><span class="priv-sum" data-translate="priv_summary"></span></summary>
+                    <ul>
+                        <li data-translate="priv_l1"></li><li data-translate="priv_l2"></li><li data-translate="priv_l3"></li>
+                        <li data-translate="priv_l4"></li><li data-translate="priv_l5"></li><li data-translate="priv_l6"></li>
+                        <li id="privContactRow" class="hidden"><span data-translate="priv_contact_label">Contato</span>: <span id="privContactVal"></span></li>
+                    </ul>
+                </details>
+            </div>
+            <div class="form-group consent-box" style="margin-top: 12px; padding: 16px;">
+                <label class="required" style="display: flex; align-items: flex-start; gap: 10px; cursor: pointer;">
+                    <input type="checkbox" id="privacyCheck" class="big-check">
+                    <span data-translate="priv_check"></span>
+                </label>
+            </div>
+
             <div class="form-group consent-box" style="margin-top: 25px; padding: 16px;">
                 <label class="required" style="display: flex; align-items: flex-start; gap: 10px; cursor: pointer;">
                     <input type="checkbox" id="declarationCheck" class="big-check">
@@ -1147,6 +1170,17 @@ const translations = {
     hosp_duration: "入院期間",
     hosp_reason_ph: "例：虫垂炎の手術",
     hosp_duration_ph: "例：2019年に2週間",
+    priv_title: "個人情報の取扱いについて",
+    priv_summary: "ご記入いただいた情報は、選考、採用手続き、就業および住居の手配のためにのみ使用します。詳細はタップしてご確認ください。",
+    priv_l1: "取得者：GORO株式会社",
+    priv_l2: "利用目的：応募内容の審査、ご連絡、入社手続き、就業・勤務シフト・社宅の手配。",
+    priv_l3: "取得する情報：氏名、連絡先、住所、学歴・職歴、家族、資格、日本語能力、制服サイズ、所持書類など。また、健康状態や刑事罰の経歴（要配慮個人情報）は、就業の適性と安全の確認のためにのみ使用します。",
+    priv_l4: "第三者提供：法令に基づく場合、またはご本人の就業先の手配に必要な場合（就業予定の企業など）を除き、ご本人の同意なく第三者に提供しません。",
+    priv_l5: "保存期間：送信から最長2年間保存し、その後は削除します。閲覧は担当者に限定します。",
+    priv_l6: "ご本人の権利：ご自身の情報の開示、訂正、削除をいつでも請求できます。",
+    priv_contact_label: "お問い合わせ",
+    priv_check: "個人情報の取扱いを読み、健康状態・刑事罰の経歴などの要配慮個人情報を含む情報の利用に同意します。",
+    priv_required: "⚠ 個人情報の取扱いに同意するには、チェックを入れてください。",
     label_yucho: "ゆうちょ銀行口座",
     yucho_have: "口座あり・通帳/カード保持",
     yucho_never: "口座なし",
@@ -1269,6 +1303,17 @@ const translations = {
     hosp_duration: "Tempo de hospitalização (入院期間)",
     hosp_reason_ph: "Ex.: cirurgia de apendicite / 例：虫垂炎の手術",
     hosp_duration_ph: "Ex.: 2 semanas, em 2019 / 例：2019年に2週間",
+    priv_title: "Aviso de privacidade (個人情報の取扱い)",
+    priv_summary: "Usamos os seus dados apenas para a seleção, a contratação e a organização do trabalho e da moradia. Toque para ler os detalhes.",
+    priv_l1: "Quem coleta: GORO CO., LTD.",
+    priv_l2: "Para quê: avaliar a sua candidatura, entrar em contato com você, fazer o cadastro e a contratação e organizar trabalho, turnos e moradia (alojamento).",
+    priv_l3: "Quais dados: identificação, contato, endereço, escolaridade, histórico profissional, família, habilitações, idioma, medidas de uniforme e documentos. Também informações de saúde e antecedentes criminais, que são dados sensíveis e usados apenas para avaliar a aptidão e a segurança no trabalho.",
+    priv_l4: "Compartilhamento: não fornecemos seus dados a terceiros sem o seu consentimento, exceto quando a lei exigir ou quando for necessário para a sua alocação de trabalho (por exemplo, a empresa onde você poderá trabalhar).",
+    priv_l5: "Guarda: mantemos os dados por até 2 anos após o envio e depois os excluímos. O acesso é restrito à equipe responsável.",
+    priv_l6: "Seus direitos: você pode pedir para ver, corrigir ou excluir seus dados a qualquer momento.",
+    priv_contact_label: "Contato",
+    priv_check: "Li o aviso de privacidade e concordo com o uso dos meus dados, inclusive os dados sensíveis (saúde e antecedentes criminais).",
+    priv_required: "⚠ Marque a caixa para concordar com o aviso de privacidade.",
     label_yucho: "Conta no Banco do Correio (ゆうちょ銀行口座)",
     yucho_have: "Abri / Possuo conta e cartão / 口座あり",
     yucho_never: "Nunca abri / 口座なし",
@@ -1391,6 +1436,17 @@ const translations = {
     hosp_duration: "Length of hospitalization",
     hosp_reason_ph: "e.g. appendicitis surgery",
     hosp_duration_ph: "e.g. 2 weeks, in 2019",
+    priv_title: "Privacy notice",
+    priv_summary: "We use your information only for selection, hiring, and arranging your work and housing. Tap to read the details.",
+    priv_l1: "Who collects it: GORO CO., LTD.",
+    priv_l2: "Purpose: to review your application, contact you, complete registration and hiring, and arrange work, shifts, and housing (dormitory).",
+    priv_l3: "What we collect: identity, contact details, address, education, work history, family, qualifications, language skills, uniform sizes, and documents. We also ask about health and criminal record, which are sensitive data used only to assess suitability and safety at work.",
+    priv_l4: "Sharing: we do not provide your information to third parties without your consent, except when required by law or when needed to place you at work (for example, the company where you may work).",
+    priv_l5: "Retention: we keep your information for up to 2 years after submission and then delete it. Access is limited to the staff in charge.",
+    priv_l6: "Your rights: you may ask to see, correct, or delete your information at any time.",
+    priv_contact_label: "Contact",
+    priv_check: "I have read the privacy notice and agree to the use of my information, including sensitive data (health and criminal record).",
+    priv_required: "⚠ Please tick the box to agree to the privacy notice.",
     label_yucho: "Japan Post Bank (Yucho) account",
     yucho_have: "I have an account and card/passbook",
     yucho_never: "Never opened one",
@@ -1513,6 +1569,17 @@ const translations = {
     hosp_duration: "Tagal ng pagpapaospital",
     hosp_reason_ph: "hal. operasyon sa apendisitis",
     hosp_duration_ph: "hal. 2 linggo, noong 2019",
+    priv_title: "Paunawa sa privacy",
+    priv_summary: "Gagamitin lang namin ang iyong impormasyon para sa pagpili, pag-hire, at pag-aayos ng trabaho at tirahan mo. I-tap para basahin ang detalye.",
+    priv_l1: "Sino ang kumukuha: GORO CO., LTD.",
+    priv_l2: "Layunin: suriin ang iyong aplikasyon, makipag-ugnayan sa iyo, tapusin ang rehistrasyon at pag-hire, at ayusin ang trabaho, shift, at tirahan (dormitoryo).",
+    priv_l3: "Anong impormasyon: pagkakakilanlan, contact, address, edukasyon, karanasan sa trabaho, pamilya, kwalipikasyon, kakayahan sa wika, sukat ng uniporme, at mga dokumento. Nagtatanong din kami tungkol sa kalusugan at kasaysayang kriminal, na sensitibong impormasyon at ginagamit lang para suriin ang kakayahan at kaligtasan sa trabaho.",
+    priv_l4: "Pagbabahagi: hindi namin ibibigay sa ibang partido ang iyong impormasyon nang walang pahintulot mo, maliban kung hinihingi ng batas o kailangan para mailagay ka sa trabaho (halimbawa, ang kumpanyang pagtatrabahuhan mo).",
+    priv_l5: "Pag-iingat: iingatan namin ang impormasyon hanggang 2 taon pagkatapos isumite, at buburahin pagkatapos. Ang makakakita lang ay ang mga staff na may hawak nito.",
+    priv_l6: "Iyong mga karapatan: maaari mong hilingin anumang oras na makita, itama, o burahin ang iyong impormasyon.",
+    priv_contact_label: "Contact",
+    priv_check: "Nabasa ko ang paunawa sa privacy at pumapayag ako sa paggamit ng aking impormasyon, kasama ang sensitibong impormasyon (kalusugan at kasaysayang kriminal).",
+    priv_required: "⚠ Lagyan ng tsek ang kahon para pumayag sa paunawa sa privacy.",
     label_yucho: "Account sa Japan Post Bank (Yucho)",
     yucho_have: "May account at card/passbook ako",
     yucho_never: "Hindi pa nagbukas",
@@ -1812,7 +1879,18 @@ const translations = {
     hosp_reason: "Motivo de la hospitalización",
     hosp_duration: "Duración de la hospitalización",
     hosp_reason_ph: "Ej.: cirugía de apendicitis",
-    hosp_duration_ph: "Ej.: 2 semanas, en 2019"
+    hosp_duration_ph: "Ej.: 2 semanas, en 2019",
+    priv_title: "Aviso de privacidad",
+    priv_summary: "Usamos su información solo para la selección, la contratación y la organización del trabajo y la vivienda. Toque para leer los detalles.",
+    priv_l1: "Quién la recopila: GORO CO., LTD.",
+    priv_l2: "Finalidad: evaluar su solicitud, comunicarnos con usted, completar el registro y la contratación, y organizar trabajo, turnos y vivienda (dormitorio).",
+    priv_l3: "Qué datos: identidad, contacto, dirección, estudios, historial laboral, familia, calificaciones, idioma, tallas de uniforme y documentos. También preguntamos sobre salud y antecedentes penales, que son datos sensibles y se usan solo para evaluar la aptitud y la seguridad en el trabajo.",
+    priv_l4: "Comunicación a terceros: no entregamos su información a terceros sin su consentimiento, salvo cuando la ley lo exija o sea necesario para asignarle un trabajo (por ejemplo, la empresa donde podría trabajar).",
+    priv_l5: "Conservación: guardamos la información hasta 2 años después del envío y luego la eliminamos. El acceso está limitado al personal responsable.",
+    priv_l6: "Sus derechos: puede pedir ver, corregir o eliminar su información en cualquier momento.",
+    priv_contact_label: "Contacto",
+    priv_check: "He leído el aviso de privacidad y acepto el uso de mi información, incluidos los datos sensibles (salud y antecedentes penales).",
+    priv_required: "⚠ Marque la casilla para aceptar el aviso de privacidad.",
   }
 };
 
@@ -2221,6 +2299,7 @@ function montarDados() {
     set('Contribuição_Nenkin', val('contribNenkin'));
     set('Antecedentes_Criminais', radioLbl('criminal', 'criminalRecord'));
     if (radioValue('criminalRecord') === 'yes') set('Antecedentes_Criminais_Detalhe', val('criminalDetails'));
+    set('Privacidade_Aceite', document.getElementById('privacyCheck').checked ? 'Sim' : '');
     set('Termos_Aceite', document.getElementById('declarationCheck').checked ? 'Sim' : '');
 
     return dados;
@@ -2230,6 +2309,8 @@ function montarDados() {
    ENVIO DO FORMULÁRIO (mesmo método do formulário antigo)
    ========================================================= */
 // Senha do formulário (precisa ser igual à propriedade FORM_TOKEN do Apps Script). Deixe '' para não enviar.
+// Contato mostrado no aviso de privacidade (e-mail ou telefone para dúvidas e pedidos de exclusão). Deixe '' para ocultar.
+const CONTATO_PRIVACIDADE = '0586-71-3256';
 const TOKEN_FORM = '-eujqD0ORyJKE8V9h9J3gIBIxhdOWcsF';
 const URL_WEBHOOK = "https://script.google.com/macros/s/AKfycbz8bboPBk880yfL3zTjgBh0gZrEC0gSpQqnIoyBgme0XAODLcBXo971i8N-DntqcwxP/exec";
 let enviandoFormulario = false;
@@ -2314,17 +2395,21 @@ function fecharEnvio() { document.getElementById('envioModal').classList.add('hi
 
 // O termo de aceite é validado aqui (e não pelo navegador) para o aviso sempre aparecer, inclusive no celular
 function validarAceite() {
-    const chk = document.getElementById('declarationCheck');
-    const box = chk.closest('.consent-box');
-    if (chk.checked) { box.classList.remove('consent-error'); return true; }
-    box.classList.add('consent-error');
-    mostrarStatusEnvio('erro', t('consent_required'));
-    box.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    chk.focus({ preventScroll: true });
-    return false;
+    // primeiro o aviso de privacidade, depois a confirmação das informações
+    const itens = [['privacyCheck', 'priv_required'], ['declarationCheck', 'consent_required']];
+    for (const [id, msg] of itens) {
+        const chk = document.getElementById(id), box = chk.closest('.consent-box');
+        if (chk.checked) { box.classList.remove('consent-error'); continue; }
+        box.classList.add('consent-error');
+        mostrarStatusEnvio('erro', t(msg));
+        box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        chk.focus({ preventScroll: true });
+        return false;
+    }
+    return true;
 }
 document.addEventListener('change', e => {
-    if (e.target && e.target.id === 'declarationCheck' && e.target.checked) {
+    if (e.target && (e.target.id === 'declarationCheck' || e.target.id === 'privacyCheck') && e.target.checked) {
         e.target.closest('.consent-box').classList.remove('consent-error');
         const st = document.getElementById('statusEnvio');
         if (st.classList.contains('status-error')) st.classList.add('hidden');
@@ -2360,6 +2445,7 @@ function handleFormSubmit(event) { event.preventDefault(); imprimirEEnviar(); }
    ========================================================= */
 document.addEventListener('DOMContentLoaded', function () {
     applyTranslations(document.getElementById('langSelector').value);
+    if (CONTATO_PRIVACIDADE) { document.getElementById('privContactVal').textContent = CONTATO_PRIVACIDADE; document.getElementById('privContactRow').classList.remove('hidden'); }
     changeTheme(document.getElementById('themeSelector').value);
     changeView(document.getElementById('viewSelector').value);
 });
