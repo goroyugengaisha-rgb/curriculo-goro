@@ -389,6 +389,8 @@
 .privacy-box ul { margin: 10px 0 0; padding-left: 18px; }
 .privacy-box li { margin-bottom: 6px; line-height: 1.4; }
 @media print { .privacy-box, #privacyCheck, .consent-box:has(#privacyCheck) { display: none !important; } }
+.ts-box { display: flex; justify-content: center; margin: 10px 0 0; }
+@media print { .ts-box { display: none !important; } }
 </style>
 </head>
 <body data-theme="light" class="view-auto">
@@ -1073,6 +1075,8 @@
 
         <div id="statusEnvio" class="hidden"></div>
 
+        <div id="turnstileBox" class="ts-box"></div>
+
         <!-- BOTÕES DE AÇÃO -->
         <div class="actions-bar">
             <button type="button" class="btn btn-success" id="btnEnviar" onclick="imprimirEEnviar()" data-translate="btn_print">Compartilhar / Enviar / 共有・送信</button>
@@ -1181,6 +1185,7 @@ const translations = {
     priv_contact_label: "お問い合わせ",
     priv_check: "個人情報の取扱いを読み、健康状態・刑事罰の経歴などの要配慮個人情報を含む情報の利用に同意します。",
     priv_required: "⚠ 個人情報の取扱いに同意するには、チェックを入れてください。",
+    ts_wait: "⚠ セキュリティ確認が終わるまでお待ちください（表示された場合はタップしてください）。その後もう一度送信してください。",
     label_yucho: "ゆうちょ銀行口座",
     yucho_have: "口座あり・通帳/カード保持",
     yucho_never: "口座なし",
@@ -1314,6 +1319,7 @@ const translations = {
     priv_contact_label: "Contato",
     priv_check: "Li o aviso de privacidade e concordo com o uso dos meus dados, inclusive os dados sensíveis (saúde e antecedentes criminais).",
     priv_required: "⚠ Marque a caixa para concordar com o aviso de privacidade.",
+    ts_wait: "⚠ Aguarde a verificação de segurança terminar (ou toque nela, se aparecer) e envie de novo.",
     label_yucho: "Conta no Banco do Correio (ゆうちょ銀行口座)",
     yucho_have: "Abri / Possuo conta e cartão / 口座あり",
     yucho_never: "Nunca abri / 口座なし",
@@ -1447,6 +1453,7 @@ const translations = {
     priv_contact_label: "Contact",
     priv_check: "I have read the privacy notice and agree to the use of my information, including sensitive data (health and criminal record).",
     priv_required: "⚠ Please tick the box to agree to the privacy notice.",
+    ts_wait: "⚠ Please wait for the security check to finish (or tap it if it appears), then submit again.",
     label_yucho: "Japan Post Bank (Yucho) account",
     yucho_have: "I have an account and card/passbook",
     yucho_never: "Never opened one",
@@ -1580,6 +1587,7 @@ const translations = {
     priv_contact_label: "Contact",
     priv_check: "Nabasa ko ang paunawa sa privacy at pumapayag ako sa paggamit ng aking impormasyon, kasama ang sensitibong impormasyon (kalusugan at kasaysayang kriminal).",
     priv_required: "⚠ Lagyan ng tsek ang kahon para pumayag sa paunawa sa privacy.",
+    ts_wait: "⚠ Hintaying matapos ang security check (o i-tap ito kung lumitaw), pagkatapos ay isumite muli.",
     label_yucho: "Account sa Japan Post Bank (Yucho)",
     yucho_have: "May account at card/passbook ako",
     yucho_never: "Hindi pa nagbukas",
@@ -1891,6 +1899,7 @@ const translations = {
     priv_contact_label: "Contacto",
     priv_check: "He leído el aviso de privacidad y acepto el uso de mi información, incluidos los datos sensibles (salud y antecedentes penales).",
     priv_required: "⚠ Marque la casilla para aceptar el aviso de privacidad.",
+    ts_wait: "⚠ Espere a que termine la verificación de seguridad (o tóquela si aparece) y envíe de nuevo.",
   }
 };
 
@@ -2311,9 +2320,45 @@ function montarDados() {
 // Senha do formulário (precisa ser igual à propriedade FORM_TOKEN do Apps Script). Deixe '' para não enviar.
 // Contato mostrado no aviso de privacidade (e-mail ou telefone para dúvidas e pedidos de exclusão). Deixe '' para ocultar.
 const CONTATO_PRIVACIDADE = '0586-71-3256';
+// Cloudflare Turnstile: cole aqui a "Site Key" (chave pública). Deixe '' para desligar.
+const TURNSTILE_SITEKEY = '0x4AAAAAAGEggw7V4CY7QG6B';
 const TOKEN_FORM = '-eujqD0ORyJKE8V9h9J3gIBIxhdOWcsF';
 const URL_WEBHOOK = "https://script.google.com/macros/s/AKfycbz8bboPBk880yfL3zTjgBh0gZrEC0gSpQqnIoyBgme0XAODLcBXo971i8N-DntqcwxP/exec";
 let enviandoFormulario = false;
+
+/* ---------- Cloudflare Turnstile (proteção contra robôs) ---------- */
+let tsWidgetId = null, tsToken = '';
+function iniciarTurnstile() {
+    if (!TURNSTILE_SITEKEY) return;
+    const sc = document.createElement('script');
+    sc.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+    sc.async = true; sc.defer = true;
+    sc.onload = function () {
+        try {
+            tsWidgetId = turnstile.render('#turnstileBox', {
+                sitekey: TURNSTILE_SITEKEY, appearance: 'interaction-only',
+                callback: function (tk) { tsToken = tk; },
+                'expired-callback': function () { tsToken = ''; },
+                'error-callback': function () { tsToken = ''; }
+            });
+        } catch (err) { console.error('Turnstile:', err); }
+    };
+    document.head.appendChild(sc);
+}
+// espera o token ficar pronto (até 20 s); '' se o Turnstile estiver desligado ou falhar
+function obterTokenTurnstile() {
+    if (!TURNSTILE_SITEKEY) return Promise.resolve('');
+    return new Promise(function (res) {
+        let n = 0;
+        const iv = setInterval(function () { if (tsToken || ++n > 100) { clearInterval(iv); res(tsToken); } }, 200);
+    });
+}
+// cada token vale uma única vez: pede um novo depois de cada envio
+function renovarTurnstile() {
+    if (tsWidgetId === null) return;
+    tsToken = '';
+    try { turnstile.reset(tsWidgetId); } catch (err) {}
+}
 let ultimoEnvio = '';
 
 function mostrarStatusEnvio(tipo, mensagem) {
@@ -2344,6 +2389,8 @@ function enviarParaPlanilha(forcar) {
     urlParams.set('website', hp ? hp.value : '');
     if (TOKEN_FORM) urlParams.set('_t', TOKEN_FORM);
 
+    return obterTokenTurnstile().then(function (tok) {
+    if (tok) urlParams.set('cf_token', tok);
     const controle = new AbortController();
     const limite = setTimeout(() => controle.abort(), 25000);
     return fetch(URL_WEBHOOK, {
@@ -2365,8 +2412,10 @@ function enviarParaPlanilha(forcar) {
           clearTimeout(limite);
           if (estado !== 'erro') ultimoEnvio = assinatura;
           resultadoEnvio = { estado: estado, quando: carimboEnvio };
+          renovarTurnstile();
           return estado;
       });
+    });
 }
 
 /* ---------- aviso de envio (janela) ---------- */
@@ -2436,6 +2485,11 @@ function imprimirEEnviar() {
     const form = document.getElementById('multiLangForm');
     if (!form.reportValidity()) return;     // mostra o que falta preencher
     if (!validarAceite()) return;
+    if (TURNSTILE_SITEKEY && !tsToken) {   // verificação ainda em andamento (ou pedindo um toque)
+        mostrarStatusEnvio('erro', t('ts_wait'));
+        document.getElementById('turnstileBox').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+    }
     executarEnvio(false);
 }
 function handleFormSubmit(event) { event.preventDefault(); imprimirEEnviar(); }
@@ -2444,6 +2498,7 @@ function handleFormSubmit(event) { event.preventDefault(); imprimirEEnviar(); }
    INICIALIZAÇÃO
    ========================================================= */
 document.addEventListener('DOMContentLoaded', function () {
+    iniciarTurnstile();
     applyTranslations(document.getElementById('langSelector').value);
     if (CONTATO_PRIVACIDADE) { document.getElementById('privContactVal').textContent = CONTATO_PRIVACIDADE; document.getElementById('privContactRow').classList.remove('hidden'); }
     changeTheme(document.getElementById('themeSelector').value);
